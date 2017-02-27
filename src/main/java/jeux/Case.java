@@ -22,10 +22,52 @@ public class Case {
     public void setX(int x)            { this.x = x ;}
     public void setY(int y)            { this.y = y ;}
 
-    public String getState() {
-        return this.state;
+    public void setInverseState() {
+        this.state = (this.state.equals("b")) ? "r" : "b";
     }
+
+    public String getState() { return this.state; }
     public int getX()        { return this.x; }
     public int getY()        { return this.y; }
+
+    public String getInverseState() {
+        return (this.state.equals("b")) ? "r" : "b";
+    }
+
+
+    // A optimiser
+    public String getStringCoord() {
+        String alpha = null;
+        String number = null;
+
+        switch (this.y) {
+            case 0:
+                alpha = "A";
+                break;
+            case 1:
+                alpha = "B";
+                break;
+            case 2:
+                alpha = "C";
+                break;
+            case 3:
+                alpha = "D";
+                break;
+            case 4:
+                alpha = "E";
+                break;
+            case 5:
+                alpha = "F";
+                break;
+            case 6:
+                alpha = "G";
+                break;
+            case 7:
+                alpha = "H";
+                break;
+        }
+
+        return alpha.concat(Integer.toString(this.x+1));
+    }
 
 }
