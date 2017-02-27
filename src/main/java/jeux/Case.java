@@ -38,7 +38,6 @@ public class Case {
     // A optimiser
     public String getStringCoord() {
         String alpha = null;
-        String number = null;
 
         switch (this.y) {
             case 0:
