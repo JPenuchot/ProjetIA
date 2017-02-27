@@ -4,7 +4,7 @@ public class Case {
     String state; // permet de definir l'etat de la case (b = noir, r = blanc, - = vide)
 
     public Case() {
-        this.state = "-"
+        this.state = "-";
     }
 
     public Case(String state) {
