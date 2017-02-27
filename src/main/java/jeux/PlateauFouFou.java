@@ -26,7 +26,32 @@ public class PlateauFouFou implements Partie1 {
 
     @Override
     public void setFromFile(String fileName) {
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader(fileName));
+            String line = reader.readLine();
+            int i = 0; // permet de parcourir les lignes
 
+            while(line != null) {
+                line = reader.readLine();
+                if(line == null) // permet de ne pas afficher la derniere ligne
+                    continue;
+                if(!line.startsWith("%")) { // n'affiche pas les lignes "commentaire"
+                    String[] formatLine = line.split(" ")[1].split(""); // Barbu Line ! ^^ permet de retirer les chiffre des lignes puis de decouper chaque case
+
+                    for(int j = 0; j < 8; j++)
+                        this.plateau[i][j] = formatLine[j];
+
+                    i++;
+                }
+            }
+
+
+        } catch (FileNotFoundException e) {
+            System.out.println("File not Found ");
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
