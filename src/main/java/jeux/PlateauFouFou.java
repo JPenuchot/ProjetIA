@@ -2,24 +2,25 @@ package jeux;
 
 import java.io.*;
 
+
 public class PlateauFouFou implements Partie1 {
 
-    public String[][] plateau; //  A changer en tableau d'une classe CELLULE
+    public Case[][] plateau;
 
 
     public PlateauFouFou() {
-        this.plateau = new String[8][8];
+        this.plateau = new Case[8][8];
 
 
         // Permet de dessiner la grille de depart
         for(int i = 0; i < 8; i++) {
             for(int j = 0; j < 8; j++) {
                 if(i % 2 == 1 && j % 2 == 0)
-                    this.plateau[i][j] = "b"; // b -> pion noir
+                    this.plateau[i][j] = new Case("b"); // b -> pion noir
                 else if (i % 2 == 0 && j % 2 == 1)
-                    this.plateau[i][j] = "r"; // r -> pion blanc
+                    this.plateau[i][j] = new Case("r"); // r -> pion blanc
                 else
-                    this.plateau[i][j] = "-"; // - -> case vide
+                    this.plateau[i][j] = new Case("-"); // - -> case vide
             }
         }
     }
@@ -39,7 +40,7 @@ public class PlateauFouFou implements Partie1 {
                     String[] formatLine = line.split(" ")[1].split(""); // Barbu Line ! ^^ permet de retirer les chiffre des lignes puis de decouper chaque case
 
                     for(int j = 0; j < 8; j++)
-                        this.plateau[i][j] = formatLine[j];
+                        this.plateau[i][j].setState(formatLine[j]);
 
                     i++;
                 }
@@ -64,7 +65,7 @@ public class PlateauFouFou implements Partie1 {
             for(int i = 0; i < 8; i++) {
                 file.write((i + 1) + " ");
                 for(int j = 0; j < 8; j++)
-                    file.write(this.plateau[i][j]); // A changer quand le tableau sera un objet de Cellule
+                    file.write(this.plateau[i][j].getState()); // A changer quand le tableau sera un objet de Cellule
                 file.write(" " + (i + 1) + "\n");
             }
 
@@ -105,7 +106,7 @@ public class PlateauFouFou implements Partie1 {
     public void printPlateau() {
         for(int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++)
-                System.out.print(this.plateau[i][j]);
+                System.out.print(this.plateau[i][j].getState());
 
             System.out.println();
         }
