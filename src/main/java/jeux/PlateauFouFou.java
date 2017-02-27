@@ -31,7 +31,29 @@ public class PlateauFouFou implements Partie1 {
 
     @Override
     public void saveToFile(String fileName) {
-        
+        try {
+            PrintWriter file = new PrintWriter(fileName);
+
+            file.write("% ABCDEFGH\n");
+
+            for(int i = 0; i < 8; i++) {
+                file.write((i + 1) + " ");
+                for(int j = 0; j < 8; j++)
+                    file.write(this.plateau[i][j]); // A changer quand le tableau sera un objet de Cellule
+                file.write(" " + (i + 1) + "\n");
+            }
+
+            file.write("% ABCDEFGH\n");
+
+            file.flush();
+            file.close();
+
+        } catch (FileNotFoundException e) {
+            System.out.println("File not Found ");
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 
