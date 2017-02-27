@@ -100,10 +100,22 @@ public class PlateauFouFou implements Partie1 {
 
     @Override
     public boolean finDePartie() {
-        return true;
+        return (getNumberCaseState("b") == 0 || getNumberCaseState("r") == 0);
     }
 
-    public void printPlateau() {
+    private int getNumberCaseState(String state) {
+
+        int compt = 0;
+
+        for(int i = 0; i < 8; i++)
+            for(int j = 0; j < 8; j++)
+                if(this.plateau[i][j].getState().equals(state))
+                    compt++;
+
+        return compt;
+    }
+
+    private void printPlateau() {
         for(int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++)
                 System.out.print(this.plateau[i][j].getState());
