@@ -16,11 +16,11 @@ public class PlateauFouFou implements Partie1 {
         for(int i = 0; i < 8; i++) {
             for(int j = 0; j < 8; j++) {
                 if(i % 2 == 1 && j % 2 == 0)
-                    this.plateau[i][j] = new Case("b"); // b -> pion noir
+                    this.plateau[i][j] = new Case("b", i, j); // b -> pion noir
                 else if (i % 2 == 0 && j % 2 == 1)
-                    this.plateau[i][j] = new Case("r"); // r -> pion blanc
+                    this.plateau[i][j] = new Case("r", i, j); // r -> pion blanc
                 else
-                    this.plateau[i][j] = new Case("-"); // - -> case vide
+                    this.plateau[i][j] = new Case("-", i, j); // - -> case vide
             }
         }
     }
@@ -90,8 +90,9 @@ public class PlateauFouFou implements Partie1 {
 
     @Override
     public String[] mouvementsPossibles(String player) {
-        return null;
+
     }
+
 
     @Override
     public void play(String move, String player) {
