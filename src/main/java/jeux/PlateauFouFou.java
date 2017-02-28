@@ -7,10 +7,8 @@ public class PlateauFouFou implements Partie1 {
 
     public Case[][] plateau;
 
-
     public PlateauFouFou() {
         this.plateau = new Case[8][8];
-
 
         // Permet de dessiner la grille de depart
         for(int i = 0; i < 8; i++) {
@@ -90,9 +88,45 @@ public class PlateauFouFou implements Partie1 {
 
     @Override
     public String[] mouvementsPossibles(String player) {
+        if(player.equals("noir")) player = "b";
+        else if(player.equals("blanc")) player = "r";
+        else {
+            System.out.println("Erreur Paramètre (PlateauFouFou.mouvementPossibles)");
+        }
 
+        for(int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                Case currentCase = this.plateau[i][j];
+                if (currentCase.getState().equals(player))
+                    this.searchMouvement(currentCase);
+            }
+        }
+
+        return null;
     }
 
+    public String searchMouvement(Case c) {
+
+        String tabCoup = "";
+        String mangeable = c.getInverseState(); // Couleurs mangeable par le joueur sur la case c;
+        int i = c.getX() , j = c.getY();
+
+        while(i > 0 && j > 0) {
+            i--;
+            j--;
+            if (this.plateau[i][j].getState().equals("-") || this.plateau[i][j].getState().equals(mangeable)) {
+                tabCoup = tabCoup + c.getStringCoord() + "-" + this.plateau[i][j].getStringCoord() + " ,";
+            }
+            else {
+                continue; // doit sortir des deux boucles
+            }
+        }
+
+        tabCoup = tabCoup.substring(0, tabCoup.length() - 2); // premet de retirer la virgule a la fin :)
+        System.out.println(tabCoup);
+
+        return tabCoup;
+    }
 
     @Override
     public void play(String move, String player) {
@@ -129,9 +163,10 @@ public class PlateauFouFou implements Partie1 {
 
         PlateauFouFou p = new PlateauFouFou();
 
-        p.saveToFile("test.txt");
+        //p.saveToFile("test.txt");
         p.setFromFile("test.txt");
-        p.printPlateau();
+        //p.printPlateau();
+        p.mouvementsPossibles("blanc");
 
     }
 }
