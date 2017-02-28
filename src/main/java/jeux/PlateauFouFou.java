@@ -86,7 +86,7 @@ public class PlateauFouFou implements Partie1 {
 
     @Override
     public boolean estValide(String move, String player) {
-        return true;
+        
     }
 
     @Override
@@ -97,15 +97,22 @@ public class PlateauFouFou implements Partie1 {
             System.out.println("Erreur Paramètre (PlateauFouFou.mouvementPossibles)");
         }
 
+        int nombrePiece = this.getNumberCaseState("b") + this.getNumberCaseState("r");
+
+        String[] coupPossible = new String[nombrePiece];
+        int compt = 0;
+
         for(int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
                 Case currentCase = this.plateau[i][j];
-                if (currentCase.getState().equals(player))
-                    this.searchMouvement(currentCase);
+                if (currentCase.getState().equals(player)) {
+                    coupPossible[compt] = this.searchMouvement(currentCase);
+                    compt++;
+                }
             }
         }
 
-        return null;
+        return coupPossible;
     }
 
     /**
@@ -268,7 +275,7 @@ public class PlateauFouFou implements Partie1 {
     /**
      * Fonction d'affichage du plateau
      */
-    private void printPlateau() {
+    public void printPlateau() {
         for(int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++)
                 System.out.print(this.plateau[i][j].getState());
