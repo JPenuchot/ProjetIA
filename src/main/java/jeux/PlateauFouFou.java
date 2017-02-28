@@ -7,6 +7,9 @@ public class PlateauFouFou implements Partie1 {
 
     public Case[][] plateau;
 
+    /**
+     * Default Construtor
+     */
     public PlateauFouFou() {
         this.plateau = new Case[8][8];
 
@@ -105,6 +108,11 @@ public class PlateauFouFou implements Partie1 {
         return null;
     }
 
+    /**
+     * Fonction de recherche de coup en diagonal (juste en haut a gauche pour l'instant
+     * @param c la case de recherche de depart
+     * @return un string de toutes les coups possibles
+     */
     public String searchMouvement(Case c) {
 
         String tabCoup = "";
@@ -150,6 +158,9 @@ public class PlateauFouFou implements Partie1 {
         return compt;
     }
 
+    /**
+     * Fonction d'affichage du plateau
+     */
     private void printPlateau() {
         for(int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++)
