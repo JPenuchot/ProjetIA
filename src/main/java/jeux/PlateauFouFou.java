@@ -210,7 +210,22 @@ public class PlateauFouFou implements Partie1 {
 
     @Override
     public void play(String move, String player) {
+        // Formattage du Player
+        if(player.equals("noir")) player = "b";
+        else if(player.equals("blanc")) player = "r";
+        else {
+            System.out.println("Erreur Paramètre (PlateauFouFou.play)");
+        }
 
+        // Formattage du Move en Integer
+        String[] moveTab = move.split("-");
+        int xSource = this.convertStringToCoord(moveTab[0]);
+        int ySource = Integer.parseInt((moveTab[0].split(""))[1]);
+        int xDest = this.convertStringToCoord(moveTab[1]);
+        int yDest = Integer.parseInt((moveTab[1].split(""))[1]);
+
+        this.plateau[ySource-1][xSource].setState("-");
+        this.plateau[yDest-1][xDest].setState(player);
     }
 
     @Override
@@ -228,6 +243,26 @@ public class PlateauFouFou implements Partie1 {
                     compt++;
 
         return compt;
+    }
+
+
+    /**
+     * Converti les lettres (A, B, C ..) en coordonnées numérique (1, 2 ,3)
+     * @param move le move a convertir sous la forme : (Ex : B2)
+     * @return le numero de la colonne (Ex : 1)
+     */
+    private int convertStringToCoord(String move) {
+        String[] x = move.split("");
+
+        if(x[0].equals("A")) return 0;
+        else if(x[0].equals("B")) return 1;
+        else if(x[0].equals("C")) return 2;
+        else if(x[0].equals("D")) return 3;
+        else if(x[0].equals("E")) return 4;
+        else if(x[0].equals("F")) return 5;
+        else if(x[0].equals("G")) return 6;
+        else if(x[0].equals("H")) return 7;
+        else                      return -1;
     }
 
     /**
@@ -248,8 +283,10 @@ public class PlateauFouFou implements Partie1 {
 
         //p.saveToFile("test.txt");
         p.setFromFile("test.txt");
-        //p.printPlateau();
-        p.mouvementsPossibles("blanc");
-
+        p.printPlateau();
+//        p.mouvementsPossibles("blanc");
+        p.play("C6-B5", "blanc");
+        System.out.println("PRINT NEW TABLEAU");
+        p.printPlateau();
     }
 }

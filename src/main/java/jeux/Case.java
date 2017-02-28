@@ -48,6 +48,10 @@ public class Case {
     }
 
 
+    /**
+     * Permet de transformer les coordoonées en String
+     * @return
+     */
     // A optimiser
     public String getStringCoord() {
         String alpha = null;
@@ -81,5 +85,4 @@ public class Case {
 
         return alpha.concat(Integer.toString(this.x+1));
     }
-
 }
