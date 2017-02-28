@@ -119,18 +119,90 @@ public class PlateauFouFou implements Partie1 {
         String mangeable = c.getInverseState(); // Couleurs mangeable par le joueur sur la case c;
         int i = c.getX() , j = c.getY();
 
-        while(i > 0 && j > 0) {
+        /************************************************************************************
+         * BOUCLE DIAG HAUT GAUCHE
+         ************************************************************************************/
+        while((i > 0 && j > 0)) {
             i--;
             j--;
-            if (this.plateau[i][j].getState().equals("-") || this.plateau[i][j].getState().equals(mangeable)) {
+            if (this.plateau[i][j].getState().equals("-")) {
                 tabCoup = tabCoup + c.getStringCoord() + "-" + this.plateau[i][j].getStringCoord() + " ,";
+            } else if(this.plateau[i][j].getState().equals(mangeable)) {
+                tabCoup = tabCoup + c.getStringCoord() + "-" + this.plateau[i][j].getStringCoord() + " ,";
+                break;
             }
             else {
-                continue; // doit sortir des deux boucles
+               // System.out.println("else : " + c.getStringCoord() + "-" + this.plateau[i][j].getStringCoord());
+                break; // doit sortir des deux boucles
             }
         }
 
-        tabCoup = tabCoup.substring(0, tabCoup.length() - 2); // premet de retirer la virgule a la fin :)
+
+        /************************************************************************************
+         * BOUCLE DIAG BAS DROITE
+         ************************************************************************************/
+        // Réallocation des variables avant la seconde boucle
+        i = c.getX();
+        j = c.getY();
+
+        while(i < 7 && j < 7) {
+            i++;
+            j++;
+            if (this.plateau[i][j].getState().equals("-")) {
+                tabCoup = tabCoup + c.getStringCoord() + "-" + this.plateau[i][j].getStringCoord() + " ,";
+            } else if(this.plateau[i][j].getState().equals(mangeable)) {
+                tabCoup = tabCoup + c.getStringCoord() + "-" + this.plateau[i][j].getStringCoord() + " ,";
+                break;
+            }
+            else {
+                break; // doit sortir de la boucle
+            }
+        }
+
+        /************************************************************************************
+         * BOUCLE DIAG HAUT DROITE
+         ************************************************************************************/
+        // Réallocation des variables avant la seconde boucle
+        i = c.getX();
+        j = c.getY();
+
+
+        while(i > 0 && j < 7) {
+            i--;
+            j++;
+            if (this.plateau[i][j].getState().equals("-")) {
+                tabCoup = tabCoup + c.getStringCoord() + "-" + this.plateau[i][j].getStringCoord() + " ,";
+            } else if(this.plateau[i][j].getState().equals(mangeable)) {
+                tabCoup = tabCoup + c.getStringCoord() + "-" + this.plateau[i][j].getStringCoord() + " ,";
+                break;
+            }
+            else {
+                break; // doit sortir de la boucle
+            }
+        }
+
+        /************************************************************************************
+         * BOUCLE DIAG BAS GAUCHE
+         ************************************************************************************/
+        // Réallocation des variables avant la seconde boucle
+        i = c.getX();
+        j = c.getY();
+
+
+        while(i < 7 && j > 0) {
+            i++;
+            j--;
+            if (this.plateau[i][j].getState().equals("-")) {
+                tabCoup = tabCoup + c.getStringCoord() + "-" + this.plateau[i][j].getStringCoord() + " ,";
+            } else if(this.plateau[i][j].getState().equals(mangeable)) {
+                tabCoup = tabCoup + c.getStringCoord() + "-" + this.plateau[i][j].getStringCoord() + " ,";
+                break;
+            }
+            else {
+                break; // doit sortir de la boucle
+            }
+        }
+
         System.out.println(tabCoup);
 
         return tabCoup;
