@@ -1,7 +1,7 @@
 package jeux;
 
 import java.io.*;
-
+import jeux.exceptions.*;
 
 public class PlateauFouFou implements Partie1 {
 
@@ -66,7 +66,7 @@ public class PlateauFouFou implements Partie1 {
             for(int i = 0; i < 8; i++) {
                 file.write((i + 1) + " ");
                 for(int j = 0; j < 8; j++)
-                    file.write(this.plateau[i][j].getState()); // A changer quand le tableau sera un objet de Cellule
+                    file.write(this.plateau[i][j].getStateAsString()); // A changer quand le tableau sera un objet de Cellule
                 file.write(" " + (i + 1) + "\n");
             }
 
@@ -91,11 +91,15 @@ public class PlateauFouFou implements Partie1 {
     }
 
     @Override
-    public String[] mouvementsPossibles(String player) {
-        if(player.equals("noir")) player = State.black;
-        else if(player.equals("blanc")) player = State.white;
+    public String[] mouvementsPossibles(String sPlayer) {
+        State player = State.empty;
+
+        if(sPlayer.equals("noir")) player = State.black;
+        else if(sPlayer.equals("blanc")) player = State.white;
         else {
             System.out.println("Erreur Paramètre (PlateauFouFou.mouvementPossibles)");
+            System.out.println(Thread.currentThread().getStackTrace());
+            return null;
         }
 
         int nombrePiece = this.getNumberCaseState(State.black) + this.getNumberCaseState(State.white);
@@ -106,7 +110,7 @@ public class PlateauFouFou implements Partie1 {
         for(int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
                 Case currentCase = this.plateau[i][j];
-                if (currentCase.getState().equals(player)) {
+                if (currentCase.getState() == player) {
                     coupPossible[compt] = this.searchMouvement(currentCase);
                     compt++;
                 }
@@ -124,109 +128,34 @@ public class PlateauFouFou implements Partie1 {
     public String searchMouvement(Case c) {
 
         String tabCoup = "";
-        String mangeable = c.getInverseState(); // Couleurs mangeable par le joueur sur la case c;
+        State mangeable = c.getInverseState(); // Couleurs mangeable par le joueur sur la case c;
         int i = c.getX() , j = c.getY();
 
-        /************************************************************************************
-         * BOUCLE DIAG HAUT GAUCHE
-         ************************************************************************************/
-        while((i > 0 && j > 0)) {
-            i--;
-            j--;
-            if (this.plateau[i][j].getState().equals(State.empty)) {
-                tabCoup = tabCoup + c.getStringCoord() + State.empty + this.plateau[i][j].getStringCoord() + " ,";
-            } else if(this.plateau[i][j].getState().equals(mangeable)) {
-                tabCoup = tabCoup + c.getStringCoord() + State.empty + this.plateau[i][j].getStringCoord() + " ,";
-                break;
-            }
-            else {
-               // System.out.println("else : " + c.getStringCoord() + State.empty + this.plateau[i][j].getStringCoord());
-                break; // doit sortir des deux boucles
-            }
-        }
 
 
-        /************************************************************************************
-         * BOUCLE DIAG BAS DROITE
-         ************************************************************************************/
-        // Réallocation des variables avant la seconde boucle
-        i = c.getX();
-        j = c.getY();
+        //  Première étape : Recherche d'adversaires aux diagonales et activation des cases
 
-        while(i < 7 && j < 7) {
-            i++;
-            j++;
-            if (this.plateau[i][j].getState().equals(State.empty)) {
-                tabCoup = tabCoup + c.getStringCoord() + State.empty + this.plateau[i][j].getStringCoord() + " ,";
-            } else if(this.plateau[i][j].getState().equals(mangeable)) {
-                tabCoup = tabCoup + c.getStringCoord() + State.empty + this.plateau[i][j].getStringCoord() + " ,";
-                break;
-            }
-            else {
-                break; // doit sortir de la boucle
-            }
-        }
-
-        /************************************************************************************
-         * BOUCLE DIAG HAUT DROITE
-         ************************************************************************************/
-        // Réallocation des variables avant la seconde boucle
-        i = c.getX();
-        j = c.getY();
-
-
-        while(i > 0 && j < 7) {
-            i--;
-            j++;
-            if (this.plateau[i][j].getState().equals(State.empty)) {
-                tabCoup = tabCoup + c.getStringCoord() + State.empty + this.plateau[i][j].getStringCoord() + " ,";
-            } else if(this.plateau[i][j].getState().equals(mangeable)) {
-                tabCoup = tabCoup + c.getStringCoord() + State.empty + this.plateau[i][j].getStringCoord() + " ,";
-                break;
-            }
-            else {
-                break; // doit sortir de la boucle
-            }
-        }
-
-        /************************************************************************************
-         * BOUCLE DIAG BAS GAUCHE
-         ************************************************************************************/
-        // Réallocation des variables avant la seconde boucle
-        i = c.getX();
-        j = c.getY();
-
-
-        while(i < 7 && j > 0) {
-            i++;
-            j--;
-            if (this.plateau[i][j].getState().equals(State.empty)) {
-                tabCoup = tabCoup + c.getStringCoord() + State.empty + this.plateau[i][j].getStringCoord() + " ,";
-            } else if(this.plateau[i][j].getState().equals(mangeable)) {
-                tabCoup = tabCoup + c.getStringCoord() + State.empty + this.plateau[i][j].getStringCoord() + " ,";
-                break;
-            }
-            else {
-                break; // doit sortir de la boucle
-            }
-        }
-
+        //
+        
         System.out.println(tabCoup);
 
         return tabCoup;
     }
 
     @Override
-    public void play(String move, String player) {
+    public void play(String move, String sPlayer) {
         // Formattage du Player
-        if(player.equals("noir")) player = State.black;
-        else if(player.equals("blanc")) player = State.white;
+        State player;
+        if(sPlayer.equals("noir")) player = State.black;
+        else if(sPlayer.equals("blanc")) player = State.white;
         else {
             System.out.println("Erreur Paramètre (PlateauFouFou.play)");
+            System.out.println(Thread.currentThread().getStackTrace());
+            return;
         }
 
         // Formattage du Move en Integer
-        String[] moveTab = move.split(State.empty);
+        String[] moveTab = move.split("-");
         int xSource = this.convertStringToCoord(moveTab[0]);
         int ySource = Integer.parseInt((moveTab[0].split(""))[1]);
         int xDest = this.convertStringToCoord(moveTab[1]);
@@ -241,13 +170,13 @@ public class PlateauFouFou implements Partie1 {
         return (getNumberCaseState(State.black) == 0 || getNumberCaseState(State.white) == 0);
     }
 
-    private int getNumberCaseState(String state) {
+    private int getNumberCaseState(State state) {
 
         int compt = 0;
 
         for(int i = 0; i < 8; i++)
             for(int j = 0; j < 8; j++)
-                if(this.plateau[i][j].getState().equals(state))
+                if(this.plateau[i][j].getState() == state)
                     compt++;
 
         return compt;

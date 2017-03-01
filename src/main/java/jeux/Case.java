@@ -77,6 +77,10 @@ public class Case {
     */
     public State getState() { return this.state; }
 
+    /** Returns the state of the cell as a string.
+    */
+    public String getStateAsString() { return stateToString(this.state); }
+
     /** Sets the horizontal position.
     */
     public int getX()        { return this.x; }
