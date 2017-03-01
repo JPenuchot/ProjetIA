@@ -1,15 +1,32 @@
 package jeux;
 
+import java.util.HashMap;
+
 enum State {
     empty,
     black,
     white
 }
 
-//  HashMap from String to State
-HashMap<String, State> hmStringToState = new HashMap<String, State>();
-
 public class Case {
+    //  HashMaps that makes the correspondance from String to State
+    static private HashMap<String, State> hmStringToState = new HashMap<String, State>();
+    static private HashMap<State, String> hmStateToString = new HashMap<State, String>();
+
+    //  HashMap initialization
+    static {
+        hmStringToState.put("-", State.empty);
+        hmStringToState.put("b", State.black);
+        hmStringToState.put("r", State.white);
+        
+        hmStringToState.put(State.empty, "-");
+        hmStringToState.put(State.black, "b");
+        hmStringToState.put(State.white, "r");
+    }
+
+    static State stringToState(String strState){    return hmStringToState.get(strState);   }
+    static String stateToString(State stState){     return hmStateToString.get(stState);    }
+
     State state; // Defines the state of the cell (b = State.black, r = State.white, - = State.empty)
     int x, y;
 
@@ -71,7 +88,6 @@ public class Case {
     /** Returns the inverse state of a cell that is not empty.
     */
     public State getInverseState() {    return (this.state == State.black) ? State.black : State.white;    }
-
 
     /**
      * Permet de transformer les coordoonées en String
