@@ -134,7 +134,14 @@ public class PlateauFouFou implements Partie1 {
 
         //  Première étape : Recherche d'adversaires aux diagonales et activation des cases
 
-        //
+        //  Deuxième étape : Si aucun adversaire n'a été trouvé,
+        //  alors on fait les intersections des diagonales du pion du joueur
+        //  avec celles des pions de l'adversaire.
+
+        //  Première passe : Explorer les diagonales du joueur
+
+
+        //  Deuxième passe : Pour chaque pion, vérifier si la diagonale du joueur
         
         System.out.println(tabCoup);
 
