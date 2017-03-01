@@ -1,88 +1,81 @@
 package jeux;
 
-public class Case {
-    String state; // permet de definir l'etat de la case (b = noir, r = blanc, - = vide)
-    int x, y;
+enum State {
+    empty,
+    black,
+    white
+}
 
-    /**
-     * Default Constructor
-     */
-    public Case() { // Ne pas utilisé le constructeur par defaut
-        this.state = "-";
-        this.x = 0;
-        this.y = 0;
-    }
+//  HashMap from String to State
+HashMap<String, State> hmStringToState = new HashMap<String, State>();
+
+public class Case {
+    State state; // Defines the state of the cell (b = State.black, r = State.white, - = State.empty)
+    int x, y;
 
     /**
      * Constructor
      */
-    public Case(String state, int x, int y) {
+    public Case(State state, int x, int y) {
         this.state = state;
         this.x = x;
         this.y = y;
     }
 
-    /**
-     * Setteurs
+    /** Constructor : Sets an State.empty cell
+     * @param x : x position
+     * @param y : y position
      */
-    public void setState(String state) {
+    public Case(int x, int y) {
+        this.state = State.empty;
+        this.x = x;
+        this.y = y;
+    }
+
+    /**
+     * Setters
+     */
+
+    /** Sets the state of a cell.
+    */
+    public void setState(State state) {
         this.state = state;
+    }
+
+    public void setState(String state){
+        if(state.equals("b"))
     }
     public void setX(int x)            { this.x = x ;}
     public void setY(int y)            { this.y = y ;}
 
     public void setInverseState() {
-        this.state = (this.state.equals("b")) ? "r" : "b";
+        this.state = (this.state == State.black) ? State.black : State.white;
     }
 
     /**
-     * Getteurs
-     * @return
+     * Getters
      */
-    public String getState() { return this.state; }
+
+    /** Returns the state of the cell.
+    */
+    public State getState() { return this.state; }
+
+    /** Sets the horizontal position.
+    */
     public int getX()        { return this.x; }
+
+    /** Sets the vertical position.
+    */
     public int getY()        { return this.y; }
 
-    public String getInverseState() {
-        return (this.state.equals("b")) ? "r" : "b";
-    }
+    /** Returns the inverse state of a cell that is not empty.
+    */
+    public State getInverseState() {    return (this.state == State.black) ? State.black : State.white;    }
 
 
     /**
      * Permet de transformer les coordoonées en String
      * @return
      */
-    // A optimiser
-    public String getStringCoord() {
-        String alpha = null;
-
-        switch (this.y) {
-            case 0:
-                alpha = "A";
-                break;
-            case 1:
-                alpha = "B";
-                break;
-            case 2:
-                alpha = "C";
-                break;
-            case 3:
-                alpha = "D";
-                break;
-            case 4:
-                alpha = "E";
-                break;
-            case 5:
-                alpha = "F";
-                break;
-            case 6:
-                alpha = "G";
-                break;
-            case 7:
-                alpha = "H";
-                break;
-        }
-
-        return alpha.concat(Integer.toString(this.x+1));
-    }
+    public String getStringCoord() {    return Character.toString((char)(this.y + 'A')) + Integer.toString(this.x+1);   }
 }

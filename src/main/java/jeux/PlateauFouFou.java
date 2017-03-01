@@ -17,11 +17,11 @@ public class PlateauFouFou implements Partie1 {
         for(int i = 0; i < 8; i++) {
             for(int j = 0; j < 8; j++) {
                 if(i % 2 == 1 && j % 2 == 0)
-                    this.plateau[i][j] = new Case("b", i, j); // b -> pion noir
+                    this.plateau[i][j] = new Case(State.black, i, j); // b -> pion noir
                 else if (i % 2 == 0 && j % 2 == 1)
-                    this.plateau[i][j] = new Case("r", i, j); // r -> pion blanc
+                    this.plateau[i][j] = new Case(State.white, i, j); // r -> pion blanc
                 else
-                    this.plateau[i][j] = new Case("-", i, j); // - -> case vide
+                    this.plateau[i][j] = new Case(State.empty, i, j); // - -> case vide
             }
         }
     }
@@ -86,18 +86,19 @@ public class PlateauFouFou implements Partie1 {
 
     @Override
     public boolean estValide(String move, String player) {
-        
+        //  TODO
+        return true;
     }
 
     @Override
     public String[] mouvementsPossibles(String player) {
-        if(player.equals("noir")) player = "b";
-        else if(player.equals("blanc")) player = "r";
+        if(player.equals("noir")) player = State.black;
+        else if(player.equals("blanc")) player = State.white;
         else {
             System.out.println("Erreur Paramètre (PlateauFouFou.mouvementPossibles)");
         }
 
-        int nombrePiece = this.getNumberCaseState("b") + this.getNumberCaseState("r");
+        int nombrePiece = this.getNumberCaseState(State.black) + this.getNumberCaseState(State.white);
 
         String[] coupPossible = new String[nombrePiece];
         int compt = 0;
@@ -132,14 +133,14 @@ public class PlateauFouFou implements Partie1 {
         while((i > 0 && j > 0)) {
             i--;
             j--;
-            if (this.plateau[i][j].getState().equals("-")) {
-                tabCoup = tabCoup + c.getStringCoord() + "-" + this.plateau[i][j].getStringCoord() + " ,";
+            if (this.plateau[i][j].getState().equals(State.empty)) {
+                tabCoup = tabCoup + c.getStringCoord() + State.empty + this.plateau[i][j].getStringCoord() + " ,";
             } else if(this.plateau[i][j].getState().equals(mangeable)) {
-                tabCoup = tabCoup + c.getStringCoord() + "-" + this.plateau[i][j].getStringCoord() + " ,";
+                tabCoup = tabCoup + c.getStringCoord() + State.empty + this.plateau[i][j].getStringCoord() + " ,";
                 break;
             }
             else {
-               // System.out.println("else : " + c.getStringCoord() + "-" + this.plateau[i][j].getStringCoord());
+               // System.out.println("else : " + c.getStringCoord() + State.empty + this.plateau[i][j].getStringCoord());
                 break; // doit sortir des deux boucles
             }
         }
@@ -155,10 +156,10 @@ public class PlateauFouFou implements Partie1 {
         while(i < 7 && j < 7) {
             i++;
             j++;
-            if (this.plateau[i][j].getState().equals("-")) {
-                tabCoup = tabCoup + c.getStringCoord() + "-" + this.plateau[i][j].getStringCoord() + " ,";
+            if (this.plateau[i][j].getState().equals(State.empty)) {
+                tabCoup = tabCoup + c.getStringCoord() + State.empty + this.plateau[i][j].getStringCoord() + " ,";
             } else if(this.plateau[i][j].getState().equals(mangeable)) {
-                tabCoup = tabCoup + c.getStringCoord() + "-" + this.plateau[i][j].getStringCoord() + " ,";
+                tabCoup = tabCoup + c.getStringCoord() + State.empty + this.plateau[i][j].getStringCoord() + " ,";
                 break;
             }
             else {
@@ -177,10 +178,10 @@ public class PlateauFouFou implements Partie1 {
         while(i > 0 && j < 7) {
             i--;
             j++;
-            if (this.plateau[i][j].getState().equals("-")) {
-                tabCoup = tabCoup + c.getStringCoord() + "-" + this.plateau[i][j].getStringCoord() + " ,";
+            if (this.plateau[i][j].getState().equals(State.empty)) {
+                tabCoup = tabCoup + c.getStringCoord() + State.empty + this.plateau[i][j].getStringCoord() + " ,";
             } else if(this.plateau[i][j].getState().equals(mangeable)) {
-                tabCoup = tabCoup + c.getStringCoord() + "-" + this.plateau[i][j].getStringCoord() + " ,";
+                tabCoup = tabCoup + c.getStringCoord() + State.empty + this.plateau[i][j].getStringCoord() + " ,";
                 break;
             }
             else {
@@ -199,10 +200,10 @@ public class PlateauFouFou implements Partie1 {
         while(i < 7 && j > 0) {
             i++;
             j--;
-            if (this.plateau[i][j].getState().equals("-")) {
-                tabCoup = tabCoup + c.getStringCoord() + "-" + this.plateau[i][j].getStringCoord() + " ,";
+            if (this.plateau[i][j].getState().equals(State.empty)) {
+                tabCoup = tabCoup + c.getStringCoord() + State.empty + this.plateau[i][j].getStringCoord() + " ,";
             } else if(this.plateau[i][j].getState().equals(mangeable)) {
-                tabCoup = tabCoup + c.getStringCoord() + "-" + this.plateau[i][j].getStringCoord() + " ,";
+                tabCoup = tabCoup + c.getStringCoord() + State.empty + this.plateau[i][j].getStringCoord() + " ,";
                 break;
             }
             else {
@@ -218,26 +219,26 @@ public class PlateauFouFou implements Partie1 {
     @Override
     public void play(String move, String player) {
         // Formattage du Player
-        if(player.equals("noir")) player = "b";
-        else if(player.equals("blanc")) player = "r";
+        if(player.equals("noir")) player = State.black;
+        else if(player.equals("blanc")) player = State.white;
         else {
             System.out.println("Erreur Paramètre (PlateauFouFou.play)");
         }
 
         // Formattage du Move en Integer
-        String[] moveTab = move.split("-");
+        String[] moveTab = move.split(State.empty);
         int xSource = this.convertStringToCoord(moveTab[0]);
         int ySource = Integer.parseInt((moveTab[0].split(""))[1]);
         int xDest = this.convertStringToCoord(moveTab[1]);
         int yDest = Integer.parseInt((moveTab[1].split(""))[1]);
 
-        this.plateau[ySource-1][xSource].setState("-");
+        this.plateau[ySource-1][xSource].setState(State.empty);
         this.plateau[yDest-1][xDest].setState(player);
     }
 
     @Override
     public boolean finDePartie() {
-        return (getNumberCaseState("b") == 0 || getNumberCaseState("r") == 0);
+        return (getNumberCaseState(State.black) == 0 || getNumberCaseState(State.white) == 0);
     }
 
     private int getNumberCaseState(String state) {
