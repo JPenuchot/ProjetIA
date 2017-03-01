@@ -1,7 +1,6 @@
 package jeux;
 
 import java.io.*;
-import jeux.exceptions.*;
 
 public class PlateauFouFou implements Partie1 {
 
