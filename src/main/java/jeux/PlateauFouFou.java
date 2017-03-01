@@ -86,7 +86,7 @@ public class PlateauFouFou implements Partie1 {
 
     @Override
     public boolean estValide(String move, String player) {
-        
+
     }
 
     @Override
