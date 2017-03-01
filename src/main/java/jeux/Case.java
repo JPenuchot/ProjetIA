@@ -19,9 +19,9 @@ public class Case {
         hmStringToState.put("b", State.black);
         hmStringToState.put("r", State.white);
         
-        hmStringToState.put(State.empty, "-");
-        hmStringToState.put(State.black, "b");
-        hmStringToState.put(State.white, "r");
+        hmStateToString.put(State.empty, "-");
+        hmStateToString.put(State.black, "b");
+        hmStateToString.put(State.white, "r");
     }
 
     static State stringToState(String strState){    return hmStringToState.get(strState);   }
@@ -60,7 +60,7 @@ public class Case {
     }
 
     public void setState(String state){
-        if(state.equals("b"))
+        this.state = stringToState(state);
     }
     public void setX(int x)            { this.x = x ;}
     public void setY(int y)            { this.y = y ;}
