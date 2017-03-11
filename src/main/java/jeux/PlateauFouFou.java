@@ -5,16 +5,17 @@ import java.io.*;
 public class PlateauFouFou implements Partie1 {
 
     public Case[][] plateau;
+    final int pSize = 8;
 
     /**
      * Default Construtor
      */
     public PlateauFouFou() {
-        this.plateau = new Case[8][8];
+        this.plateau = new Case[pSize][pSize];
 
         // Permet de dessiner la grille de depart
-        for(int i = 0; i < 8; i++) {
-            for(int j = 0; j < 8; j++) {
+        for(int i = 0; i < pSize; i++) {
+            for(int j = 0; j < pSize; j++) {
                 if(i % 2 == 1 && j % 2 == 0)
                     this.plateau[i][j] = new Case(State.black, i, j); // b -> pion noir
                 else if (i % 2 == 0 && j % 2 == 1)
@@ -39,7 +40,7 @@ public class PlateauFouFou implements Partie1 {
                 if(!line.startsWith("%")) { // n'affiche pas les lignes "commentaire"
                     String[] formatLine = line.split(" ")[1].split(""); // Barbu Line ! ^^ permet de retirer les chiffre des lignes puis de decouper chaque case
 
-                    for(int j = 0; j < 8; j++)
+                    for(int j = 0; j < pSize; j++)
                         this.plateau[i][j].setState(formatLine[j]);
 
                     i++;
@@ -62,9 +63,9 @@ public class PlateauFouFou implements Partie1 {
 
             file.write("% ABCDEFGH\n");
 
-            for(int i = 0; i < 8; i++) {
+            for(int i = 0; i < pSize; i++) {
                 file.write((i + 1) + " ");
-                for(int j = 0; j < 8; j++)
+                for(int j = 0; j < pSize; j++)
                     file.write(this.plateau[i][j].getStateAsString()); // A changer quand le tableau sera un objet de Cellule
                 file.write(" " + (i + 1) + "\n");
             }
@@ -106,8 +107,8 @@ public class PlateauFouFou implements Partie1 {
         String[] coupPossible = new String[nombrePiece];
         int compt = 0;
 
-        for(int i = 0; i < 8; i++) {
-            for (int j = 0; j < 8; j++) {
+        for(int i = 0; i < pSize; i++) {
+            for (int j = 0; j < pSize; j++) {
                 Case currentCase = this.plateau[i][j];
                 if (currentCase.getState() == player) {
                     coupPossible[compt] = this.searchMouvement(currentCase);
@@ -125,23 +126,38 @@ public class PlateauFouFou implements Partie1 {
      * @return un string de toutes les coups possibles
      */
     public String searchMouvement(Case c) {
-
         String tabCoup = "";
         State mangeable = c.getInverseState(); // Couleurs mangeable par le joueur sur la case c;
-        int i = c.getX() , j = c.getY();
+        int x = c.getX() , y = c.getY();
+        int i_, j_;
 
-
+        //  Liste des trajectoires possibles pour le pion en cours
+        int bfr[pSize][pSize];
 
         //  Première étape : Recherche d'adversaires aux diagonales et activation des cases
+        for(int i = 0; i < pSize; i++){
+            boolean dirTab[4];
+            for(int dir = 0; dir < 4; dir++){
+                i_ = // TODO;
+                j_ = // TODO;
+                if(dirTab[dir] && i_ < pSize && j_ < pSize && i_ >= 0 && j_ >= 0){
+                    //  Si on trouve un ennemi, inverser dirTab[dir] et ajouter la position (i_; j_) à la liste des coups possibles
 
-        //  Deuxième étape : Si aucun adversaire n'a été trouvé,
+                    //  On active bfr[i_][j_] pour détecter les intersections de diagonales
+                    //  avec celles des adversaires si on doit passer à la deuxième étape
+                    bfr[i_][j_] = 1;
+                }
+            }
+        }
+
+        //  Deuxième étape : Si aucun adversaire n'a été trouvé (coups possibles vide),
         //  alors on fait les intersections des diagonales du pion du joueur
         //  avec celles des pions de l'adversaire.
 
         //  Première passe : Explorer les diagonales du joueur
 
 
-        //  Deuxième passe : Pour chaque pion, vérifier si la diagonale du joueur
+        //  Deuxième passe : Pour chaque pion, vérifier si la diagonale du joueur est sur son chemin
         
         System.out.println(tabCoup);
 
@@ -180,8 +196,8 @@ public class PlateauFouFou implements Partie1 {
 
         int compt = 0;
 
-        for(int i = 0; i < 8; i++)
-            for(int j = 0; j < 8; j++)
+        for(int i = 0; i < pSize; i++)
+            for(int j = 0; j < pSize; j++)
                 if(this.plateau[i][j].getState() == state)
                     compt++;
 
@@ -212,8 +228,8 @@ public class PlateauFouFou implements Partie1 {
      * Fonction d'affichage du plateau
      */
     public void printPlateau() {
-        for(int i = 0; i < 8; i++) {
-            for (int j = 0; j < 8; j++)
+        for(int i = 0; i < pSize; i++) {
+            for (int j = 0; j < pSize; j++)
                 System.out.print(this.plateau[i][j].getState());
 
             System.out.println();
