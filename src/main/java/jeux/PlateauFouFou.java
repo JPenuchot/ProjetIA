@@ -126,7 +126,7 @@ public class PlateauFouFou implements Partie1 {
                 if (currentCase.getState() == player) {
                     cp = this.searchMouvement(currentCase);
                     for(int k = 0; k < cp.length; k++){
-                        coupPossible[compt] = cp[i];
+                        coupPossible[compt] = cp[k];
                         compt++;
                     }
                 }
