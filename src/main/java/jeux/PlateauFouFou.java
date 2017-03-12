@@ -1,11 +1,22 @@
 package jeux;
 
 import java.io.*;
+import java.util.ArrayList;
 
 public class PlateauFouFou implements Partie1 {
 
     public Case[][] plateau;
     final int pSize = 8;
+    final String[] letters = { //  TODO : Générer dynamiquement
+        "A",
+        "B",
+        "C",
+        "D",
+        "E",
+        "F",
+        "G",
+        "H"
+    };
 
     /**
      * Default Construtor
@@ -125,30 +136,35 @@ public class PlateauFouFou implements Partie1 {
      * @param c la case de recherche de depart
      * @return un string de toutes les coups possibles
      */
-    public String searchMouvement(Case c) {
+    public String[] searchMouvement(Case c) {
         String tabCoup = "";
         State mangeable = c.getInverseState(); // Couleurs mangeable par le joueur sur la case c;
         int x = c.getX() , y = c.getY();
         int i_, j_;
 
+        ArrayList<String> res = new ArrayList<String>();
+
         //  Liste des trajectoires possibles pour le pion en cours
-        int bfr[pSize][pSize];
+        int[][] bfr = new int[pSize][pSize];
 
         //  Première étape : Recherche d'adversaires aux diagonales et activation des cases
         for(int i = 0; i < pSize; i++){
-            boolean dirTab[4];
+            boolean dirTab[] = new boolean[4];
             for(int dir = 0; dir < 4; dir++){
-                i_ = // TODO;
-                j_ = // TODO;
+                i_ = x + ((((dir >> 1) % 1) * 2) - 1) * i;    //  Permet d'alterner entre x + i et x - i deux fois sur quatre en fonction de dir
+                j_ = y + (((dir % 1)        * 2) - 1) * i;    //  Permet d'alterner entre y + j et y - j une fois sur deux en fonction de dir
                 if(dirTab[dir] && i_ < pSize && j_ < pSize && i_ >= 0 && j_ >= 0){
                     //  Si on trouve un ennemi, inverser dirTab[dir] et ajouter la position (i_; j_) à la liste des coups possibles
-
-                    //  On active bfr[i_][j_] pour détecter les intersections de diagonales
-                    //  avec celles des adversaires si on doit passer à la deuxième étape
-                    bfr[i_][j_] = 1;
+                    if(this.plateau[i_][j_] == mangeable){
+                        //  TODO Ajout de la position
+                        res.add(convertCoordToString(i_, j_));
+                    }
+                    bfr[i_][j_] = 1;    //  Marquer les diagonales du pion (Utilisé pour l'étape 2)
                 }
             }
         }
+
+        if(!res.isEmpty()){ return res.toArray(); } //  On retourne le tableau dans le cas d'une menace
 
         //  Deuxième étape : Si aucun adversaire n'a été trouvé (coups possibles vide),
         //  alors on fait les intersections des diagonales du pion du joueur
@@ -210,7 +226,7 @@ public class PlateauFouFou implements Partie1 {
      * @param move le move a convertir sous la forme : (Ex : B2)
      * @return le numero de la colonne (Ex : 1)
      */
-    private int convertStringToCoord(String move) {
+    public static int convertStringToCoord(String move) {
         String[] x = move.split("");
 
         if(x[0].equals("A")) return 0;
@@ -222,6 +238,10 @@ public class PlateauFouFou implements Partie1 {
         else if(x[0].equals("G")) return 6;
         else if(x[0].equals("H")) return 7;
         else                      return -1;
+    }
+
+    public static String convertCoordToString(int i, int j){
+        return letters[i] + j;
     }
 
     /**
