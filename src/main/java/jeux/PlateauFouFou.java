@@ -2,6 +2,7 @@ package jeux;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class PlateauFouFou implements Partie1 {
 
@@ -122,7 +123,7 @@ public class PlateauFouFou implements Partie1 {
             for (int j = 0; j < pSize; j++) {
                 Case currentCase = this.plateau[i][j];
                 if (currentCase.getState() == player) {
-                    coupPossible[compt] = this.searchMouvement(currentCase);
+                    coupPossible[compt] = Arrays.toString(this.searchMouvement(currentCase));
                     compt++;
                 }
             }
