@@ -3,8 +3,10 @@ package jeux;
 public class PartieFouFou {
 
     public static void printCoupPossible(String[] coupPossible) {
-        for(int i = 0; i < coupPossible.length; i++) {
-            System.out.print(coupPossible[i] + " ");
+        for (int i = 0; i < coupPossible.length; i++) {
+            if(coupPossible[i] != null) {
+                System.out.print(coupPossible[i] + " ");
+            }
 
             if(i % 10 == 0)
                 System.out.println();
@@ -43,7 +45,7 @@ public class PartieFouFou {
             if(meilleurCoup.length != 0 ) {
                 System.out.println("Coup joué : " + meilleurCoup[0] + " par le joueur " + lesJoueurs[jnum]);
 
-                plateauCourant.play(meilleurCoup[1], lesJoueurs[jnum]);
+                plateauCourant.play(meilleurCoup[0], lesJoueurs[jnum]);
                 plateauCourant.printPlateau();
 
 

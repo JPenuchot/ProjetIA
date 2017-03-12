@@ -116,8 +116,8 @@ public class PlateauFouFou implements Partie1 {
 
         int nombrePiece = this.getNumberCaseState(State.black) + this.getNumberCaseState(State.white);
 
-        String[] coupPossible = new String[200];
-        String[] cp = new String[200];
+        String[] coupPossible = new String[100];
+        String[] cp = new String[50];
         int compt = 0;
 
         for(int i = 0; i < pSize; i++) {
