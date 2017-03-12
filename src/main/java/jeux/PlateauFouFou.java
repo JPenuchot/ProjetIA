@@ -149,6 +149,7 @@ public class PlateauFouFou implements Partie1 {
         State mangeable = c.getInverseState(); // Couleurs mangeable par le joueur sur la case c;
         int x = c.getX() , y = c.getY();
         int ni, nj;
+        String sOrigin = convertCoordToString(x, y);
 
         ArrayList<String> res = new ArrayList<String>();
 
@@ -168,7 +169,7 @@ public class PlateauFouFou implements Partie1 {
                     //  Si on trouve un ennemi, inverser dirTab[dir] et ajouter la position (ni; nj) à la liste des coups possibles
                     if(this.plateau[ni][nj].getState() == mangeable){
                         //  Ajout de la position dans le tableau de résultats
-                        res.add(convertCoordToString(ni, nj));  //  TODO : Corriger
+                        res.add(sOrigin + "-" + convertCoordToString(ni, nj));  //  TODO : Corriger
                         dirTab[dir] = !dirTab[dir];
                     }
                 }
@@ -203,7 +204,7 @@ public class PlateauFouFou implements Partie1 {
                             nj_ = nj + (((dir_ % 1)        * 2) - 1) * rad_;
                             if(!dirTab[dir_] && ni_ < pSize && nj_ < pSize && ni_ >= 0 && nj_ >= 0){
                                 if(this.plateau[ni_][nj_].getState() == mangeable){
-                                    res.add(convertCoordToString(ni_, nj_));  //  TODO : Corriger
+                                    res.add(sOrigin + "-" + convertCoordToString(ni_, nj_));  //  TODO : Corriger
                                     dirTab[dir_] = !dirTab[dir_];
                                 }
                             }
