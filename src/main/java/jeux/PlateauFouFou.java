@@ -192,7 +192,7 @@ public class PlateauFouFou implements Partie1 {
                 if(ni < pSize && nj < pSize && ni >= 0 && nj >= 0){
                     //  Deuxième imbrication (parcours des diagonales depuis la position (ni; nj))
                     for(int rad_ = 0; rad_ < pSize; rad_++){
-                        for(int dir_ = 0; dir_ < 4; dir_++){
+                        for(int dir_ = 0; dir_ < 4 && dir_ != dir && (dir & dir_) == 0; dir_++){    //  On n'explore pas la direction de la première imbrication.
                             ni_ = ni + ((((dir_ >> 1) % 2) * 2) - 1) * rad_;
                             nj_ = nj + (((dir_ % 2)        * 2) - 1) * rad_;
                             if(ni_ < pSize && nj_ < pSize && ni_ >= 0 && nj_ >= 0){
