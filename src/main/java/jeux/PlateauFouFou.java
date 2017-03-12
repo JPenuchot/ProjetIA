@@ -150,7 +150,7 @@ public class PlateauFouFou implements Partie1 {
         //  et dir qui itère parmi les quatre directions.
         //  dirTab permet d'indiquer quelles sont les directions à explorer
         //  (on s'arrête dans une direction donnée lorsqu'on a rencontré un ennemi)
-        for(int rad = 0; rad < pSize; rad++){
+        for(int rad = 1; rad < pSize; rad++){
             boolean dirTab[] = new boolean[4];
             for(int dir = 0; dir < 4; dir++){
                 //  ni et nj : Case explorée
@@ -182,7 +182,7 @@ public class PlateauFouFou implements Partie1 {
         int ni_, nj_;
         boolean found = false;
 
-        for(int rad = 0; rad < pSize; rad++){
+        for(int rad = 1; rad < pSize; rad++){
             for(int dir = 0; dir < 4; dir++){
                 //  ni et nj : Case explorée
                 ni = x + ((((dir >> 1) % 2) * 2) - 1) * rad;    //  Permet d'alterner entre x + i et x - i deux fois sur quatre en fonction de dir
@@ -191,7 +191,7 @@ public class PlateauFouFou implements Partie1 {
 
                 if(ni < pSize && nj < pSize && ni >= 0 && nj >= 0){
                     //  Deuxième imbrication (parcours des diagonales depuis la position (ni; nj))
-                    for(int rad_ = 0; rad_ < pSize; rad_++){
+                    for(int rad_ = 1; rad_ < pSize; rad_++){
                         for(int dir_ = 0; dir_ < 4 && dir_ != dir && (dir & dir_) == 0; dir_++){    //  On n'explore pas la direction de la première imbrication.
                             ni_ = ni + ((((dir_ >> 1) % 2) * 2) - 1) * rad_;
                             nj_ = nj + (((dir_ % 2)        * 2) - 1) * rad_;
