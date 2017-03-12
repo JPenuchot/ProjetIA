@@ -153,8 +153,8 @@ public class PlateauFouFou implements Partie1 {
             boolean dirTab[] = new boolean[4];
             for(int dir = 0; dir < 4; dir++){
                 //  ni et nj : Case explorée
-                ni = x + ((((dir >> 1) % 1) * 2) - 1) * rad;    //  Permet d'alterner entre x + i et x - i deux fois sur quatre en fonction de dir
-                nj = y + (((dir % 1)        * 2) - 1) * rad;    //  Permet d'alterner entre y + j et y - j une fois sur deux en fonction de dir
+                ni = x + ((((dir >> 1) % 2) * 2) - 1) * rad;    //  Permet d'alterner entre x + i et x - i deux fois sur quatre en fonction de dir
+                nj = y + (((dir % 2)        * 2) - 1) * rad;    //  Permet d'alterner entre y + j et y - j une fois sur deux en fonction de dir
                 if(!dirTab[dir] && ni < pSize && nj < pSize && ni >= 0 && nj >= 0){
                     //  Si on trouve un ennemi, inverser dirTab[dir] et ajouter la position (ni; nj) à la liste des coups possibles
                     if(this.plateau[ni][nj].getState() == mangeable){
@@ -179,7 +179,7 @@ public class PlateauFouFou implements Partie1 {
         //  On ne vérifie plus la présence d'ennemis sur le chemin car on sait qu'il n'y en a pas
 
         int ni_, nj_;
-        
+
         for(int rad = 0; rad < pSize; rad++){
             for(int dir = 0; dir < 4; dir++){
                 //  ni et nj : Case explorée
