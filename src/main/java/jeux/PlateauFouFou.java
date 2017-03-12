@@ -8,7 +8,7 @@ public class PlateauFouFou implements Partie1 {
 
     public Case[][] plateau;
     final int pSize = 8;
-    final String[] letters = { //  TODO : Générer dynamiquement
+    static final String[] letters = { //  TODO : Générer dynamiquement
         "A",
         "B",
         "C",
@@ -138,47 +138,77 @@ public class PlateauFouFou implements Partie1 {
      * @return un string de toutes les coups possibles
      */
     public String[] searchMouvement(Case c) {
-        String tabCoup = "";
         State mangeable = c.getInverseState(); // Couleurs mangeable par le joueur sur la case c;
         int x = c.getX() , y = c.getY();
-        int i_, j_;
+        int ni, nj;
 
         ArrayList<String> res = new ArrayList<String>();
 
-        //  Liste des trajectoires possibles pour le pion en cours
-        int[][] bfr = new int[pSize][pSize];
-
         //  Première étape : Recherche d'adversaires aux diagonales et activation des cases
-        for(int i = 0; i < pSize; i++){
+        //  ----
+        //  La progression se fait avec rad qui représente le rayon
+        //  et dir qui itère parmi les quatre directions.
+        //  dirTab permet d'indiquer quelles sont les directions à explorer
+        //  (on s'arrête dans une direction donnée lorsqu'on a rencontré un ennemi)
+        for(int rad = 0; rad < pSize; rad++){
             boolean dirTab[] = new boolean[4];
             for(int dir = 0; dir < 4; dir++){
-                i_ = x + ((((dir >> 1) % 1) * 2) - 1) * i;    //  Permet d'alterner entre x + i et x - i deux fois sur quatre en fonction de dir
-                j_ = y + (((dir % 1)        * 2) - 1) * i;    //  Permet d'alterner entre y + j et y - j une fois sur deux en fonction de dir
-                if(dirTab[dir] && i_ < pSize && j_ < pSize && i_ >= 0 && j_ >= 0){
-                    //  Si on trouve un ennemi, inverser dirTab[dir] et ajouter la position (i_; j_) à la liste des coups possibles
-                    if(this.plateau[i_][j_] == mangeable){
-                        //  TODO Ajout de la position
-                        res.add(convertCoordToString(i_, j_));
+                //  ni et nj : Case explorée
+                ni = x + ((((dir >> 1) % 2) * 2) - 1) * rad;    //  Permet d'alterner entre x + i et x - i deux fois sur quatre en fonction de dir
+                nj = y + (((dir % 2)        * 2) - 1) * rad;    //  Permet d'alterner entre y + j et y - j une fois sur deux en fonction de dir
+                if(!dirTab[dir] && ni < pSize && nj < pSize && ni >= 0 && nj >= 0){
+                    //  Si on trouve un ennemi, inverser dirTab[dir] et ajouter la position (ni; nj) à la liste des coups possibles
+                    if(this.plateau[ni][nj].getState() == mangeable){
+                        //  Ajout de la position dans le tableau de résultats
+                        res.add(convertCoordToString(ni, nj));  //  TODO : Corriger
+                        dirTab[dir] = !dirTab[dir];
                     }
-                    bfr[i_][j_] = 1;    //  Marquer les diagonales du pion (Utilisé pour l'étape 2)
                 }
             }
         }
 
-        if(!res.isEmpty()){ return res.toArray(); } //  On retourne le tableau dans le cas d'une menace
+        //  On retourne le tableau dans le cas d'une menace
+        if(!res.isEmpty()){
+            String[] arrRes = new String[res.size()];
+            res.toArray(arrRes);
+            return arrRes;
+        }
 
-        //  Deuxième étape : Si aucun adversaire n'a été trouvé (coups possibles vide),
-        //  alors on fait les intersections des diagonales du pion du joueur
-        //  avec celles des pions de l'adversaire.
+        //  Deuxième passe : double exploration (héhé)
 
-        //  Première passe : Explorer les diagonales du joueur
+        //  Première imbrication
+        //  On ne vérifie plus la présence d'ennemis sur le chemin car on sait qu'il n'y en a pas
 
+        int ni_, nj_;
 
-        //  Deuxième passe : Pour chaque pion, vérifier si la diagonale du joueur est sur son chemin
-        
-        System.out.println(tabCoup);
+        for(int rad = 0; rad < pSize; rad++){
+            for(int dir = 0; dir < 4; dir++){
+                //  ni et nj : Case explorée
+                ni = x + ((((dir >> 1) % 1) * 2) - 1) * rad;    //  Permet d'alterner entre x + i et x - i deux fois sur quatre en fonction de dir
+                nj = y + (((dir % 1)        * 2) - 1) * rad;    //  Permet d'alterner entre y + j et y - j une fois sur deux en fonction de dir
+                if(ni < pSize && nj < pSize && ni >= 0 && nj >= 0){
+                    //  Deuxième imbrication (parcours des diagonales depuis la position (ni; nj))
+                    for(int rad_ = 0; rad_ < pSize; rad_++){
+                        boolean dirTab[] = new boolean[4];
+                        for(int dir_ = 0; dir_ < 4; dir_++){
+                            ni_ = ni + ((((dir_ >> 1) % 1) * 2) - 1) * rad_;
+                            nj_ = nj + (((dir_ % 1)        * 2) - 1) * rad_;
+                            if(!dirTab[dir_] && ni_ < pSize && nj_ < pSize && ni_ >= 0 && nj_ >= 0){
+                                if(this.plateau[ni_][nj_].getState() == mangeable){
+                                    res.add(convertCoordToString(ni_, nj_));  //  TODO : Corriger
+                                    dirTab[dir_] = !dirTab[dir_];
+                                }
+                            }
+                        }
+                    }
+                    //  Fin deuxième imbrication
+                }
+            }
+        }
 
-        return tabCoup;
+        String[] arrRes = new String[res.size()];
+        res.toArray(arrRes);
+        return arrRes;
     }
 
     @Override
