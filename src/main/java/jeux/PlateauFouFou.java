@@ -116,17 +116,25 @@ public class PlateauFouFou implements Partie1 {
 
         int nombrePiece = this.getNumberCaseState(State.black) + this.getNumberCaseState(State.white);
 
-        String[] coupPossible = new String[nombrePiece];
+        String[] coupPossible = new String[100];
+        String[] cp = new String[20];
         int compt = 0;
 
         for(int i = 0; i < pSize; i++) {
             for (int j = 0; j < pSize; j++) {
                 Case currentCase = this.plateau[i][j];
                 if (currentCase.getState() == player) {
-                    coupPossible[compt] = Arrays.toString(this.searchMouvement(currentCase));
-                    compt++;
+                    cp = this.searchMouvement(currentCase);
+                    for(int k = 0; k < cp.length; k++){
+                        coupPossible[compt] = cp[i];
+                        compt++;
+                    }
                 }
             }
+        }
+
+        for(int i = 0; i < nombrePiece; i++) {
+            //System.out.println(coupPossible[i]);
         }
 
         return coupPossible;

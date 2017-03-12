@@ -25,14 +25,14 @@ public class PartieFouFou {
         jnum = 0; // On commence par le joueur Blanc (arbitraire)
 
         while (!jeufini) {
-            System.out.println("Coups possibles pour" + lesJoueurs[jnum] + " : " + plateauCourant.mouvementsPossibles(lesJoueurs[jnum]));
-
             String[] meilleurCoup = plateauCourant.mouvementsPossibles(lesJoueurs[jnum]);
 
-            if(meilleurCoup.length != 0 ) {
-                System.out.println("Coup joué : " + meilleurCoup + " par le joueur " + lesJoueurs[jnum]);
+            System.out.println("Coups possibles pour " + lesJoueurs[jnum] + " : " + meilleurCoup[0]);
 
-                plateauCourant.play(meilleurCoup[0], lesJoueurs[jnum]);
+            if(meilleurCoup.length != 0 ) {
+                System.out.println("Coup joué : " + meilleurCoup[0] + " par le joueur " + lesJoueurs[jnum]);
+
+                plateauCourant.play(meilleurCoup[1], lesJoueurs[jnum]);
                 plateauCourant.printPlateau();
 
 
