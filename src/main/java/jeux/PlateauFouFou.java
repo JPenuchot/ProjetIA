@@ -180,12 +180,15 @@ public class PlateauFouFou implements Partie1 {
         //  On ne vérifie plus la présence d'ennemis sur le chemin car on sait qu'il n'y en a pas
 
         int ni_, nj_;
+        boolean found = false;
 
         for(int rad = 0; rad < pSize; rad++){
             for(int dir = 0; dir < 4; dir++){
                 //  ni et nj : Case explorée
                 ni = x + ((((dir >> 1) % 2) * 2) - 1) * rad;    //  Permet d'alterner entre x + i et x - i deux fois sur quatre en fonction de dir
                 nj = y + (((dir % 2)        * 2) - 1) * rad;    //  Permet d'alterner entre y + j et y - j une fois sur deux en fonction de dir
+                found = false;
+
                 if(ni < pSize && nj < pSize && ni >= 0 && nj >= 0){
                     //  Deuxième imbrication (parcours des diagonales depuis la position (ni; nj))
                     for(int rad_ = 0; rad_ < pSize; rad_++){
@@ -197,9 +200,13 @@ public class PlateauFouFou implements Partie1 {
                                 if(this.plateau[ni_][nj_].getState() == mangeable){
                                     res.add(sOrigin + "-" + convertCoordToString(ni_, nj_));  //  TODO : Corriger
                                     dirTab[dir_] = !dirTab[dir_];
+                                    found = true;
+                                    break;
                                 }
                             }
                         }
+                        if(found)   //  Plus besoin de continuer l'exploration si on a trouvé un ennemi.
+                            break;
                     }
                     //  Fin deuxième imbrication
                 }
