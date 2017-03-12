@@ -78,7 +78,7 @@ public class PlateauFouFou implements Partie1 {
             for(int i = 0; i < pSize; i++) {
                 file.write((i + 1) + " ");
                 for(int j = 0; j < pSize; j++)
-                    file.write(this.plateau[i][j].getStateAsString()); // A changer quand le tableau sera un objet de Cellule
+                    file.write(this.plateau[i][j].getStateAsString()); // A changer quand le tableau sera un objet de Cellul
                 file.write(" " + (i + 1) + "\n");
             }
 
@@ -116,8 +116,8 @@ public class PlateauFouFou implements Partie1 {
 
         int nombrePiece = this.getNumberCaseState(State.black) + this.getNumberCaseState(State.white);
 
-        String[] coupPossible = new String[500];
-        String[] cp = new String[500];
+        String[] coupPossible = new String[200];
+        String[] cp = new String[200];
         int compt = 0;
 
         for(int i = 0; i < pSize; i++) {
@@ -244,8 +244,8 @@ public class PlateauFouFou implements Partie1 {
         int xDest = this.convertStringToCoord(moveTab[1]);
         int yDest = Integer.parseInt((moveTab[1].split(""))[1]);
 
-        this.plateau[ySource-1][xSource].setState(State.empty);
-        this.plateau[yDest-1][xDest].setState(player);
+        this.plateau[ySource][xSource].setState(State.empty);
+        this.plateau[yDest][xDest].setState(player);
     }
 
     @Override

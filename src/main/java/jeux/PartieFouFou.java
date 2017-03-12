@@ -1,6 +1,16 @@
 package jeux;
 
 public class PartieFouFou {
+
+    public static void printCoupPossible(String[] coupPossible) {
+        for(int i = 0; i < coupPossible.length; i++) {
+            System.out.print(coupPossible[i] + " ");
+
+            if(i % 10 == 0)
+                System.out.println();
+        }
+    }
+
     public static void main(String[] args) {
 
         String jBlanc = "blanc";
@@ -27,7 +37,8 @@ public class PartieFouFou {
         while (!jeufini) {
             String[] meilleurCoup = plateauCourant.mouvementsPossibles(lesJoueurs[jnum]);
 
-            System.out.println("Coups possibles pour " + lesJoueurs[jnum] + " : " + meilleurCoup[0]);
+            System.out.println("Coups possibles pour " + lesJoueurs[jnum] + " : ");
+            printCoupPossible(meilleurCoup);
 
             if(meilleurCoup.length != 0 ) {
                 System.out.println("Coup joué : " + meilleurCoup[0] + " par le joueur " + lesJoueurs[jnum]);
