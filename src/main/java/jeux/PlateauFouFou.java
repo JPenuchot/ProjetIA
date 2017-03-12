@@ -116,8 +116,8 @@ public class PlateauFouFou implements Partie1 {
 
         int nombrePiece = this.getNumberCaseState(State.black) + this.getNumberCaseState(State.white);
 
-        String[] coupPossible = new String[100];
-        String[] cp = new String[20];
+        String[] coupPossible = new String[500];
+        String[] cp = new String[500];
         int compt = 0;
 
         for(int i = 0; i < pSize; i++) {
@@ -290,7 +290,12 @@ public class PlateauFouFou implements Partie1 {
     public void printPlateau() {
         for(int i = 0; i < pSize; i++) {
             for (int j = 0; j < pSize; j++)
-                System.out.print(this.plateau[i][j].getState());
+                if(this.plateau[i][j].getState() == State.black)
+                    System.out.print("b");
+                else if(this.plateau[i][j].getState() == State.white)
+                    System.out.print("w");
+                else
+                    System.out.print("-");
 
             System.out.println();
         }
