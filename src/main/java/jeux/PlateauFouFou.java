@@ -184,15 +184,15 @@ public class PlateauFouFou implements Partie1 {
         for(int rad = 0; rad < pSize; rad++){
             for(int dir = 0; dir < 4; dir++){
                 //  ni et nj : Case explorée
-                ni = x + ((((dir >> 1) % 1) * 2) - 1) * rad;    //  Permet d'alterner entre x + i et x - i deux fois sur quatre en fonction de dir
-                nj = y + (((dir % 1)        * 2) - 1) * rad;    //  Permet d'alterner entre y + j et y - j une fois sur deux en fonction de dir
+                ni = x + ((((dir >> 1) % 2) * 2) - 1) * rad;    //  Permet d'alterner entre x + i et x - i deux fois sur quatre en fonction de dir
+                nj = y + (((dir % 2)        * 2) - 1) * rad;    //  Permet d'alterner entre y + j et y - j une fois sur deux en fonction de dir
                 if(ni < pSize && nj < pSize && ni >= 0 && nj >= 0){
                     //  Deuxième imbrication (parcours des diagonales depuis la position (ni; nj))
                     for(int rad_ = 0; rad_ < pSize; rad_++){
                         boolean dirTab[] = new boolean[4];
                         for(int dir_ = 0; dir_ < 4; dir_++){
-                            ni_ = ni + ((((dir_ >> 1) % 1) * 2) - 1) * rad_;
-                            nj_ = nj + (((dir_ % 1)        * 2) - 1) * rad_;
+                            ni_ = ni + ((((dir_ >> 1) % 2) * 2) - 1) * rad_;
+                            nj_ = nj + (((dir_ % 2)        * 2) - 1) * rad_;
                             if(!dirTab[dir_] && ni_ < pSize && nj_ < pSize && ni_ >= 0 && nj_ >= 0){
                                 if(this.plateau[ni_][nj_].getState() == mangeable){
                                     res.add(sOrigin + "-" + convertCoordToString(ni_, nj_));  //  TODO : Corriger
