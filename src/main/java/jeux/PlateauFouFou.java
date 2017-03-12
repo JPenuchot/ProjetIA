@@ -169,7 +169,7 @@ public class PlateauFouFou implements Partie1 {
                     //  Si on trouve un ennemi, inverser dirTab[dir] et ajouter la position (ni; nj) à la liste des coups possibles
                     if(this.plateau[ni][nj].getState() == mangeable){
                         //  Ajout de la position dans le tableau de résultats
-                        res.add(sOrigin + "-" + convertCoordToString(ni, nj));  //  TODO : Corriger
+                        res.add(sOrigin + "-" + convertCoordToString(ni, nj));
                         dirTab[dir] = !dirTab[dir];
                     }
                 }
@@ -201,15 +201,13 @@ public class PlateauFouFou implements Partie1 {
                 if(ni < pSize && nj < pSize && ni >= 0 && nj >= 0){
                     //  Deuxième imbrication (parcours des diagonales depuis la position (ni; nj))
                     for(int rad_ = 0; rad_ < pSize; rad_++){
-                        boolean dirTab[] = new boolean[4];
                         for(int dir_ = 0; dir_ < 4; dir_++){
                             ni_ = ni + ((((dir_ >> 1) % 2) * 2) - 1) * rad_;
                             nj_ = nj + (((dir_ % 2)        * 2) - 1) * rad_;
-                            if(!dirTab[dir_] && ni_ < pSize && nj_ < pSize && ni_ >= 0 && nj_ >= 0){
+                            if(ni_ < pSize && nj_ < pSize && ni_ >= 0 && nj_ >= 0){
                                 if(this.plateau[ni_][nj_].getState() == mangeable){
-                                    res.add(sOrigin + "-" + convertCoordToString(ni_, nj_));  //  TODO : Corriger
-                                    dirTab[dir_] = !dirTab[dir_];
-                                    found = true;
+                                    res.add(sOrigin + "-" + convertCoordToString(ni, nj));
+                                    found = true;   //  On casse les deux boucles si on trouve un ennemi lors de la 2ème exploration.
                                     break;
                                 }
                             }
