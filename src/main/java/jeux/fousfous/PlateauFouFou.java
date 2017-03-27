@@ -1,8 +1,10 @@
-package jeux;
+package fousfous;
 
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
+
+import jeux.Partie1;
 
 public class PlateauFouFou implements Partie1 {
 

@@ -1,6 +1,5 @@
-package jeux;
+package fousfous;
 
-import jeux.Case;
 import org.junit.Test;
 import org.junit.Assert;
 

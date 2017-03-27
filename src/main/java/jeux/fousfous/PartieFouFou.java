@@ -1,4 +1,4 @@
-package jeux;
+package fousfous;
 
 public class PartieFouFou {
 
