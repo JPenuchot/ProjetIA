@@ -7,10 +7,10 @@ import java.util.Date;
  * Petite Classe toute simple qui vous montre comment on peut lancer une partie sur deux IJoueurs...
  * Cela vous servira a debugger facilement votre projet en conditions presque reelles de tournoi
  * 
- * Attention, l'arbitre n'est pas lanc� dessus, mais comme il s'agit de deux IJoueur � vous il n'est
- * pas n�cessaire de v�rifier la validit� des coups (bien entendu)
+ * Attention, l'arbitre n'est pas lancé dessus, mais comme il s'agit de deux IJoueur à vous il n'est
+ * pas nécessaire de vérifier la validité des coups (bien entendu)
  * 
- * Par contre, comme rien ne v�rifie la fin de partie (pas d'arbitre), vos IJoueur devront renvoyer
+ * Par contre, comme rien ne vérifie la fin de partie (pas d'arbitre), vos IJoueur devront renvoyer
  * la chaine "xxxxx" pour dire que la partie est finie.
  * 
  * Cette classe n'affiche rien : elle se contente de donner la main alternativement aux deux
@@ -22,7 +22,7 @@ public class Solo {
     private static IJoueur joueurBlanc;
     private static IJoueur joueurNoir;
 
-    // Ne pas modifier ces constantes, elles seront utilisees par l'arbitre
+    // Ne pas modifier ces constantes, elles seront utilisées par l'arbitre
     private final static int BLANC = -1;
     private final static int NOIR = 1;
 
@@ -37,8 +37,8 @@ public class Solo {
     }
 
     /**
-     * Pour �viter de toujours envoyer des lignes de commandes, vous pouvez renvoyer automatiquement
-     * dans cette m�thode votre joueur par d�faut. Attention, il faut bien remplir le return new
+     * Pour éviter de toujours envoyer des lignes de commandes, vous pouvez renvoyer automatiquement
+     * dans cette méthode votre joueur par défaut. Attention, il faut bien remplir le return new
      * VOTREJOUEUR() pour que cela fonctionne la classe implantee renvoyee doit implanter
      * l'interface IJoueur...
      * 
@@ -59,7 +59,7 @@ public class Solo {
      * 
      * @param classeJoueur
      * @param s
-     * @return la classe chargee dynamiquement
+     * @return la classe chargée dynamiquement
      */
     private static IJoueur loadNamedPlayer(String classeJoueur, String s) {
 	IJoueur joueur;
@@ -77,8 +77,8 @@ public class Solo {
     }
 
     /**
-     * Boucle principale du jeu, en utilisant une version de l'arbitre identique a celle du tournoi
-     * L'arbitre sera le garant de la validite des coups, et de leur affichage standard pour la
+     * Boucle principale du jeu, en utilisant une version de l'arbitre identique à celle du tournoi
+     * L'arbitre sera le garant de la validité des coups, et de leur affichage standard pour la
      * publication via le site web.
      * 
      * @param joueurBlanc
@@ -93,7 +93,7 @@ public class Solo {
 	while (!partieFinie) {
 	    nbCoups++;
 
-	    System.out.println("\n*********\nOn demande � " + joueurCourant.binoName() + " de jouer...");
+	    System.out.println("\n*********\nOn demande à " + joueurCourant.binoName() + " de jouer...");
 	    long waitingTime1 = new Date().getTime();
 
 	    coup = joueurCourant.choixMouvement();
@@ -101,7 +101,7 @@ public class Solo {
 	    long waitingTime2 = new Date().getTime();
 	    // On rajoute 1 pour eliminer les temps infinis
 	    long waitingTime = waitingTime2 - waitingTime1 + 1;
-	    System.out.println("Le joueur " + joueurCourant.binoName() + " a jou� le coup " + coup + " en "
+	    System.out.println("Le joueur " + joueurCourant.binoName() + " a joué le coup " + coup + " en "
 		    + waitingTime + "s.");
 	    try {
 		Thread.sleep(1); // Juste pour attendre un peu
@@ -136,10 +136,10 @@ public class Solo {
 
 	System.out.println("Partie solo ...");
 
-	if (args.length == 0) { // On a deux classes a charger
+	if (args.length == 0) { // On a deux classes à charger
 	    joueurBlanc = getDefaultPlayer("Blanc");
 	    joueurNoir = getDefaultPlayer("Noir");
-	} else if (args.length == 2) { // On a deux classes a charger
+	} else if (args.length == 2) { // On a deux classes à charger
 	    joueurBlanc = getDefaultPlayer("Blanc");
 	    joueurNoir = getDefaultPlayer("Noir");
 	} else if (args.length == 3) {

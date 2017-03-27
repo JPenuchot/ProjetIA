@@ -11,14 +11,14 @@ package fousfous;
 
 public interface IJoueur {
 
-    // Mais pas lors de la conversation avec l'arbitre (m�thodes initJoueur et getNumJoueur)
+    // Mais pas lors de la conversation avec l'arbitre (méthodes initJoueur et getNumJoueur)
     // Vous pouvez changer cela en interne si vous le souhaitez
     static final int BLANC = -1;
     static final int NOIR = 1;
 
     /**
-     * L'arbitre vient de lancer votre joueur. Il lui informe par cette m�thode que vous devez jouer
-     * dans cette couleur. Vous pouvez utiliser cette m�thode abstraite, ou la m�thode constructeur
+     * L'arbitre vient de lancer votre joueur. Il lui informe par cette méthode que vous devez jouer
+     * dans cette couleur. Vous pouvez utiliser cette méthode abstraite, ou la méthode constructeur
      * de votre classe, pour initialiser vos structures.
      * 
      * @param mycolour
@@ -26,21 +26,21 @@ public interface IJoueur {
      */
     public void initJoueur(int mycolour);
 
-    // Doit retourner l'argument pass� par la fonction ci-dessus (constantes BLANC ou NOIR)
+    // Doit retourner l'argument passé par la fonction ci-dessus (constantes BLANC ou NOIR)
     public int getNumJoueur();
 
     /**
-     * C'est ici que vous devez faire appel � votre IA pour trouver le meilleur coup � jouer sur le
+     * C'est ici que vous devez faire appel à votre IA pour trouver le meilleur coup à jouer sur le
      * plateau courant.
      * 
-     * @return une chaine d�crivant le mouvement. Cette chaine doit ?tre d�crite exactement comme
+     * @return une chaine décrivant le mouvement. Cette chaine doit ?tre décrite exactement comme
      *         sur l'exemple : String msg = "" + positionInitiale + "-" +positionFinale + ""; ou "PASSE";
-     *          Chaque position contient une lettre et un num�ro, par exemple:A1,B2 (coup "A1-B2")
+     *          Chaque position contient une lettre et un numéro, par exemple:A1,B2 (coup "A1-B2")
      */
     public String choixMouvement();
 
     /**
-     * M�thode appel�e par l'arbitre pour d�signer le vainqueur. Vous pouvez en profiter pour
+     * Méthode appelée par l'arbitre pour désigner le vainqueur. Vous pouvez en profiter pour
      * imprimer une banni?re de joie... Si vous gagnez...
      * 
      * @param colour
@@ -49,14 +49,14 @@ public interface IJoueur {
     public void declareLeVainqueur(int colour);
 
     /**
-     * On suppose que l'arbitre a v�rifi� que le mouvement ennemi �tait bien l�gal. Il vous informe
-     * du mouvement ennemi. A vous de r�percuter ce mouvement dans vos structures. Comme par exemple
-     * �liminer les pions que ennemi vient de vous prendre par ce mouvement. Il n'est pas n�cessaire
-     * de r�fl�chir d�j� � votre prochain coup � jouer : pour cela l'arbitre appelera ensuite
+     * On suppose que l'arbitre a vérifié que le mouvement ennemi était bien légal. Il vous informe
+     * du mouvement ennemi. A vous de répercuter ce mouvement dans vos structures. Comme par exemple
+     * éliminer les pions que ennemi vient de vous prendre par ce mouvement. Il n'est pas nécessaire
+     * de réfléchir déjà à votre prochain coup à jouer : pour cela l'arbitre appelera ensuite
      * choixMouvement().
      * 
      * @param coup
-     * 			une chaine d�crivant le mouvement:  par exemple: "A1-B2"
+     * 			une chaine décrivant le mouvement:  par exemple: "A1-B2"
      */
     public void mouvementEnnemi(String coup);
 
