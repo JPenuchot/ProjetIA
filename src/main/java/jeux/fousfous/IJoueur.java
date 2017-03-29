@@ -10,7 +10,6 @@ package fousfous;
  */
 
 public interface IJoueur {
-
     // Mais pas lors de la conversation avec l'arbitre (méthodes initJoueur et getNumJoueur)
     // Vous pouvez changer cela en interne si vous le souhaitez
     static final int BLANC = -1;
