@@ -1,25 +1,27 @@
 package fousfous;
 
-public JoueurAlphaBeta implements IJoueur {
+public class JoueurAlphaBeta implements IJoueur {
 
     // Mais pas lors de la conversation avec l'arbitre (méthodes initJoueur et getNumJoueur)
     // Vous pouvez changer cela en interne si vous le souhaitez
     static final int BLANC = -1;
     static final int NOIR = 1;
 
+    State color;
+
     @Override
     public void initJoueur(int mycolour){
-    	//	TODO
+    	this.color = mycolour == 1 ? State.black : State.white;
     }
 
     @Override
     public int getNumJoueur(){
-    	//	TODO
+    	return -1;   //  TODO
     }
 
     @Override
     public String choixMouvement(){
-    	//	TODO
+    	return null;   //  TODO
     }
 
     @Override
