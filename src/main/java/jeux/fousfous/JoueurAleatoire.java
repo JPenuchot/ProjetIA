@@ -33,6 +33,6 @@ public JoueurAleatoire implements IJoueur {
     }
 
     @Override
-    public String binoName(){ return "Quentin Barrochecul et Jules Penufiotte"; }
+    public String binoName(){ return "Quentin Barroche et Jules Penuchot"; }
 
 }
