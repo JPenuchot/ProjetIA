@@ -7,10 +7,9 @@ import java.util.Arrays;
 import jeux.Partie1;
 
 public class PlateauFouFou implements Partie1 {
-
-    public Case[][] plateau;
+    public Case[] plateau;
     final int pSize = 8;
-    static final String[] letters = { //  TODO : Générer dynamiquement
+    static final String[] letters = {
         "A",
         "B",
         "C",
@@ -25,19 +24,23 @@ public class PlateauFouFou implements Partie1 {
      * Default Construtor
      */
     public PlateauFouFou() {
-        this.plateau = new Case[pSize][pSize];
+        this.plateau = new Case[pSize * pSize];
 
         // Permet de dessiner la grille de depart
         for(int i = 0; i < pSize; i++) {
             for(int j = 0; j < pSize; j++) {
                 if(i % 2 == 1 && j % 2 == 0)
-                    this.plateau[i][j] = new Case(State.black, i, j); // b -> pion noir
+                    this.plateau[i * pSize + j] = new Case(State.black, i, j); // b -> pion noir
                 else if (i % 2 == 0 && j % 2 == 1)
-                    this.plateau[i][j] = new Case(State.white, i, j); // r -> pion blanc
+                    this.plateau[i * pSize + j] = new Case(State.white, i, j); // r -> pion blanc
                 else
-                    this.plateau[i][j] = new Case(State.empty, i, j); // - -> case vide
+                    this.plateau[i * pSize + j] = new Case(State.empty, i, j); // - -> case vide
             }
         }
+    }
+
+    public PlateauFouFou(Case[] plateau){
+
     }
 
     @Override
@@ -55,7 +58,7 @@ public class PlateauFouFou implements Partie1 {
                     String[] formatLine = line.split(" ")[1].split(""); // Barbu Line ! ^^ permet de retirer les chiffre des lignes puis de decouper chaque case
 
                     for(int j = 0; j < pSize; j++)
-                        this.plateau[i][j].setState(formatLine[j]);
+                        this.plateau[i * pSize + j].setState(formatLine[j]);
 
                     i++;
                 }
@@ -80,7 +83,7 @@ public class PlateauFouFou implements Partie1 {
             for(int i = 0; i < pSize; i++) {
                 file.write((i + 1) + " ");
                 for(int j = 0; j < pSize; j++)
-                    file.write(this.plateau[i][j].getStateAsString()); // A changer quand le tableau sera un objet de Cellul
+                    file.write(this.plateau[i * pSize + j].getStateAsString()); // A changer quand le tableau sera un objet de Cellul
                 file.write(" " + (i + 1) + "\n");
             }
 
@@ -100,7 +103,7 @@ public class PlateauFouFou implements Partie1 {
 
     @Override
     public boolean estValide(String move, String player) {
-        //  TODO
+        
         return true;
     }
 
@@ -108,14 +111,16 @@ public class PlateauFouFou implements Partie1 {
     public String[] mouvementsPossibles(String sPlayer) {
         State player = State.empty;
 
-        if(sPlayer.equals("noir")) player = State.black;
-        else if(sPlayer.equals("blanc")) player = State.white;
-        else {
-            System.out.println("Erreur Paramètre (PlateauFouFou.mouvementPossibles)");
-            System.out.println(Thread.currentThread().getStackTrace());
-            return null;
-        }
+        if(sPlayer.equals("noir"))  return mouvementsPossibles(State.black);
+        if(sPlayer.equals("blanc")) return mouvementsPossibles(State.white);
+        
+        System.out.println("Erreur Paramètre (PlateauFouFou.mouvementPossibles)");
+        System.out.println(Thread.currentThread().getStackTrace());
+        
+        return null;
+    }
 
+    public String[] mouvementsPossibles(State player) {
         int nombrePiece = this.getNumberCaseState(State.black) + this.getNumberCaseState(State.white);
 
         String[] coupPossible = new String[100];
@@ -124,7 +129,7 @@ public class PlateauFouFou implements Partie1 {
 
         for(int i = 0; i < pSize; i++) {
             for (int j = 0; j < pSize; j++) {
-                Case currentCase = this.plateau[i][j];
+                Case currentCase = this.plateau[i * pSize + j];
                 if (currentCase.getState() == player) {
                     cp = this.searchMouvement(currentCase);
                     for(int k = 0; k < cp.length; k++){
@@ -133,10 +138,6 @@ public class PlateauFouFou implements Partie1 {
                     }
                 }
             }
-        }
-
-        for(int i = 0; i < nombrePiece; i++) {
-            //System.out.println(coupPossible[i]);
         }
 
         return coupPossible;
@@ -169,7 +170,7 @@ public class PlateauFouFou implements Partie1 {
                 nj = y + (((dir % 2)        * 2) - 1) * rad;    //  Permet d'alterner entre y + j et y - j une fois sur deux en fonction de dir
                 if(!dirTab[dir] && ni < pSize && nj < pSize && ni >= 0 && nj >= 0){
                     //  Si on trouve un ennemi, inverser dirTab[dir] et ajouter la position (ni; nj) à la liste des coups possibles
-                    if(this.plateau[ni][nj].getState() == mangeable){
+                    if(this.plateau[ni * pSize + nj].getState() == mangeable){
                         //  Ajout de la position dans le tableau de résultats
                         res.add(sOrigin + "-" + convertCoordToString(ni, nj));
                         dirTab[dir] = !dirTab[dir];
@@ -207,7 +208,7 @@ public class PlateauFouFou implements Partie1 {
                             ni_ = ni + ((((dir_ >> 1) % 2) * 2) - 1) * rad_;
                             nj_ = nj + (((dir_ % 2)        * 2) - 1) * rad_;
                             if(ni_ < pSize && nj_ < pSize && ni_ >= 0 && nj_ >= 0){
-                                if(this.plateau[ni_][nj_].getState() == mangeable){
+                                if(this.plateau[ni_ * pSize + nj_].getState() == mangeable){
                                     res.add(sOrigin + "-" + convertCoordToString(ni, nj));
                                     found = true;   //  On casse les deux boucles si on trouve un ennemi lors de la 2ème exploration.
                                     break;
@@ -246,8 +247,8 @@ public class PlateauFouFou implements Partie1 {
         int xDest = this.convertStringToCoord(moveTab[1]);
         int yDest = Integer.parseInt((moveTab[1].split(""))[1]);
 
-        this.plateau[ySource][xSource].setState(State.empty);
-        this.plateau[yDest][xDest].setState(player);
+        this.plateau[ySource * pSize + xSource].setState(State.empty);
+        this.plateau[yDest * pSize + xDest].setState(player);
     }
 
     @Override
@@ -261,7 +262,7 @@ public class PlateauFouFou implements Partie1 {
 
         for(int i = 0; i < pSize; i++)
             for(int j = 0; j < pSize; j++)
-                if(this.plateau[i][j].getState() == state)
+                if(this.plateau[i * pSize + j].getState() == state)
                     compt++;
 
         return compt;
@@ -297,60 +298,14 @@ public class PlateauFouFou implements Partie1 {
     public void printPlateau() {
         for(int i = 0; i < pSize; i++) {
             for (int j = 0; j < pSize; j++)
-                if(this.plateau[i][j].getState() == State.black)
+                if(this.plateau[i * pSize + j].getState() == State.black)
                     System.out.print("b");
-                else if(this.plateau[i][j].getState() == State.white)
+                else if(this.plateau[i * pSize + j].getState() == State.white)
                     System.out.print("w");
                 else
                     System.out.print("-");
 
             System.out.println();
-        }
-    }
-
-    public static void main(String[] args) {
-
-        String jBlanc = "blanc";
-        String jNoir = "noir";
-
-        String[] lesJoueurs = new String[2];
-        lesJoueurs[0] = jBlanc;
-        lesJoueurs[1] = jNoir;
-
-//        AlgoJeu AlgoJoueur[] = new AlgoJeu[2];
-//        AlgoJoueur[0] = new Minimax(HeuristiquesDominos.hblanc, jBlanc, jNoir, 4); // Il faut remplir la méthode !!!
-//        AlgoJoueur[1] = new Minimax(HeuristiquesDominos.hnoir, jNoir, jBlanc, 1);  // Il faut remplir la méthode !!!
-
-
-        boolean jeufini = false;
-        int jnum;
-
-        PlateauFouFou plateauCourant = new PlateauFouFou();
-
-        // A chaque itération de la boucle, on fait jouer un des deux joueurs
-        // tour a tour
-        jnum = 0; // On commence par le joueur Blanc (arbitraire)
-
-        while (!jeufini) {
-            String[] meilleurCoup = plateauCourant.mouvementsPossibles(lesJoueurs[jnum]);
-
-            System.out.println("Coups possibles pour " + lesJoueurs[jnum] + " : ");
-            PartieFouFou.printCoupPossible(meilleurCoup);
-
-            if(meilleurCoup.length != 0 ) {
-                System.out.println("Coup joué : " + meilleurCoup[0] + " par le joueur " + lesJoueurs[jnum]);
-
-                plateauCourant.play(meilleurCoup[0], lesJoueurs[jnum]);
-                plateauCourant.printPlateau();
-
-
-                jnum = 1 - jnum;
-
-            } else {
-                System.out.println("Le joueur " + lesJoueurs[jnum] + " ne peut plus jouer et abandone !");
-                System.out.println("Le joueur " + lesJoueurs[1 - jnum] + " a gagné cette partie !");
-                jeufini = true;
-            }
         }
     }
 }
