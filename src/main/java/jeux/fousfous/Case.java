@@ -93,6 +93,10 @@ public class Case {
     */
     public State getInverseState() {    return (this.state == State.black) ? State.black : State.white;    }
 
+    public static State getInverseState(State st){
+        return (st == State.empty) ? (State.empty) : (st == State.black ? State.white : State.black);
+    }
+
     /**
      * Permet de transformer les coordoonées en String
      * @return
