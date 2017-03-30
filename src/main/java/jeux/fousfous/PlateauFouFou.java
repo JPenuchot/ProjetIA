@@ -109,7 +109,7 @@ public class PlateauFouFou implements Partie1 {
 
     @Override
     public boolean estValide(String move, String player) {
-        
+
         return true;
     }
 
@@ -119,10 +119,10 @@ public class PlateauFouFou implements Partie1 {
 
         if(sPlayer.equals("noir"))  return mouvementsPossibles(State.black);
         if(sPlayer.equals("blanc")) return mouvementsPossibles(State.white);
-        
+
         System.out.println("Erreur Paramètre (PlateauFouFou.mouvementPossibles)");
         System.out.println(Thread.currentThread().getStackTrace());
-        
+
         return null;
     }
 
@@ -255,6 +255,19 @@ public class PlateauFouFou implements Partie1 {
 
         this.plateau[iSource * pSize + jSource].setState(State.empty);
         this.plateau[iDest * pSize + jDest].setState(player);
+    }
+
+
+    public void play(String move, State sPlayer) {
+        // Formattage du Move en Integer
+        String[] moveTab = move.split("-");
+        int iSource = this.convertStringToCoord(moveTab[0]);
+        int jSource = Integer.parseInt((moveTab[0].split(""))[1]);
+        int iDest = this.convertStringToCoord(moveTab[1]);
+        int jDest = Integer.parseInt((moveTab[1].split(""))[1]);
+
+        this.plateau[iSource * pSize + jSource].setState(State.empty);
+        this.plateau[iDest * pSize + jDest].setState(sPlayer);
     }
 
     @Override
