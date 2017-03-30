@@ -1,6 +1,7 @@
 # Folder
 target/
-.idea
+.idea/
+tmp/
 
 
 # File

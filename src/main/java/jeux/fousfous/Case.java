@@ -1,4 +1,4 @@
-package jeux;
+package fousfous;
 
 import java.util.HashMap;
 
