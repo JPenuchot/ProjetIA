@@ -9,7 +9,7 @@ public class JoueurAlphaBeta implements IJoueur {
 
     State color;
     int colorInt;
-    
+
     PlateauFouFou plateau;
 
     @Override
@@ -22,7 +22,7 @@ public class JoueurAlphaBeta implements IJoueur {
 
     @Override
     public int getNumJoueur(){
-    	return -1;   //  TODO
+    	return this.colorInt;
     }
 
     @Override
@@ -32,12 +32,14 @@ public class JoueurAlphaBeta implements IJoueur {
 
     @Override
     public void declareLeVainqueur(int colour){
-    	//	TODO
+    	if (colour == this.colorInt) {
+            System.out.println("J'ai gagné : (" + colorInt + ")");
+        }
     }
 
     @Override
     public void mouvementEnnemi(String coup){
-    	//	TODO
+    	this.plateauCourant.play(coup, Case.getInverseState(this.color));
     }
 
     @Override

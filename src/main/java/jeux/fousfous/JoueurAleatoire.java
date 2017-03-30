@@ -9,16 +9,18 @@ public class JoueurAleatoire implements IJoueur {
 
     State color;
     int colorInt;
+    PlateauFoufou plateauCourant;
 
     @Override
     public void initJoueur(int mycolour){
     	this.color = mycolour == 1 ? State.black : State.white;
         this.colorInt = mycolour;
+        this.plateauCourant = new PlateauFoufou();
     }
 
     @Override
     public int getNumJoueur(){
-    	return -1;   //  TODO
+        return this.colorInt;
     }
 
     @Override
@@ -28,12 +30,14 @@ public class JoueurAleatoire implements IJoueur {
 
     @Override
     public void declareLeVainqueur(int colour){
-    	//	TODO
+        if (colour == this.colorInt) {
+            System.out.println("J'ai gagné : (" + colorInt + ")");
+        }
     }
 
     @Override
     public void mouvementEnnemi(String coup){
-    	//	TODO
+        this.plateauCourant.play(coup, Case.getInverseState(this.color));
     }
 
     @Override
