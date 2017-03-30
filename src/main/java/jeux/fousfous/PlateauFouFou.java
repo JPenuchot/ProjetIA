@@ -248,13 +248,13 @@ public class PlateauFouFou implements Partie1 {
 
         // Formattage du Move en Integer
         String[] moveTab = move.split("-");
-        int xSource = this.convertStringToCoord(moveTab[0]);
-        int ySource = Integer.parseInt((moveTab[0].split(""))[1]);
-        int xDest = this.convertStringToCoord(moveTab[1]);
-        int yDest = Integer.parseInt((moveTab[1].split(""))[1]);
+        int iSource = this.convertStringToCoord(moveTab[0]);
+        int jSource = Integer.parseInt((moveTab[0].split(""))[1]);
+        int iDest = this.convertStringToCoord(moveTab[1]);
+        int jDest = Integer.parseInt((moveTab[1].split(""))[1]);
 
-        this.plateau[ySource * pSize + xSource].setState(State.empty);
-        this.plateau[yDest * pSize + xDest].setState(player);
+        this.plateau[iSource * pSize + jSource].setState(State.empty);
+        this.plateau[iDest * pSize + jDest].setState(player);
     }
 
     @Override
