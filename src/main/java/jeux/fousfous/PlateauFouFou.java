@@ -9,6 +9,7 @@ import jeux.Partie1;
 public class PlateauFouFou implements Partie1 {
     public Case[] plateau;
     final int pSize = 8;
+
     static final String[] letters = {
         "A",
         "B",
@@ -39,8 +40,13 @@ public class PlateauFouFou implements Partie1 {
         }
     }
 
+    /**
+     * Builds a new instance using an existing array.
+     *
+     * @param      plateau  The array the new Plateau object will be built from
+     */
     public PlateauFouFou(Case[] plateau){
-
+        this.plateau = plateau;
     }
 
     @Override
