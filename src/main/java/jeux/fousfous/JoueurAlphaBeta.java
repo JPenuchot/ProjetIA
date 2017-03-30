@@ -8,10 +8,16 @@ public class JoueurAlphaBeta implements IJoueur {
     static final int NOIR = 1;
 
     State color;
+    int colorInt;
+    
+    PlateauFouFou plateau;
 
     @Override
     public void initJoueur(int mycolour){
     	this.color = mycolour == 1 ? State.black : State.white;
+        this.colorInt = mycolour;
+
+        plateau = new PlateauFouFou();
     }
 
     @Override
