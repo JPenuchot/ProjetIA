@@ -1,5 +1,11 @@
 package fousfous;
 
+import java.util.Random;
+import java.util.Date;
+
+/**
+ * Implémente un joueur aléatoire.
+ */
 public class JoueurAleatoire implements IJoueur {
 
     // Mais pas lors de la conversation avec l'arbitre (méthodes initJoueur et getNumJoueur)
@@ -7,37 +13,47 @@ public class JoueurAleatoire implements IJoueur {
     static final int BLANC = -1;
     static final int NOIR = 1;
 
-    State color;
-    int colorInt;
-    PlateauFoufou plateauCourant;
+    State player;
+    int playerInt;
+    PlateauFouFou plateau;
+
+    Random rnd;
 
     @Override
     public void initJoueur(int mycolour){
-    	this.color = mycolour == 1 ? State.black : State.white;
-        this.colorInt = mycolour;
-        this.plateauCourant = new PlateauFoufou();
+    	this.player = mycolour == 1 ? State.black : State.white;
+        this.playerInt = mycolour;
+        this.plateau = new PlateauFouFou();
+
+        Date dt = new Date();
+
+        this.rnd = new Random(dt.getTime());
     }
 
     @Override
     public int getNumJoueur(){
-        return this.colorInt;
+        return this.playerInt;
     }
 
     @Override
     public String choixMouvement(){
-    	return null;   //  TODO
+    	String[] coups = plateau.mouvementsPossibles(player);
+        String coup = coups[rnd.nextInt() % coups.length];
+        plateau.play(coup, this.player);
+
+        return coup;
     }
 
     @Override
     public void declareLeVainqueur(int colour){
-        if (colour == this.colorInt) {
-            System.out.println("J'ai gagné : (" + colorInt + ")");
+        if (colour == this.playerInt) {
+            System.out.println("J'ai gagné : (" + playerInt + ")");
         }
     }
 
     @Override
     public void mouvementEnnemi(String coup){
-        this.plateauCourant.play(coup, Case.getInverseState(this.color));
+        this.plateau.play(coup, Case.getInverseState(this.player));
     }
 
     @Override

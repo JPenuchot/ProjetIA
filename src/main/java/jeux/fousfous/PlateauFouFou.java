@@ -129,9 +129,8 @@ public class PlateauFouFou implements Partie1 {
     public String[] mouvementsPossibles(State player) {
         int nombrePiece = this.getNumberCaseState(State.black) + this.getNumberCaseState(State.white);
 
-        String[] coupPossible = new String[100];
-        String[] cp = new String[50];
-        int compt = 0;
+        ArrayList<String> coupPossible = new ArrayList<String>();
+        String[] cp;
 
         for(int i = 0; i < pSize; i++) {
             for (int j = 0; j < pSize; j++) {
@@ -139,14 +138,13 @@ public class PlateauFouFou implements Partie1 {
                 if (currentCase.getState() == player) {
                     cp = this.searchMouvement(i, j);
                     for(int k = 0; k < cp.length; k++){
-                        coupPossible[compt] = cp[k];
-                        compt++;
+                        coupPossible.add(cp[k]);
                     }
                 }
             }
         }
 
-        return coupPossible;
+        return coupPossible.toArray(new String[coupPossible.size()]);
     }
 
     /**

@@ -19,16 +19,17 @@ public class Case {
         hmStringToState.put("r", State.white);
     }
 
-    static State stringToState(String strState) {    return hmStringToState.get(strState);   }
-    static String stateToString(State stState)  {
+    public static State stringToState(String strState) {    return hmStringToState.get(strState);   }
+    public static String stateToString(State stState)  {
         switch (stState){
-            case State.black:
-                return "b";
-            case State.white:
-                return "r";
-            case State.empty:
-                return "-";
+            case black:
+                return new String("b");
+            case white:
+                return new String("r");
+            case empty:
+                return new String("-");
         }
+        return null;
     }
 
     State state; // Defines the state of the cell (b = State.black, r = State.white, - = State.empty)
