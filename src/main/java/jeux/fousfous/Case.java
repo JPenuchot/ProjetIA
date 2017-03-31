@@ -11,21 +11,25 @@ enum State {
 public class Case {
     //  HashMaps that makes the correspondance from String to State
     static private HashMap<String, State> hmStringToState = new HashMap<String, State>();
-    static private HashMap<State, String> hmStateToString = new HashMap<State, String>();
 
     //  HashMap initialization
     static {
         hmStringToState.put("-", State.empty);
         hmStringToState.put("b", State.black);
         hmStringToState.put("r", State.white);
-        
-        hmStateToString.put(State.empty, "-");
-        hmStateToString.put(State.black, "b");
-        hmStateToString.put(State.white, "r");
     }
 
     static State stringToState(String strState) {    return hmStringToState.get(strState);   }
-    static String stateToString(State stState)  {    return hmStateToString.get(stState);    }
+    static String stateToString(State stState)  {
+        switch (stState){
+            case State.black:
+                return "b";
+            case State.white:
+                return "r";
+            case State.empty:
+                return "-";
+        }
+    }
 
     State state; // Defines the state of the cell (b = State.black, r = State.white, - = State.empty)
 
