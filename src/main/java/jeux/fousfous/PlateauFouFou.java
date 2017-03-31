@@ -31,11 +31,11 @@ public class PlateauFouFou implements Partie1 {
         for(int i = 0; i < pSize; i++) {
             for(int j = 0; j < pSize; j++) {
                 if(i % 2 == 1 && j % 2 == 0)
-                    this.plateau[i * pSize + j] = new Case(State.black, i, j); // b -> pion noir
+                    this.plateau[i * pSize + j] = new Case(State.black); // b -> pion noir
                 else if (i % 2 == 0 && j % 2 == 1)
-                    this.plateau[i * pSize + j] = new Case(State.white, i, j); // r -> pion blanc
+                    this.plateau[i * pSize + j] = new Case(State.white); // r -> pion blanc
                 else
-                    this.plateau[i * pSize + j] = new Case(State.empty, i, j); // - -> case vide
+                    this.plateau[i * pSize + j] = new Case(State.empty); // - -> case vide
             }
         }
     }
@@ -137,7 +137,7 @@ public class PlateauFouFou implements Partie1 {
             for (int j = 0; j < pSize; j++) {
                 Case currentCase = this.plateau[i * pSize + j];
                 if (currentCase.getState() == player) {
-                    cp = this.searchMouvement(currentCase);
+                    cp = this.searchMouvement(i, j);
                     for(int k = 0; k < cp.length; k++){
                         coupPossible[compt] = cp[k];
                         compt++;
@@ -154,11 +154,12 @@ public class PlateauFouFou implements Partie1 {
      * @param c la case de recherche de depart
      * @return un string de toutes les coups possibles
      */
-    public String[] searchMouvement(Case c) {
-        State mangeable = c.getInverseState(); // Couleurs mangeable par le joueur sur la case c;
-        int x = c.getX() , y = c.getY();
+    public String[] searchMouvement(int i, int j) {
         int ni, nj;
-        String sOrigin = convertCoordToString(x, y);
+
+        State mangeable = Case.getInverseState(this.plateau[i * pSize + j].getState());
+
+        String sOrigin = convertCoordToString(i, j);
 
         ArrayList<String> res = new ArrayList<String>();
 
@@ -172,8 +173,8 @@ public class PlateauFouFou implements Partie1 {
             boolean dirTab[] = new boolean[4];
             for(int dir = 0; dir < 4; dir++){
                 //  ni et nj : Case explorée
-                ni = x + ((((dir >> 1) % 2) * 2) - 1) * rad;    //  Permet d'alterner entre x + i et x - i deux fois sur quatre en fonction de dir
-                nj = y + (((dir % 2)        * 2) - 1) * rad;    //  Permet d'alterner entre y + j et y - j une fois sur deux en fonction de dir
+                ni = i + ((((dir >> 1) % 2) * 2) - 1) * rad;    //  Permet d'alterner entre x + i et x - i deux fois sur quatre en fonction de dir
+                nj = j + (((dir % 2)        * 2) - 1) * rad;    //  Permet d'alterner entre y + j et y - j une fois sur deux en fonction de dir
                 if(!dirTab[dir] && ni < pSize && nj < pSize && ni >= 0 && nj >= 0){
                     //  Si on trouve un ennemi, inverser dirTab[dir] et ajouter la position (ni; nj) à la liste des coups possibles
                     if(this.plateau[ni * pSize + nj].getState() == mangeable){
@@ -203,8 +204,8 @@ public class PlateauFouFou implements Partie1 {
         for(int rad = 1; rad < pSize; rad++){
             for(int dir = 0; dir < 4; dir++){
                 //  ni et nj : Case explorée
-                ni = x + ((((dir >> 1) % 2) * 2) - 1) * rad;    //  Permet d'alterner entre x + i et x - i deux fois sur quatre en fonction de dir
-                nj = y + (((dir % 2)        * 2) - 1) * rad;    //  Permet d'alterner entre y + j et y - j une fois sur deux en fonction de dir
+                ni = i + ((((dir >> 1) % 2) * 2) - 1) * rad;    //  Permet d'alterner entre x + i et x - i deux fois sur quatre en fonction de dir
+                nj = j + (((dir % 2)        * 2) - 1) * rad;    //  Permet d'alterner entre y + j et y - j une fois sur deux en fonction de dir
                 found = false;
 
                 if(ni < pSize && nj < pSize && ni >= 0 && nj >= 0){
