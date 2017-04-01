@@ -7,7 +7,7 @@ import java.util.Arrays;
 import jeux.Partie1;
 
 public class PlateauFouFou implements Partie1 {
-    public Case[] plateau;
+    public State[] plateau;
     final int pSize = 8;
 
     static final String[] letters = {
@@ -25,17 +25,17 @@ public class PlateauFouFou implements Partie1 {
      * Default Construtor
      */
     public PlateauFouFou() {
-        this.plateau = new Case[pSize * pSize];
+        this.plateau = new State[pSize * pSize];
 
         // Permet de dessiner la grille de depart
         for(int i = 0; i < pSize; i++) {
             for(int j = 0; j < pSize; j++) {
                 if(i % 2 == 1 && j % 2 == 0)
-                    this.plateau[i * pSize + j] = new Case(State.black); // b -> pion noir
+                    this.plateau[i * pSize + j] = State.black; // b -> pion noir
                 else if (i % 2 == 0 && j % 2 == 1)
-                    this.plateau[i * pSize + j] = new Case(State.white); // r -> pion blanc
+                    this.plateau[i * pSize + j] = State.white; // r -> pion blanc
                 else
-                    this.plateau[i * pSize + j] = new Case(State.empty); // - -> case vide
+                    this.plateau[i * pSize + j] = State.empty; // - -> case vide
             }
         }
     }
@@ -45,7 +45,7 @@ public class PlateauFouFou implements Partie1 {
      *
      * @param      plateau  The array the new Plateau object will be built from
      */
-    public PlateauFouFou(Case[] plateau){
+    public PlateauFouFou(State[] plateau){
         this.plateau = plateau;
     }
 
@@ -64,7 +64,7 @@ public class PlateauFouFou implements Partie1 {
                     String[] formatLine = line.split(" ")[1].split(""); // Barbu Line ! ^^ permet de retirer les chiffre des lignes puis de decouper chaque case
 
                     for(int j = 0; j < pSize; j++)
-                        this.plateau[i * pSize + j].setState(formatLine[j]);
+                        this.plateau[i * pSize + j] = Case.stringToState(formatLine[j]);
 
                     i++;
                 }
@@ -89,7 +89,7 @@ public class PlateauFouFou implements Partie1 {
             for(int i = 0; i < pSize; i++) {
                 file.write((i + 1) + " ");
                 for(int j = 0; j < pSize; j++)
-                    file.write(this.plateau[i * pSize + j].getStateAsString()); // A changer quand le tableau sera un objet de Cellul
+                    file.write(Case.stateToString(this.plateau[i * pSize + j])); // A changer quand le tableau sera un objet de Cellul
                 file.write(" " + (i + 1) + "\n");
             }
 
@@ -134,8 +134,7 @@ public class PlateauFouFou implements Partie1 {
 
         for(int i = 0; i < pSize; i++) {
             for (int j = 0; j < pSize; j++) {
-                Case currentCase = this.plateau[i * pSize + j];
-                if (currentCase.getState() == player) {
+                if (this.plateau[i * pSize + j] == player) {
                     cp = this.searchMouvement(i, j);
                     for(int k = 0; k < cp.length; k++){
                         coupPossible.add(cp[k]);
@@ -155,7 +154,7 @@ public class PlateauFouFou implements Partie1 {
     public String[] searchMouvement(int i, int j) {
         int ni, nj;
 
-        State mangeable = Case.getInverseState(this.plateau[i * pSize + j].getState());
+        State mangeable = Case.getInverseState(this.plateau[i * pSize + j]);
 
         String sOrigin = convertCoordToString(i, j);
 
@@ -175,7 +174,7 @@ public class PlateauFouFou implements Partie1 {
                 nj = j + (((dir % 2)        * 2) - 1) * rad;    //  Permet d'alterner entre y + j et y - j une fois sur deux en fonction de dir
                 if(!dirTab[dir] && ni < pSize && nj < pSize && ni >= 0 && nj >= 0){
                     //  Si on trouve un ennemi, inverser dirTab[dir] et ajouter la position (ni; nj) à la liste des coups possibles
-                    if(this.plateau[ni * pSize + nj].getState() == mangeable){
+                    if(this.plateau[ni * pSize + nj] == mangeable){
                         //  Ajout de la position dans le tableau de résultats
                         res.add(sOrigin + "-" + convertCoordToString(ni, nj));
                         dirTab[dir] = !dirTab[dir];
@@ -213,7 +212,7 @@ public class PlateauFouFou implements Partie1 {
                             ni_ = ni + ((((dir_ >> 1) % 2) * 2) - 1) * rad_;
                             nj_ = nj + (((dir_ % 2)        * 2) - 1) * rad_;
                             if(ni_ < pSize && nj_ < pSize && ni_ >= 0 && nj_ >= 0){
-                                if(this.plateau[ni_ * pSize + nj_].getState() == mangeable){
+                                if(this.plateau[ni_ * pSize + nj_] == mangeable){
                                     res.add(sOrigin + "-" + convertCoordToString(ni, nj));
                                     found = true;   //  On casse les deux boucles si on trouve un ennemi lors de la 2ème exploration.
                                     break;
@@ -252,8 +251,8 @@ public class PlateauFouFou implements Partie1 {
         int iDest = this.convertStringToCoord(moveTab[1]);
         int jDest = Integer.parseInt((moveTab[1].split(""))[1]);
 
-        this.plateau[iSource * pSize + jSource].setState(State.empty);
-        this.plateau[iDest * pSize + jDest].setState(player);
+        this.plateau[iSource * pSize + jSource] = State.empty;
+        this.plateau[iDest * pSize + jDest] = player;
     }
 
     /**
@@ -277,16 +276,16 @@ public class PlateauFouFou implements Partie1 {
         Action[] res = new Action[2];
         res[0].i = iSource;
         res[0].j = jSource;
-        res[0].before   = plateau[iSource * pSize + jSource].getState();
+        res[0].before   = plateau[iSource * pSize + jSource];
         res[0].after    = State.empty;
 
         res[1].i = iDest;
         res[1].j = jDest;
-        res[1].before   = plateau[iDest * pSize + jDest].getState();
+        res[1].before   = plateau[iDest * pSize + jDest];
         res[1].after    = sPlayer;
 
-        this.plateau[iSource * pSize + jSource].setState(State.empty);
-        this.plateau[iDest * pSize + jDest].setState(sPlayer);
+        this.plateau[iSource * pSize + jSource] = State.empty;
+        this.plateau[iDest * pSize + jDest] = sPlayer;
 
         return res;
     }
@@ -298,7 +297,7 @@ public class PlateauFouFou implements Partie1 {
      */
     public void play(Action[] actions){
         for(Action act : actions)
-            plateau[act.i * pSize + act.j].setState(act.after);
+            plateau[act.i * pSize + act.j] = act.after;
     }
 
     /**
@@ -307,7 +306,7 @@ public class PlateauFouFou implements Partie1 {
      * @param      act   L'action décrite
      */
     public void play(Action act){
-        plateau[act.i * pSize + act.j].setState(act.after);
+        plateau[act.i * pSize + act.j] = act.after;
     }
 
     @Override
@@ -321,7 +320,7 @@ public class PlateauFouFou implements Partie1 {
 
         for(int i = 0; i < pSize; i++)
             for(int j = 0; j < pSize; j++)
-                if(this.plateau[i * pSize + j].getState() == state)
+                if(this.plateau[i * pSize + j] == state)
                     compt++;
 
         return compt;
@@ -357,9 +356,9 @@ public class PlateauFouFou implements Partie1 {
     public void printPlateau() {
         for(int i = 0; i < pSize; i++) {
             for (int j = 0; j < pSize; j++)
-                if(this.plateau[i * pSize + j].getState() == State.black)
+                if(this.plateau[i * pSize + j] == State.black)
                     System.out.print("b");
-                else if(this.plateau[i * pSize + j].getState() == State.white)
+                else if(this.plateau[i * pSize + j] == State.white)
                     System.out.print("w");
                 else
                     System.out.print("-");
