@@ -8,7 +8,7 @@ enum State {
     white
 }
 
-public class Case {
+public class StateUtils {
     //  HashMaps that makes the correspondance from String to State
     static private HashMap<String, State> hmStringToState = new HashMap<String, State>();
 
@@ -31,47 +31,6 @@ public class Case {
         }
         return null;
     }
-
-    State state; // Defines the state of the cell (b = State.black, r = State.white, - = State.empty)
-
-    /**
-     * Constructor
-     */
-    public Case(State state) {
-        this.state = state;
-    }
-
-    /** Constructor : Sets an State.empty cell
-     */
-    public Case() {
-        this.state = State.empty;
-    }
-
-    /**
-     * Setters
-     */
-
-    /** Sets the state of a cell.
-    */
-    public void setState(State state) {
-        this.state = state;
-    }
-
-    public void setState(String state){
-        this.state = stringToState(state);
-    }
-
-    /**
-     * Getters
-     */
-
-    /** Returns the state of the cell.
-    */
-    public State getState() { return this.state; }
-
-    /** Returns the state of the cell as a string.
-    */
-    public String getStateAsString() { return stateToString(this.state); }
 
     public static State getInverseState(State st){
         return (st == State.empty) ? (State.empty) : (st == State.black ? State.white : State.black);

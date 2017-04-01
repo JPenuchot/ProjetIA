@@ -64,7 +64,7 @@ public class PlateauFouFou implements Partie1 {
                     String[] formatLine = line.split(" ")[1].split(""); // Barbu Line ! ^^ permet de retirer les chiffre des lignes puis de decouper chaque case
 
                     for(int j = 0; j < pSize; j++)
-                        this.plateau[i * pSize + j] = Case.stringToState(formatLine[j]);
+                        this.plateau[i * pSize + j] = StateUtils.stringToState(formatLine[j]);
 
                     i++;
                 }
@@ -89,7 +89,7 @@ public class PlateauFouFou implements Partie1 {
             for(int i = 0; i < pSize; i++) {
                 file.write((i + 1) + " ");
                 for(int j = 0; j < pSize; j++)
-                    file.write(Case.stateToString(this.plateau[i * pSize + j])); // A changer quand le tableau sera un objet de Cellul
+                    file.write(StateUtils.stateToString(this.plateau[i * pSize + j])); // A changer quand le tableau sera un objet de Cellul
                 file.write(" " + (i + 1) + "\n");
             }
 
@@ -154,7 +154,7 @@ public class PlateauFouFou implements Partie1 {
     public String[] searchMouvement(int i, int j) {
         int ni, nj;
 
-        State mangeable = Case.getInverseState(this.plateau[i * pSize + j]);
+        State mangeable = StateUtils.getInverseState(this.plateau[i * pSize + j]);
 
         String sOrigin = convertCoordToString(i, j);
 

@@ -39,7 +39,7 @@ public class JoueurAlphaBeta implements IJoueur {
 
     @Override
     public void mouvementEnnemi(String coup){
-    	this.plateau.play(coup, Case.getInverseState(this.player));
+    	this.plateau.play(coup, StateUtils.getInverseState(this.player));
     }
 
     @Override
