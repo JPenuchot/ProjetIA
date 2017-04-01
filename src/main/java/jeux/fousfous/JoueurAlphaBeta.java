@@ -48,7 +48,6 @@ public class JoueurAlphaBeta implements IJoueur {
     private float explore(PlateauFouFou plateau, int prof){
         /*  TODO :
          *      -   Mémorisation des chemins explorés
-         *      -   Système de backtracking des opérations avec Action
          */
         return 0.f;
     }
