@@ -61,10 +61,6 @@ public class Case {
         this.state = stringToState(state);
     }
 
-    public void setInverseState() {
-        this.state = (this.state == State.black) ? State.black : State.white;
-    }
-
     /**
      * Getters
      */
@@ -76,10 +72,6 @@ public class Case {
     /** Returns the state of the cell as a string.
     */
     public String getStateAsString() { return stateToString(this.state); }
-
-    /** Returns the inverse state of a cell that is not empty.
-    */
-    public State getInverseState() {    return (this.state == State.black) ? State.black : State.white;    }
 
     public static State getInverseState(State st){
         return (st == State.empty) ? (State.empty) : (st == State.black ? State.white : State.black);
