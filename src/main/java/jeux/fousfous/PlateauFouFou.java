@@ -256,17 +256,58 @@ public class PlateauFouFou implements Partie1 {
         this.plateau[iDest * pSize + jDest].setState(player);
     }
 
-
-    public void play(String move, State sPlayer) {
+    /**
+     * Joue un mouvement donné et retourne les actions faites avec les états précédents
+     * pour faire du backtracking.
+     *
+     * @param      move     Le mouvement décrit par un String
+     * @param      sPlayer  Le player qui effectue le mouvement
+     *
+     * @return     Actions décrites avec les états précédents
+     */
+    public Action[] play(String move, State sPlayer) {
         // Formattage du Move en Integer
         String[] moveTab = move.split("-");
         int iSource = this.convertStringToCoord(moveTab[0]);
         int jSource = Integer.parseInt((moveTab[0].split(""))[1]);
         int iDest = this.convertStringToCoord(moveTab[1]);
         int jDest = Integer.parseInt((moveTab[1].split(""))[1]);
+        
+        //  Description des actions pour le backtracking
+        Action[] res = new Action[2];
+        res[0].i = iSource;
+        res[0].j = jSource;
+        res[0].before   = plateau[iSource * pSize + jSource].getState();
+        res[0].after    = State.empty;
+
+        res[1].i = iDest;
+        res[1].j = jDest;
+        res[1].before   = plateau[iDest * pSize + jDest].getState();
+        res[1].after    = sPlayer;
 
         this.plateau[iSource * pSize + jSource].setState(State.empty);
         this.plateau[iDest * pSize + jDest].setState(sPlayer);
+
+        return res;
+    }
+
+    /**
+     * Joue un ensemble d'instructions décrit dans actions
+     *
+     * @param      actions  Liste d'actions
+     */
+    public void play(Action[] actions){
+        for(Action act : actions)
+            plateau[act.i * pSize + act.j].setState(act.after);
+    }
+
+    /**
+     * Joue une action décrite par act
+     *
+     * @param      act   L'action décrite
+     */
+    public void play(Action act){
+        plateau[act.i * pSize + act.j].setState(act.after);
     }
 
     @Override
