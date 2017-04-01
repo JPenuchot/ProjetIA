@@ -45,4 +45,12 @@ public class JoueurAlphaBeta implements IJoueur {
     @Override
     public String binoName(){ return "Quentin Barroche et Jules Penuchot"; }
 
+    private float explore(PlateauFouFou plateau, int prof){
+        /*  TODO :
+         *      -   Mémorisation des chemins explorés
+         *      -   Système de backtracking des opérations avec Action
+         */
+        return 0.f;
+    }
+
 }
