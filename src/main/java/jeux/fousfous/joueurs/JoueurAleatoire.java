@@ -1,7 +1,9 @@
-package fousfous;
+package joueurs;
 
 import java.util.Random;
 import java.util.Date;
+
+import structure.*;
 
 /**
  * Implémente un joueur aléatoire.

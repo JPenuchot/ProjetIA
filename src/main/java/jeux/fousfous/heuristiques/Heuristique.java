@@ -1,6 +1,8 @@
-package fousfous;
+package heuristiques;
 
-public class Heuristique{
+import structure.*;
+
+public interface Heuristique{
 	/**
 	 * Renvoie une estimation de la situation pour un joueur sur un plateau donné.
 	 *
@@ -9,7 +11,5 @@ public class Heuristique{
 	 *
 	 * @return     Estimation de la situation du joueur
 	 */
-	public static float estimate(PlateauFouFou plateau, State joueur){
-		return 0.f;	//	TODO
-	}
+	public float estimate(PlateauFouFou plateau, State joueur);
 }

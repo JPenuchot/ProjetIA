@@ -1,4 +1,4 @@
-package fousfous;
+package structure;
 
 /**
  * Décrit une action. Cet objet est utilisé pour décrire un changement sur le plateau afin de mettre en place un système de backtracking

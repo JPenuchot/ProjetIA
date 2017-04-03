@@ -1,12 +1,6 @@
-package fousfous;
+package structure;
 
 import java.util.HashMap;
-
-enum State {
-    empty,
-    black,
-    white
-}
 
 public class StateUtils {
     //  HashMaps that makes the correspondance from String to State

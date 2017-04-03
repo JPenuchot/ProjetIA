@@ -1,8 +1,9 @@
 package fousfous;
 
-
-
 import java.util.Date;
+
+import joueurs.IJoueur;
+import joueurs.JoueurAleatoire;
 
 /**
  * Petite Classe toute simple qui vous montre comment on peut lancer une partie sur deux IJoueurs...

@@ -1,4 +1,4 @@
-package fousfous;
+package joueurs;
 
 
 /**

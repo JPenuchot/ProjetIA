@@ -1,4 +1,7 @@
-package fousfous;
+package joueurs;
+
+import structure.*;
+import heuristiques.*;
 
 public class JoueurAlphaBeta implements IJoueur {
 
@@ -45,11 +48,20 @@ public class JoueurAlphaBeta implements IJoueur {
     @Override
     public String binoName(){ return "Quentin Barroche et Jules Penuchot"; }
 
-    private float explore(PlateauFouFou plateau, int prof){
+    /**
+     * Implémentation de l'algorithme AlphaBeta.
+     *
+     * @param      plateau  Plateau en cours
+     * @param      h        Heuristique
+     * @param      prof     Profondeur max
+     *
+     * @return     Coup à jouer
+     */
+    private String alphaBeta(PlateauFouFou plateau, Heuristique h, int prof){
         /*  TODO :
          *      -   Mémorisation des chemins explorés
          */
-        return 0.f;
+        return null;
     }
 
 }

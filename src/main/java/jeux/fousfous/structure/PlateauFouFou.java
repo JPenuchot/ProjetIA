@@ -1,4 +1,4 @@
-package fousfous;
+package structure;
 
 import java.io.*;
 import java.util.ArrayList;
