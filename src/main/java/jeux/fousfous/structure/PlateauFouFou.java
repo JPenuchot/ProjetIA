@@ -370,4 +370,16 @@ public class PlateauFouFou implements Partie1 {
     public State[] getStateArray(){
         return this.plateau;
     }
+
+    /**
+     * Determines if over.
+     *
+     * @return     True if over, False otherwise.
+     */
+    public boolean isOver(){
+        for(int i = 0; i < pSize * pSize; i++)
+            if(this.plateau[i] != State.empty)
+                return false;
+        return true;
+    }
 }
