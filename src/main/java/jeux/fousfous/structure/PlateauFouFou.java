@@ -173,8 +173,8 @@ public class PlateauFouFou implements Partie1 {
         //  et dir qui itère parmi les quatre directions.
         //  dirTab permet d'indiquer quelles sont les directions à explorer
         //  (on s'arrête dans une direction donnée lorsqu'on a rencontré un ennemi)
+        boolean dirTab[] = new boolean[4];
         for(int rad = 1; rad < pSize; rad++){
-            boolean dirTab[] = new boolean[4];
             for(int dir = 0; dir < 4; dir++){
                 //  ni et nj : Case explorée
                 ni = i + ((((dir >> 1) % 2) * 2) - 1) * rad;    //  Permet d'alterner entre x + i et x - i deux fois sur quatre en fonction de dir
@@ -184,11 +184,11 @@ public class PlateauFouFou implements Partie1 {
                     if(this.plateau[ni * pSize + nj] == ennemi){
                         //  Ajout de la position dans le tableau de résultats
                         res.add(sOrigin + "-" + convertCoordToString(ni, nj));
-                        dirTab[dir] = !dirTab[dir];
+                        dirTab[dir] = true;
                     }
                     else if(this.plateau[ni * pSize + nj] == ami){
                         //  Un ami bloque l'exploration
-                        dirTab[dir] = !dirTab[dir];
+                        dirTab[dir] = true;
                     }
                 }
             }
@@ -209,6 +209,7 @@ public class PlateauFouFou implements Partie1 {
         int ni_, nj_;
         boolean found = false;
 
+        dirTab = new boolean[4];
         for(int rad = 1; rad < pSize; rad++){
             for(int dir = 0; dir < 4; dir++){
                 //  ni et nj : Case explorée
@@ -216,8 +217,12 @@ public class PlateauFouFou implements Partie1 {
                 nj = j + (((dir % 2)        * 2) - 1) * rad;    //  Permet d'alterner entre y + j et y - j une fois sur deux en fonction de dir
                 found = false;
 
-                if(ni < pSize && nj < pSize && ni >= 0 && nj >= 0){
+                if(this.plateau[ni * pSize + nj] == ami)        //  On inverse si on tombe sur un ami
+                    dirTab[dir] = true;
+
+                if(!dirTab[dir] && ni < pSize && nj < pSize && ni >= 0 && nj >= 0){
                     //  Deuxième imbrication (parcours des diagonales depuis la position (ni; nj))
+                    boolean dirTab_[] = new boolean[4];
                     for(int rad_ = 1; rad_ < pSize; rad_++){
                         for(int dir_ = 0; dir_ < 4 && dir_ != dir && (dir & dir_) == 0; dir_++){    //  On n'explore pas la direction de la première imbrication.
                             ni_ = ni + ((((dir_ >> 1) % 2) * 2) - 1) * rad_;
@@ -227,6 +232,9 @@ public class PlateauFouFou implements Partie1 {
                                     res.add(sOrigin + "-" + convertCoordToString(ni, nj));
                                     found = true;   //  On casse les deux boucles si on trouve un ennemi lors de la 2ème exploration.
                                     break;
+                                }
+                                else if(this.plateau[ni_ * pSize + nj_] == ami){
+                                    dirTab_[dir] = true;
                                 }
                             }
                         }
