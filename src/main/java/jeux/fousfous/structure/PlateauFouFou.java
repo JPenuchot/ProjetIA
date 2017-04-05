@@ -160,7 +160,8 @@ public class PlateauFouFou implements Partie1 {
     public String[] searchMouvement(int i, int j) {
         int ni, nj;
 
-        State mangeable = StateUtils.getInverseState(this.plateau[i * pSize + j]);
+        State ami = this.plateau[i * pSize + j];
+        State ennemi = StateUtils.getInverseState(ami);
 
         String sOrigin = convertCoordToString(i, j);
 
@@ -180,9 +181,13 @@ public class PlateauFouFou implements Partie1 {
                 nj = j + (((dir % 2)        * 2) - 1) * rad;    //  Permet d'alterner entre y + j et y - j une fois sur deux en fonction de dir
                 if(!dirTab[dir] && ni < pSize && nj < pSize && ni >= 0 && nj >= 0){
                     //  Si on trouve un ennemi, inverser dirTab[dir] et ajouter la position (ni; nj) à la liste des coups possibles
-                    if(this.plateau[ni * pSize + nj] == mangeable){
+                    if(this.plateau[ni * pSize + nj] == ennemi){
                         //  Ajout de la position dans le tableau de résultats
                         res.add(sOrigin + "-" + convertCoordToString(ni, nj));
+                        dirTab[dir] = !dirTab[dir];
+                    }
+                    else if(this.plateau[ni * pSize + nj] == ami){
+                        //  Un ami bloque l'exploration
                         dirTab[dir] = !dirTab[dir];
                     }
                 }
@@ -218,7 +223,7 @@ public class PlateauFouFou implements Partie1 {
                             ni_ = ni + ((((dir_ >> 1) % 2) * 2) - 1) * rad_;
                             nj_ = nj + (((dir_ % 2)        * 2) - 1) * rad_;
                             if(ni_ < pSize && nj_ < pSize && ni_ >= 0 && nj_ >= 0){
-                                if(this.plateau[ni_ * pSize + nj_] == mangeable){
+                                if(this.plateau[ni_ * pSize + nj_] == ennemi){
                                     res.add(sOrigin + "-" + convertCoordToString(ni, nj));
                                     found = true;   //  On casse les deux boucles si on trouve un ennemi lors de la 2ème exploration.
                                     break;
