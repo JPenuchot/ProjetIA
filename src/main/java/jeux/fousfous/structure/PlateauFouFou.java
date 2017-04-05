@@ -8,7 +8,7 @@ import jeux.Partie1;
 
 public class PlateauFouFou implements Partie1 {
     public State[] plateau;
-    final int pSize = 8;
+    public final static int pSize = 8;
 
     static final String[] letters = {
         "A",
@@ -367,7 +367,7 @@ public class PlateauFouFou implements Partie1 {
         }
     }
 
-    public State[] getStateTab(){
+    public State[] getStateArray(){
         return this.plateau;
     }
 }
