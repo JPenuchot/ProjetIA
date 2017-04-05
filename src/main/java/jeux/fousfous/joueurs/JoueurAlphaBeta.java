@@ -43,6 +43,7 @@ public class JoueurAlphaBeta implements IJoueur {
     @Override
     public String choixMouvement(){
 
+        return null;
     }
 
     public float negAlphaBeta(int p, float alpha, float beta) {
