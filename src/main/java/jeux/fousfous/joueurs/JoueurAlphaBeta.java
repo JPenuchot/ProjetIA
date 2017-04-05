@@ -14,6 +14,18 @@ public class JoueurAlphaBeta implements IJoueur {
     int playerInt;
 
     PlateauFouFou plateau;
+    Heuristique h;
+
+    public JoueurAlphaBeta() {
+        System.out.println("ATTENTION constructeur par defaut JAB");
+    }
+
+
+    // TODO
+    public JoueurAlphaBeta(State joueur, PlateauFouFou p, Heuristique h) {
+        this.player = joueur;
+
+    }
 
     @Override
     public void initJoueur(int mycolour){
@@ -30,8 +42,32 @@ public class JoueurAlphaBeta implements IJoueur {
 
     @Override
     public String choixMouvement(){
-    	return null;   //  TODO
+
     }
+
+    public int negAlphaBeta(int p, int alpha, int beta) {
+        if (p == 0 || this.plateau.isOver()) {
+            alpha = h.estimate(this.plateau, this.player);
+        } else {
+
+            String[] coupPossibles = this.plateau.mouvementsPossibles(State.stateToString(this.player));
+
+            for(String c : coupPossibles) {
+                Action[] ac = this.plateau.play(c, this.player);
+
+                alpha = Math.max(alpha, -1 * negAlphaBeta(p-1, -1 * beta, -1 * alpha));
+
+                if(alpha >= beta) {
+                    return beta
+                }
+            }
+        }
+
+        return alpha;
+    }
+
+
+
 
     @Override
     public void declareLeVainqueur(int colour){
