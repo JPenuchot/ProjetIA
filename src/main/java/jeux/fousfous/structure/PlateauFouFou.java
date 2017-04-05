@@ -254,7 +254,7 @@ public class PlateauFouFou implements Partie1 {
         this.plateau[iSource * pSize + jSource] = State.empty;
         this.plateau[iDest * pSize + jDest] = player;
     }
-
+    
     /**
      * Joue un mouvement donné et retourne les actions faites avec les états précédents
      * pour faire du backtracking.
@@ -365,5 +365,9 @@ public class PlateauFouFou implements Partie1 {
 
             System.out.println();
         }
+    }
+
+    public State[] getStateTab(){
+        return this.plateau;
     }
 }
