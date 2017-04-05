@@ -1,0 +1,4 @@
+#!/bin/bash
+
+cd tmp
+java -cp obfousfous.jar fousfous.ClientJeu fousfous.JoueurAleatoire localhost 1234

@@ -1,0 +1,4 @@
+#!/bin/bash
+
+cd tmp
+java -cp obfousfous.jar fousfous.ServeurJeu 1234 1

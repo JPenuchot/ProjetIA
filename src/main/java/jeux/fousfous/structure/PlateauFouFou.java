@@ -267,10 +267,10 @@ public class PlateauFouFou implements Partie1 {
     public Action[] play(String move, State sPlayer) {
         // Formattage du Move en Integer
         String[] moveTab = move.split("-");
-        int iSource = this.convertStringToCoord(moveTab[0]);
-        int jSource = Integer.parseInt((moveTab[0].split(""))[1]);
-        int iDest = this.convertStringToCoord(moveTab[1]);
-        int jDest = Integer.parseInt((moveTab[1].split(""))[1]);
+        int jSource = this.convertStringToCoord(moveTab[0]);
+        int iSource = Integer.parseInt((moveTab[0].split(""))[1]);
+        int jDest = this.convertStringToCoord(moveTab[1]);
+        int iDest = Integer.parseInt((moveTab[1].split(""))[1]);
         
         //  Description des actions pour le backtracking
         Action[] res = new Action[2];
@@ -347,7 +347,7 @@ public class PlateauFouFou implements Partie1 {
     }
 
     public static String convertCoordToString(int i, int j){
-        return letters[i] + j;
+        return letters[j] + i;
     }
 
     /**
