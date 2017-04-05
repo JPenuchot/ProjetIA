@@ -15,8 +15,9 @@ public class JoueurAlphaBeta implements IJoueur {
 
     PlateauFouFou plateau;
     Heuristique h;
+    int profondeur;
 
-    public JoueurAlphaBeta() {
+    public JoueurAlphaBeta() {
         System.out.println("ATTENTION constructeur par defaut JAB");
     }
 
@@ -42,23 +43,49 @@ public class JoueurAlphaBeta implements IJoueur {
 
     @Override
     public String choixMouvement(){
+        String[] coupPossibles = this.plateau.mouvementsPossibles(StateUtils.stateToString(this.player));
+        String meilleurCoup = "";
+        float max = Float.MIN_VALUE;
+        float alphaBeta = 0;
 
+        for(String c : coupPossibles) {
+            Action[] ac = this.plateau.play(c, this.player);
+
+            alphaBeta = negAlphaBeta(this.profondeur, Float.MIN_VALUE, Float.MAX_VALUE);
+
+            for(Action a : ac) {
+                    a.reverse();
+                    this.plateau.play(a);
+            }
+
+            if(max < alphaBeta) {
+                max = alphaBeta;
+                meilleurCoup = c;
+            }
+        }
+
+        return meilleurCoup;
     }
 
-    public int negAlphaBeta(int p, int alpha, int beta) {
+    public float negAlphaBeta(int p, float alpha, float beta) {
         if (p == 0 || this.plateau.isOver()) {
             alpha = h.estimate(this.plateau, this.player);
         } else {
 
-            String[] coupPossibles = this.plateau.mouvementsPossibles(State.stateToString(this.player));
+            String[] coupPossibles = this.plateau.mouvementsPossibles(StateUtils.stateToString(this.player));
 
             for(String c : coupPossibles) {
                 Action[] ac = this.plateau.play(c, this.player);
 
                 alpha = Math.max(alpha, -1 * negAlphaBeta(p-1, -1 * beta, -1 * alpha));
 
+                for(Action a : ac) {
+                    a.reverse();
+                    this.plateau.play(a);
+                }
+
                 if(alpha >= beta) {
-                    return beta
+                    return beta;
                 }
             }
         }
