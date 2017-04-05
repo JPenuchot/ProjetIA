@@ -159,7 +159,7 @@ public class PlateauFouFou implements Partie1 {
      */
     public String[] searchMouvement(int i, int j) {
         int ni, nj;
-
+        System.out.println("Jusque-la pas d'erreur...");
         State ami = this.plateau[i * pSize + j];
         State ennemi = StateUtils.getInverseState(ami);
 
@@ -174,6 +174,7 @@ public class PlateauFouFou implements Partie1 {
         //  dirTab permet d'indiquer quelles sont les directions à explorer
         //  (on s'arrête dans une direction donnée lorsqu'on a rencontré un ennemi)
         boolean dirTab[] = new boolean[4];
+
         for(int rad = 1; rad < pSize; rad++){
             for(int dir = 0; dir < 4; dir++){
                 //  ni et nj : Case explorée
@@ -198,6 +199,7 @@ public class PlateauFouFou implements Partie1 {
         if(!res.isEmpty()){
             String[] arrRes = new String[res.size()];
             res.toArray(arrRes);
+            System.out.println("J'ai trouvé en une exploration.");
             return arrRes;
         }
 
@@ -205,6 +207,9 @@ public class PlateauFouFou implements Partie1 {
 
         //  Première imbrication
         //  On ne vérifie plus la présence d'ennemis sur le chemin car on sait qu'il n'y en a pas
+
+
+        System.out.println("Je commence la deuxieme exploration...");
 
         int ni_, nj_;
         boolean found = false;
@@ -217,14 +222,17 @@ public class PlateauFouFou implements Partie1 {
                 nj = j + (((dir % 2)        * 2) - 1) * rad;    //  Permet d'alterner entre y + j et y - j une fois sur deux en fonction de dir
                 found = false;
 
-                if(this.plateau[ni * pSize + nj] == ami)        //  On inverse si on tombe sur un ami
+                if(!dirTab[dir] && ni < pSize && nj < pSize && ni >= 0 && nj >= 0){
+                    if(this.plateau[ni * pSize + nj] == ami)    //  On inverse si on tombe sur un ami
                     dirTab[dir] = true;
 
-                if(!dirTab[dir] && ni < pSize && nj < pSize && ni >= 0 && nj >= 0){
                     //  Deuxième imbrication (parcours des diagonales depuis la position (ni; nj))
                     boolean dirTab_[] = new boolean[4];
                     for(int rad_ = 1; rad_ < pSize; rad_++){
-                        for(int dir_ = 0; dir_ < 4 && dir_ != dir && (dir & dir_) == 0; dir_++){    //  On n'explore pas la direction de la première imbrication.
+                        for(int dir_ = 0; dir_ < 4; dir_++){    //  On n'explore pas la direction de la première imbrication.
+                            if(dir_ == dir || (dir & dir_) != 0)
+                                continue;
+
                             ni_ = ni + ((((dir_ >> 1) % 2) * 2) - 1) * rad_;
                             nj_ = nj + (((dir_ % 2)        * 2) - 1) * rad_;
                             if(ni_ < pSize && nj_ < pSize && ni_ >= 0 && nj_ >= 0){
@@ -234,7 +242,7 @@ public class PlateauFouFou implements Partie1 {
                                     break;
                                 }
                                 else if(this.plateau[ni_ * pSize + nj_] == ami){
-                                    dirTab_[dir] = true;
+                                    dirTab_[dir_] = true;
                                 }
                             }
                         }
@@ -246,7 +254,14 @@ public class PlateauFouFou implements Partie1 {
             }
         }
 
+        System.out.println("Coups possibles :");
+
+        for(String st : res){
+            System.out.println(st);
+        }
+
         String[] arrRes = new String[res.size()];
+        System.out.println("J'ai trouvé en deux explorations.");
         res.toArray(arrRes);
         return arrRes;
     }
