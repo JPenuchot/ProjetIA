@@ -1,4 +1,3 @@
 #!/bin/bash
 
-cd tmp
-java -cp obfousfous.jar fousfous.ClientJeu fousfous.JoueurAleatoire localhost 1234
+java -cp target/Barroche_Penuchot-1.0.jar fousfous.ClientJeu joueurs.JoueurAleatoire localhost 1234

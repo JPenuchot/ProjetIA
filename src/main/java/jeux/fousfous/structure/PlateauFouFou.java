@@ -132,6 +132,8 @@ public class PlateauFouFou implements Partie1 {
         ArrayList<String> coupPossible = new ArrayList<String>();
         String[] cp;
 
+        System.out.println("DebMouv");
+
         for(int i = 0; i < pSize; i++) {
             for (int j = 0; j < pSize; j++) {
                 if (this.plateau[i * pSize + j] == player) {
@@ -142,6 +144,10 @@ public class PlateauFouFou implements Partie1 {
                 }
             }
         }
+
+        System.out.println("finMouv");
+
+        System.out.println("Coup Possible :" + coupPossible);
 
         return coupPossible.toArray(new String[coupPossible.size()]);
     }
@@ -234,6 +240,9 @@ public class PlateauFouFou implements Partie1 {
 
     @Override
     public void play(String move, String sPlayer) {
+
+        System.out.println("DebPlay1");
+
         // Formattage du Player
         State player;
         if(sPlayer.equals("noir")) player = State.black;
@@ -244,17 +253,22 @@ public class PlateauFouFou implements Partie1 {
             return;
         }
 
+
+        System.out.println("Mouvement à jouer : " + move + " pour " + sPlayer);
+
         // Formattage du Move en Integer
         String[] moveTab = move.split("-");
         int iSource = this.convertStringToCoord(moveTab[0]);
-        int jSource = Integer.parseInt((moveTab[0].split(""))[1]);
+        int jSource = Integer.parseInt((moveTab[0].split(""))[1]) - 1;
         int iDest = this.convertStringToCoord(moveTab[1]);
-        int jDest = Integer.parseInt((moveTab[1].split(""))[1]);
+        int jDest = Integer.parseInt((moveTab[1].split(""))[1]) - 1;
 
         this.plateau[iSource * pSize + jSource] = State.empty;
         this.plateau[iDest * pSize + jDest] = player;
+
+        System.out.println("FinPlay1");
     }
-    
+
     /**
      * Joue un mouvement donné et retourne les actions faites avec les états précédents
      * pour faire du backtracking.
@@ -265,27 +279,71 @@ public class PlateauFouFou implements Partie1 {
      * @return     Actions décrites avec les états précédents
      */
     public Action[] play(String move, State sPlayer) {
+        System.out.println("DebPlay2");
+
         // Formattage du Move en Integer
         String[] moveTab = move.split("-");
         int jSource = this.convertStringToCoord(moveTab[0]);
-        int iSource = Integer.parseInt((moveTab[0].split(""))[1]);
+        int iSource = Integer.parseInt((moveTab[0].split(""))[1]) - 1;
         int jDest = this.convertStringToCoord(moveTab[1]);
-        int iDest = Integer.parseInt((moveTab[1].split(""))[1]);
-        
+        int iDest = Integer.parseInt((moveTab[1].split(""))[1]) - 1;
+
+        System.out.println("FinInit2");
+
+        System.out.println("Mouvement à jouer : " + move + " pour " + sPlayer);
+
         //  Description des actions pour le backtracking
         Action[] res = new Action[2];
+
+        res[0] = new Action();
+        res[1] = new Action();
+
+        System.out.println("FinPart11 - 2");
+
         res[0].i = iSource;
+
+        System.out.println("FinPart12 - 2");
+
         res[0].j = jSource;
+
+        System.out.println("FinPart13 - 2");
+
+
+        // ERREUR
+        int t = iSource * pSize + jSource;
+        System.out.println("iSource : " + iSource + "\npSize : " + pSize + "\njSource : " + jSource + "\n" + t);
+
         res[0].before   = plateau[iSource * pSize + jSource];
+
+
+        System.out.println("FinPart14 - 2");
+
         res[0].after    = State.empty;
+
+        System.out.println("FinPart1 - 2");
 
         res[1].i = iDest;
         res[1].j = jDest;
         res[1].before   = plateau[iDest * pSize + jDest];
         res[1].after    = sPlayer;
 
+        System.out.println("FinPart2 - 2");
+
+        System.out.println("AVANT JOUER -------------------");
+        this.printPlateau();
         this.plateau[iSource * pSize + jSource] = State.empty;
         this.plateau[iDest * pSize + jDest] = sPlayer;
+
+        int td = iDest * pSize + jDest;
+
+        System.out.println("iDest : " + iDest + "\npSize : " + pSize + "\njDest : " + jDest);
+        System.out.println("Source : " + t + " Destination : " + td);
+
+
+        System.out.println("APRES JOUER -------------------");
+        this.printPlateau();
+
+        System.out.println("FinPlay2");
 
         return res;
     }
@@ -346,8 +404,10 @@ public class PlateauFouFou implements Partie1 {
         else                      return -1;
     }
 
+
+    // ERREUR AJOUR DU (+1)
     public static String convertCoordToString(int i, int j){
-        return letters[j] + i;
+        return letters[j] + (i+1);
     }
 
     /**

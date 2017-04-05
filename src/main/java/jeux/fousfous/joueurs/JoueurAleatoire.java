@@ -30,6 +30,9 @@ public class JoueurAleatoire implements IJoueur {
         Date dt = new Date();
 
         this.rnd = new Random(dt.getTime());
+
+        System.out.println("initJoueur");
+
     }
 
     @Override
@@ -39,9 +42,22 @@ public class JoueurAleatoire implements IJoueur {
 
     @Override
     public String choixMouvement(){
+
+        System.out.println("DebutChoixMouvement");
+
     	String[] coups = plateau.mouvementsPossibles(player);
-        String coup = coups[rnd.nextInt() % coups.length];
+
+        System.out.println("ChoixMouvement1");
+
+        //String coup = coups[rnd.nextInt() % coups.length];
+        String coup = coups[0];
+
+        System.out.println("ChoixMouvement2");
+
         plateau.play(coup, this.player);
+
+
+        System.out.println("FinChoixMouvement");
 
         return coup;
     }
@@ -56,6 +72,7 @@ public class JoueurAleatoire implements IJoueur {
     @Override
     public void mouvementEnnemi(String coup){
         this.plateau.play(coup, StateUtils.getInverseState(this.player));
+        //this.plateau.printPlateau();
     }
 
     @Override
