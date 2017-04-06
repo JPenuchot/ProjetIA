@@ -127,38 +127,36 @@ public class PlateauFouFou implements Partie1 {
     }
 
     public String[] mouvementsPossibles(State player) {
-        int nombrePiece = this.getNumberCaseState(State.black) + this.getNumberCaseState(State.white);
-
         ArrayList<String> coupPossible = new ArrayList<String>();
-        String[] cp;
+        ArrayList<String> cpUnique = new ArrayList<String>();
 
         for(int i = 0; i < pSize; i++) {
             for (int j = 0; j < pSize; j++) {
 
                 if (this.plateau[i * pSize + j] == player) {
 
-                    cp = this.searchMouvement(i, j);
+                    cpUnique = this.searchMouvement(i, j);
 
-                    for(String k : cp){
-                        coupPossible.add(k);
-                    }
+                    // for(String k : cpUnique){
+                    //     coupPossible.add(k);
+                    // }
+
+                    coupPossible.addAll(cpUnique);
+
                 }
             }
         }
 
-
-        // System.out.println("Size : " + coupPossible.size());
-        // System.out.println("Coup : " + coupPossible);
-
         return coupPossible.toArray(new String[coupPossible.size()]);
     }
+
 
     /**
      * Fonction de recherche de coup en diagonal (juste en haut a gauche pour l'instant
      * @param c la case de recherche de depart
      * @return un string de toutes les coups possibles
      */
-    public String[] searchMouvement(int i, int j) {
+    public ArrayList<String> searchMouvement(int i, int j) {
         int ni, nj;
         State ami = this.plateau[i * pSize + j];
         State ennemi = StateUtils.getInverseState(ami);
@@ -197,9 +195,9 @@ public class PlateauFouFou implements Partie1 {
 
         //  On retourne le tableau dans le cas d'une menace
         if(!res.isEmpty()){
-            String[] arrRes = new String[res.size()];
-            res.toArray(arrRes);
-            return arrRes;
+            //String[] arrRes = new String[res.size()];
+            //res.toArray(arrRes);
+            return res;
         }
 
         //  Deuxième passe : double exploration (héhé)
@@ -250,9 +248,9 @@ public class PlateauFouFou implements Partie1 {
             }
         }
 
-        String[] arrRes = new String[res.size()];
-        res.toArray(arrRes);
-        return arrRes;
+        // String[] arrRes = new String[res.size()];
+        // res.toArray(arrRes);
+        return res;
     }
 
     @Override
