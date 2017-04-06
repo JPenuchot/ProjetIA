@@ -146,7 +146,6 @@ public class PlateauFouFou implements Partie1 {
         return coupPossible.toArray(new String[coupPossible.size()]);
     }
 
-
     /**
      * Fonction de recherche de coup en diagonal (juste en haut a gauche pour l'instant
      * @param c la case de recherche de depart
@@ -334,7 +333,7 @@ public class PlateauFouFou implements Partie1 {
         return (getNumberCaseState(State.black) == 0 || getNumberCaseState(State.white) == 0);
     }
 
-    private int getNumberCaseState(State state) {
+    public int getNumberCaseState(State state) {
 
         int compt = 0;
 

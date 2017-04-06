@@ -45,6 +45,12 @@ public class JoueurAleatoire implements IJoueur {
     	String[] coups = plateau.mouvementsPossibles(player);
 
         //String coup = coups[rnd.nextInt() % coups.length];
+        System.out.println("Coups Possibles : ");
+
+        for(String s : coups) {
+            System.out.println(s);
+        }
+
         String coup = coups[0];
 
         //System.out.println("Taille coups : " + coups.length);

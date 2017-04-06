@@ -45,23 +45,27 @@ public class JoueurAlphaBeta implements IJoueur {
             System.out.println(s);
         }
 
-        for(String c : coupPossibles) {
-            Action[] ac = this.plateau.play(c, this.player);
+        if(coupPossibles.length != 1) {
+            for(String c : coupPossibles) {
+                Action[] ac = this.plateau.play(c, this.player);
 
-            //System.out.println("DebutAlpha");
-            alphaBeta = negAlphaBeta(this.profondeur - 1, Float.MIN_VALUE, Float.MAX_VALUE, 1);
-            //System.out.println("finAlpha : " + alphaBeta);
+                //System.out.println("DebutAlpha");
+                alphaBeta = negAlphaBeta(this.profondeur - 1, Float.MIN_VALUE, Float.MAX_VALUE, 1);
+                //System.out.println("finAlpha : " + alphaBeta);
 
-            for(Action a : ac) {
-                    a.reverse();
-                    this.plateau.play(a);
+                for(Action a : ac) {
+                        a.reverse();
+                        this.plateau.play(a);
+                }
+
+                if(max < alphaBeta) {
+                    //System.out.println("Meilleur Coup Selectionné :" + c);
+                    max = alphaBeta;
+                    meilleurCoup = c;
+                }
             }
-
-            if(max < alphaBeta) {
-                //System.out.println("Meilleur Coup Selectionné :" + c);
-                max = alphaBeta;
-                meilleurCoup = c;
-            }
+        } else {
+            meilleurCoup = coupPossibles[0];
         }
 
         System.out.println("Meilleur Coup : " + meilleurCoup);
