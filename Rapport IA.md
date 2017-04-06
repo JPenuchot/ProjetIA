@@ -1,7 +1,11 @@
-#Rapport Ia
+#Rapport Foufou
 
 
-Notre système s’organise autour de l’utilisation d’un tableau à une dimension ainsi que l’utilisation d’énumeration comme State qui permet de connaitre le type d’une case. C’est-à-dire si elle contient une piece de couleur Noir, Blanche ou vide.
+
+
+##Introduction : 
+
+Notre système s’organise autour de l’utilisation d’un tableau à une dimension ainsi que l’utilisation d’énumération comme State qui permet de connaitre le type d’une case. C’est-à-dire si elle contient une pièce de couleur Noir, Blanche ou vide. La partie suivant décrit l'architecture du programme ainsi qu'une breve description des classes.
 
 
 ##Architecture du programme :
@@ -30,7 +34,7 @@ src                                                             - Dossier source
 |    |    |    |    ├── PartieFoufou.java                       -
 |    |    |    |    ├── Solo.java                               -
 |    |    |    ├── Partie1.java                                 - Interface pour PlateauFoufou
-```
+``
 
 ##Énumération State : 
 
@@ -42,7 +46,7 @@ public enum State {
 }
 ```
 
-Notre plateau de jeu est un tableau de State. On peut ici voir que State peut avoir trois « état » differents. Toutes nos algorithmes, fonctions utilise cette énumération. Au début, nous avions utilisé une classe nommé Case, qui nous permettait de stocker les informations sur chaque case, mais nous nous sommes vite rendu compte que ceci n’était pas indispensable et que donc nous utilisions de la mémoire inutilement. 
+Notre plateau de jeu est un tableau de State. On peut ici voir que State peut avoir trois « état » différents. Toutes nos algorithmes, fonctions utilise cette énumération. Au début, nous avions utilisé une classe nommé Case, qui nous permettait de stocker les informations sur chaque case, mais nous nous sommes vite rendu compte que ceci n’était pas indispensable et que donc nous utilisions de la mémoire inutilement. 
 
 Pour manipuler les States, nous avons 4 méthodes implémenté dans une classe StateUtils.
 stringToState : permet de convertir un string en state grâce à une hashMap 
@@ -55,7 +59,7 @@ Je ne détaillerais pas toutes les fonctions car nous avons tenu à commenter au
 
 ##Fonction MouvementsPossibles : 
 
-Comme je l’ai expliqué au dessus, notre programme utilise en majorité l’Enumération State. Or nous devions utiliser les fonctions implémenter par l’interface qui nous était donné. C’est pourquoi nous avons surchargé la fonction mouvementsPossibles. Ici on peut voir la fonction de base qui prends en parametre un string.
+Comme nous l’avons expliqué au-dessus, notre programme utilise en majorité l’Enumération State. Or nous devions utiliser les fonctions implémenter par l’interface qui nous était donné. C’est pourquoi nous avons **surchargé** la fonction mouvementsPossibles. Ici on peut voir la fonction de base qui prends en paramètre un string.
 
 ```java
 @Override
@@ -98,8 +102,8 @@ public String[] mouvementsPossibles(State player) {
 
 
 
-Voici notre fonction surchargé mouvementsPossibles qui nous permet d’utiliser les States. Nous avons fait le choix d’utiliser une ArrayList<String> pour stocker nos coups plutôt qu’un tableau non dynamique. En effet, une ArrayList nous permet donc de ne pas alloué un tableau trop grand des le debut ou de ne pas faire une réallocation d’un tableau a la main. 
-Notre variable coupPossibles sera donc une ArrayList de String contenant tout les coups possibles des pieces. La variable cpUnique contiendra tout les coups possibles pour une piece données. Notre boucle nous permet de parcourir tout le tableau et d’ensuite chercher les cases contenant le State passer précedamment en parametre. 
+Voici notre fonction surchargé mouvementsPossibles qui nous permet d’utiliser les States. Nous avons fait le choix d’utiliser une ArrayList<String> pour stocker nos coups plutôt qu’un tableau non dynamique. En effet, une ArrayList nous permet donc de ne pas alloué un tableau trop grand dès le début ou de ne pas faire une réallocation d’un tableau a la main. 
+Notre variable coupPossibles sera donc une ArrayList de String contenant tous les coups possibles des pièces. La variable cpUnique contiendra tout les coups possibles pour une pièce données. Notre boucle nous permet de parcourir tous le tableau et d’ensuite chercher les cases contenant le State passer précédemment en paramètre. 
 
 Les lignes : 
 
@@ -109,9 +113,9 @@ Les lignes :
  coupPossible.addAll(cpUnique);
  ```
 
-permetttent de stocker tout les mouvement possibles pour une piece de coordonnées i , j dans la variables cp. Et ensuite d’ajouter a coupPossible tout les coups pour la piece données. Nous détaillerons ensuite la fonction searchMouvement qui permet la recheche des mouvements possibles dans notre tableau.
+permettent de stocker tous les mouvements possibles pour une pièce de coordonnées i , j dans la variables cp. Et ensuite d’ajouter à coupPossible tous les coups pour la pièce données. Nous détaillerons ensuite la fonction searchMouvement qui permet la recheche des mouvements possibles dans notre tableau.
 
-Comme la fonction de retour est un tableau non dynamique de String, nous devons ensuite convertir notre ArrayList<String> grâce à la derniere ligne.
+Comme la fonction de retour est un tableau non dynamique de String, nous devons ensuite convertir notre ArrayList<String> grâce à la dernière ligne.
 
 ##Fonction searchMouvement :
 
@@ -119,9 +123,9 @@ Comme la fonction de retour est un tableau non dynamique de String, nous devons 
 
 ##Fonction Play : 
 
-De même que pour la fonction mouvementPossibles, nous avons surchager la fonction play pour qu’elle puisse correspondre a notre choix statégique (State, Action).
+De même que pour la fonction mouvementPossibles, nous avons surchager la fonction play pour qu’elle puisse correspondre à notre choix statégique (State, Action).
 
-Je vais ici detailler la conversion des mouvements en coordonnées. Je prendrais ici comme exemples, le mouvement : A2 – D5
+Je vais ici détailler la conversion des mouvements en coordonnées. Je prendrais comme exemple, le mouvement : **A2 – D5**
 
  ```java
  // Formattage du Move en Integer
@@ -132,7 +136,7 @@ Je vais ici detailler la conversion des mouvements en coordonnées. Je prendrais
         int iDest = Integer.parseInt((moveTab[1].split(""))[1]) - 1;
 ```
 
-D’abord, nous decoupons les deux parties du mouvement : ["A2", "D5"]. Ensuite, nous nous occupons de la premiere partie qui correspond aux coordonnées de la case source (iSource, jSource). iSource est calculer grace a une fonction qui convertis les lettres (A, B, C …) en entier (1, 2, 3 …). Pour obtenir jSource, nous avons d’abord decouper notre mouvement source en deux : ["A","2"], puis convertis l’entier 2 en integer pour ensuite lui soustraire 1. Cette soustraction viens du fait que nos coordonnées vont de 0 à 7 alors que les mouvements vont de 1 à 8. Voila comment nous transformons un mouvement en coordonnées.
+D’abord, nous découpons les deux parties du mouvement : ["A2", "D5"]. Ensuite, nous nous occupons de la première partie qui corresponds aux coordonnées de la case source (iSource, jSource). iSource est calculé grâce à une fonction qui convertis les lettres (A, B, C …) en entier (1, 2, 3 …). Pour obtenir jSource, nous avons d’abord découper notre mouvement source en deux : ["A","2"], puis convertis l’entier 2 en integer pour ensuite lui soustraire 1. Cette soustraction vient du fait que nos coordonnées vont de 0 à 7 alors que les mouvements vont de 1 à 8. Voila comment nous transformons un mouvement en coordonnées.
 
 Nous avons trois autres implémentations de la méthode play, voici leurs prototypes :
 
@@ -142,19 +146,19 @@ public void play(Action[] actions)
 public void play(Action act)
 ```
 
-1.	Permet de retourner les mouvements sous forme d’etat apres les avoir jouer
-2.	Permet de jouer une action
-3.	Permet de jouer un tableau d’actions
+1.	Permet de retourner les mouvements sous forme d'Action apres les avoir joués
+2.	Permet de jouer une Action
+3.	Permet de jouer un tableau d’Actions
 
 
 ##Fonction isOver :
 
-La méthode isOver est notre fonction d’arret. Elle permet donc de savoir quand arreter le jeu. Elle renvoi juste vrai lorsqu’on nous n’avons plus qu’une unique couleur de piece sur le plateau.
+La méthode isOver est notre fonction d’arrêt. Elle permet donc de savoir quand arreter le jeu. Elle renvoie juste vrai lorsqu’on nous n’avons plus qu’une unique couleur de piece sur le plateau.
 
 
 ##Classe Action :
 
-Lors des dernieres implémentation des algorithme de recherche, nous etions embeter par le fait de devoir a chaque fois copier le plateau de jeux pour pouvoir ensuite faire des recheche dessus sans pour autant « modifier » le plateau (celui avant la recherche). Nous avons donc d’utiliser une classe Action qui va nous permettre de sauvegarder les mouvements effectué lors de la recherche et donc de pouvoir les inverser par la suite pour revenir à l’etat initiale.
+Lors des dernières implémentations des algorithme de recherche, nous etions embetés par le fait de devoir à chaque fois copier le plateau de jeu pour pouvoir ensuite faire des recheches dessus sans pour autant « modifier » le plateau (celui avant la recherche). Nous avons donc d’utiliser une classe Action qui va nous permettre de sauvegarder les mouvements effectués lors de la recherche et donc de pouvoir les inverser par la suite pour revenir à l’état initiale.
 
 // TODO
 
@@ -162,7 +166,7 @@ Lors des dernieres implémentation des algorithme de recherche, nous etions embe
 
 ##Heuristiques :
 
-Pour le choix des heuristiques, nous avons avant tous penser à faire quelque chose de simple à calculer au vu du nombre de fois ou celle-ci sera calculer. Nous avons donc choisir de calculer la difference entre les pieces noir et les pieces blanche : 
+Pour le choix des heuristiques, nous avons avant tout de suite penser à faire quelque chose de simple à calculer au vu du nombre de fois ou celle-ci sera calculée. Nous avons donc choisir de calculer la différence entre les pièces noires et les pièces blanches : 
 
 ```java
 public float estimate(PlateauFouFou plateau, State joueur){
@@ -174,7 +178,7 @@ public float estimate(PlateauFouFou plateau, State joueur){
 	}
 ```
 
-Notre fonction estimate de l’Heuristique prends deux paramètre, le plateau actuelle ainsi que le joueurs qui appel celle-ci. On peut ici voir que la boucle parcourt tout notre plateau de jeux (pSize était notre largeur et hauteur). 
+Notre fonction estimate de l’Heuristique prends deux paramètres, le plateau actuelle ainsi que le joueurs qui appel celle-ci. On peut ici voir que la boucle parcourt tout notre plateau de jeux (pSize était notre largeur et hauteur). 
 
 La ligne : 
 
@@ -183,3 +187,16 @@ res += plateau.getStateArray()[i] == joueur ? 1.f : -1.f;
 ```
 
 Ajoute +1 a res si la case qu’on explore contient un pion du Joueur et retire 1 sinon. Ce qui nous permet donc d’avoir la différence entre le nombre de pion noir et blanc sur le plateau.
+
+
+##Difficultés rencontrées :
+
+Durant ce projet, nous avons rencontré plusieurs difficultées. Tout d'abord comment rechercher les mouvements possibles en temps optimal. C'est-à-dire ne pas faire quatre (dans chaque direction) explorations du plateau. Le but de ce projet, en plus de coder une intélligence artificielle, était d'avoir le code le plus optimal possible.
+
+
+##Amélioration envisagées : 
+
+1. L'intelligence artificielle et le machine learning étant étroitement liée, nous voulions essayer de coder un systeme de machine learning afin d'avoir une intélligence artificielle presque imbattable. Or nous n'avons pas eu le temps de le faire. Nous allons donc essayé d'apporter cette amélioration majeur dans les mois qui suivent.
+2. Lors de l'exploration des arbres de jeu (avec alpha Beta par exemple), de nombre parcourt se ressemblent. Il faudrait donc sauvegarder l'etat de l'arbre ainsi que la valeurs des heuristiques sur les noeuds afin de gagner un temps precieux.
+
+
