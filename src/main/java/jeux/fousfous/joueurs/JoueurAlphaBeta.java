@@ -21,7 +21,7 @@ public class JoueurAlphaBeta implements IJoueur {
     public void initJoueur(int mycolour){
     	this.player = mycolour == 1 ? State.black : State.white;
         this.playerInt = mycolour;
-        this.profondeur = 3;
+        this.profondeur = 6;
         this.h = new DiffPions();
 
         plateau = new PlateauFouFou();
@@ -39,11 +39,17 @@ public class JoueurAlphaBeta implements IJoueur {
         float max = Float.MIN_VALUE;
         float alphaBeta = Float.MIN_VALUE;
 
+        System.out.println("Coups Possible : ");
+
+        for (String s : coupPossibles) {
+            System.out.println(s);
+        }
+
         for(String c : coupPossibles) {
             Action[] ac = this.plateau.play(c, this.player);
 
             //System.out.println("DebutAlpha");
-            alphaBeta = negAlphaBeta(this.profondeur, Float.MIN_VALUE, Float.MAX_VALUE, 1);
+            alphaBeta = negAlphaBeta(this.profondeur - 1, Float.MIN_VALUE, Float.MAX_VALUE, 1);
             //System.out.println("finAlpha : " + alphaBeta);
 
             for(Action a : ac) {
@@ -70,37 +76,26 @@ public class JoueurAlphaBeta implements IJoueur {
 
 
         if (p == 0 || this.plateau.isOver()) {
-            //System.out.println("Lancement de l'heuristiques");
-            if(parite == 1) {
+            if(parite == 1)
                 alpha = this.h.estimate(this.plateau, this.player);
-                // System.out.println("Fin Heuristique, (" + this.player + ")alpha : " + alpha);
-            }
-            else {
+            else
                 alpha = this.h.estimate(this.plateau, StateUtils.getInverseState(this.player));
-                // System.out.println("Fin Heuristique, (" + StateUtils.getInverseState(this.player) + ")alpha : " + alpha);
-            }
         } else {
 
             String[] coupPossibles = this.plateau.mouvementsPossibles(this.player);
 
             for(String c : coupPossibles) {
-                //System.out.println("Init Action");
                 Action[] ac = new Action[2];
-                //System.out.println("FinInit Action");
                 ac = this.plateau.play(c, this.player);
-                //System.out.println("Play Action");
 
                 alpha = Math.max(alpha, -1 * negAlphaBeta(p-1, -1 * beta, -1 * alpha, -1 * parite));
 
                 for(Action a : ac) {
-                    //System.out.println("Deb Reverse");
                     a.reverse();
                     this.plateau.play(a);
-                    //System.out.println("Fin Reverse");
                 }
 
                 if(alpha >= beta) {
-                    //System.out.println("Return beta : " + beta);
                     return beta;
                 }
             }
