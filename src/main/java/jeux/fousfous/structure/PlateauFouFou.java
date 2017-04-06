@@ -398,11 +398,8 @@ public class PlateauFouFou implements Partie1 {
      * @return     True if over, False otherwise.
      */
     public boolean isOver() {
-        if (this.getNumberCaseState(State.black) == 0 || this.getNumberCaseState(State.white) == 0) {
-            System.out.println("Is Over");
+        if (this.getNumberCaseState(State.black) == 0 || this.getNumberCaseState(State.white) == 0)
             return true;
-        }
-
         return false;
     }
 }
