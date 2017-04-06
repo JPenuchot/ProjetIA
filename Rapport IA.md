@@ -6,7 +6,31 @@ Notre système s’organise autour de l’utilisation d’un tableau à une dime
 
 ##Architecture du programme :
 
-// TODO : finir architecture.Txt et le copier ici
+```
+src                                                             - Dossier source
+├── main                                                        -
+|    ├── java                                                   -
+|    |    ├── jeux                                              -
+|    |    |    ├── fousfous                                     -
+|    |    |    |    ├── heuristiques                            - Dossier contenant toutes les heuristiques
+|    |    |    |    |    ├── DiffPions.java                     - heuristique différence pion
+|    |    |    |    |    ├── Heuristique.java                   - Interface heuristique
+|    |    |    |    ├── joueurs                                 - Dossier contenant tous nos joueurs
+|    |    |    |    |    ├── IJoueur.java                       - Interface Joueur
+|    |    |    |    |    ├── JoueurAleatoire.java               - Joueur jouant aléatoirement
+|    |    |    |    |    ├── JoueurAlphaBeta.java               - Joueur jouant AlphaBeta
+|    |    |    |    ├── structure                               - Dossier contenant la structure du Jeu
+|    |    |    |    |    ├── Action.java                        - Action decrivant un mouvement
+|    |    |    |    |    ├── PlateauFouFou.java                 - Implémentation principale du Jeu
+|    |    |    |    |    ├── PlateauUtils.java                  -
+|    |    |    |    |    ├── State.java                         - Enumération State
+|    |    |    |    |    ├── StateUtils.java                    - Manipulation des States
+|    |    |    |    ├── Applet.java                             - Affichage Graphique
+|    |    |    |    ├── ClientJeu.java                          - Connection Serveur
+|    |    |    |    ├── PartieFoufou.java                       -
+|    |    |    |    ├── Solo.java                               -
+|    |    |    ├── Partie1.java                                 - Interface pour PlateauFoufou
+```
 
 ##Énumération State : 
 
