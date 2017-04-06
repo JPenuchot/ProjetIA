@@ -21,7 +21,8 @@ public class JoueurAlphaBeta implements IJoueur {
     public void initJoueur(int mycolour){
     	this.player = mycolour == 1 ? State.black : State.white;
         this.playerInt = mycolour;
-        this.profondeur = 4;
+        this.profondeur = 3;
+        this.h = new DiffPions();
 
         plateau = new PlateauFouFou();
     }
@@ -36,12 +37,14 @@ public class JoueurAlphaBeta implements IJoueur {
         String[] coupPossibles = this.plateau.mouvementsPossibles(this.player);
         String meilleurCoup = "";
         float max = Float.MIN_VALUE;
-        float alphaBeta = 0;
+        float alphaBeta = Float.MIN_VALUE;
 
         for(String c : coupPossibles) {
             Action[] ac = this.plateau.play(c, this.player);
 
-            alphaBeta = negAlphaBeta(this.profondeur, Float.MIN_VALUE, Float.MAX_VALUE);
+            //System.out.println("DebutAlpha");
+            alphaBeta = negAlphaBeta(this.profondeur, Float.MIN_VALUE, Float.MAX_VALUE, 1);
+            //System.out.println("finAlpha : " + alphaBeta);
 
             for(Action a : ac) {
                     a.reverse();
@@ -49,32 +52,55 @@ public class JoueurAlphaBeta implements IJoueur {
             }
 
             if(max < alphaBeta) {
+                //System.out.println("Meilleur Coup Selectionné :" + c);
                 max = alphaBeta;
                 meilleurCoup = c;
             }
         }
 
+        System.out.println("Meilleur Coup : " + meilleurCoup);
+        plateau.play(meilleurCoup, this.player);
+
         return meilleurCoup;
     }
 
-    public float negAlphaBeta(int p, float alpha, float beta) {
+    public float negAlphaBeta(int p, float alpha, float beta, float parite) {
+
+        // System.out.println("AlphaBeta, p : " + p + "\nalpha :" + alpha + "\nbeta : " + beta + "\npartite : " + parite);
+
+
         if (p == 0 || this.plateau.isOver()) {
-            alpha = h.estimate(this.plateau, this.player);
+            //System.out.println("Lancement de l'heuristiques");
+            if(parite == 1) {
+                alpha = this.h.estimate(this.plateau, this.player);
+                // System.out.println("Fin Heuristique, (" + this.player + ")alpha : " + alpha);
+            }
+            else {
+                alpha = this.h.estimate(this.plateau, StateUtils.getInverseState(this.player));
+                // System.out.println("Fin Heuristique, (" + StateUtils.getInverseState(this.player) + ")alpha : " + alpha);
+            }
         } else {
 
             String[] coupPossibles = this.plateau.mouvementsPossibles(this.player);
 
             for(String c : coupPossibles) {
-                Action[] ac = this.plateau.play(c, this.player);
+                //System.out.println("Init Action");
+                Action[] ac = new Action[2];
+                //System.out.println("FinInit Action");
+                ac = this.plateau.play(c, this.player);
+                //System.out.println("Play Action");
 
-                alpha = Math.max(alpha, -1 * negAlphaBeta(p-1, -1 * beta, -1 * alpha));
+                alpha = Math.max(alpha, -1 * negAlphaBeta(p-1, -1 * beta, -1 * alpha, -1 * parite));
 
                 for(Action a : ac) {
+                    //System.out.println("Deb Reverse");
                     a.reverse();
                     this.plateau.play(a);
+                    //System.out.println("Fin Reverse");
                 }
 
                 if(alpha >= beta) {
+                    //System.out.println("Return beta : " + beta);
                     return beta;
                 }
             }

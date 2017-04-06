@@ -135,18 +135,20 @@ public class PlateauFouFou implements Partie1 {
         for(int i = 0; i < pSize; i++) {
             for (int j = 0; j < pSize; j++) {
 
-                //System.out.println(i * pSize + j);
-
                 if (this.plateau[i * pSize + j] == player) {
+
                     cp = this.searchMouvement(i, j);
 
                     for(String k : cp){
                         coupPossible.add(k);
-                        System.out.println(k);
                     }
                 }
             }
         }
+
+
+        // System.out.println("Size : " + coupPossible.size());
+        // System.out.println("Coup : " + coupPossible);
 
         return coupPossible.toArray(new String[coupPossible.size()]);
     }
