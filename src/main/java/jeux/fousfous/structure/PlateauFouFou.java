@@ -132,8 +132,6 @@ public class PlateauFouFou implements Partie1 {
         ArrayList<String> coupPossible = new ArrayList<String>();
         String[] cp;
 
-        System.out.println("DebMouv");
-
         for(int i = 0; i < pSize; i++) {
             for (int j = 0; j < pSize; j++) {
 
@@ -150,10 +148,6 @@ public class PlateauFouFou implements Partie1 {
             }
         }
 
-        System.out.println("finMouv");
-
-        System.out.println("Coup Possible :" + coupPossible);
-
         return coupPossible.toArray(new String[coupPossible.size()]);
     }
 
@@ -164,7 +158,6 @@ public class PlateauFouFou implements Partie1 {
      */
     public String[] searchMouvement(int i, int j) {
         int ni, nj;
-        System.out.println("Jusque-la pas d'erreur...");
         State ami = this.plateau[i * pSize + j];
         State ennemi = StateUtils.getInverseState(ami);
 
@@ -204,7 +197,6 @@ public class PlateauFouFou implements Partie1 {
         if(!res.isEmpty()){
             String[] arrRes = new String[res.size()];
             res.toArray(arrRes);
-            System.out.println("J'ai trouvé en une exploration.");
             return arrRes;
         }
 
@@ -212,9 +204,6 @@ public class PlateauFouFou implements Partie1 {
 
         //  Première imbrication
         //  On ne vérifie plus la présence d'ennemis sur le chemin car on sait qu'il n'y en a pas
-
-
-        System.out.println("Je commence la deuxieme exploration...");
 
         int ni_, nj_;
         boolean found = false;
@@ -240,7 +229,7 @@ public class PlateauFouFou implements Partie1 {
 
                             ni_ = ni + ((((dir_ >> 1) % 2) * 2) - 1) * rad_;
                             nj_ = nj + (((dir_ % 2)        * 2) - 1) * rad_;
-                            if(ni_ < pSize && nj_ < pSize && ni_ >= 0 && nj_ >= 0){
+                            if(!dirTab_[dir_] && ni_ < pSize && nj_ < pSize && ni_ >= 0 && nj_ >= 0){
                                 if(this.plateau[ni_ * pSize + nj_] == ennemi){
                                     res.add(sOrigin + "-" + convertCoordToString(ni, nj));
                                     found = true;   //  On casse les deux boucles si on trouve un ennemi lors de la 2ème exploration.
@@ -259,35 +248,20 @@ public class PlateauFouFou implements Partie1 {
             }
         }
 
-        System.out.println("Coups possibles :");
-
-        for(String st : res){
-            System.out.println(st);
-        }
-
         String[] arrRes = new String[res.size()];
-        System.out.println("J'ai trouvé en deux explorations.");
         res.toArray(arrRes);
         return arrRes;
     }
 
     @Override
     public void play(String move, String sPlayer) {
-
-        System.out.println("DebPlay1");
-
         // Formattage du Player
         State player;
         if(sPlayer.equals("noir")) player = State.black;
         else if(sPlayer.equals("blanc")) player = State.white;
         else {
-            System.out.println("Erreur Paramètre (PlateauFouFou.play)");
-            System.out.println(Thread.currentThread().getStackTrace());
             return;
         }
-
-
-        System.out.println("Mouvement à jouer : " + move + " pour " + sPlayer);
 
         // Formattage du Move en Integer
         String[] moveTab = move.split("-");
@@ -298,8 +272,6 @@ public class PlateauFouFou implements Partie1 {
 
         this.plateau[iSource * pSize + jSource] = State.empty;
         this.plateau[iDest * pSize + jDest] = player;
-
-        System.out.println("FinPlay1");
     }
 
     /**
@@ -312,8 +284,6 @@ public class PlateauFouFou implements Partie1 {
      * @return     Actions décrites avec les états précédents
      */
     public Action[] play(String move, State sPlayer) {
-        System.out.println("DebPlay2");
-
         // Formattage du Move en Integer
         String[] moveTab = move.split("-");
         int jSource = this.convertStringToCoord(moveTab[0]);
@@ -321,62 +291,25 @@ public class PlateauFouFou implements Partie1 {
         int jDest = this.convertStringToCoord(moveTab[1]);
         int iDest = Integer.parseInt((moveTab[1].split(""))[1]) - 1;
 
-        System.out.println("FinInit2");
-
-        System.out.println("Mouvement à jouer : " + move + " pour " + sPlayer);
-
         //  Description des actions pour le backtracking
         Action[] res = new Action[2];
 
         res[0] = new Action();
         res[1] = new Action();
 
-        System.out.println("FinPart11 - 2");
-
         res[0].i = iSource;
-
-        System.out.println("FinPart12 - 2");
-
         res[0].j = jSource;
 
-        System.out.println("FinPart13 - 2");
-
-
-        // ERREUR
-        int t = iSource * pSize + jSource;
-        System.out.println("iSource : " + iSource + "\npSize : " + pSize + "\njSource : " + jSource + "\n" + t);
-
         res[0].before   = plateau[iSource * pSize + jSource];
-
-
-        System.out.println("FinPart14 - 2");
-
         res[0].after    = State.empty;
-
-        System.out.println("FinPart1 - 2");
 
         res[1].i = iDest;
         res[1].j = jDest;
         res[1].before   = plateau[iDest * pSize + jDest];
         res[1].after    = sPlayer;
 
-        System.out.println("FinPart2 - 2");
-
-        System.out.println("AVANT JOUER -------------------");
-        this.printPlateau();
         this.plateau[iSource * pSize + jSource] = State.empty;
         this.plateau[iDest * pSize + jDest] = sPlayer;
-
-        int td = iDest * pSize + jDest;
-
-        System.out.println("iDest : " + iDest + "\npSize : " + pSize + "\njDest : " + jDest);
-        System.out.println("Source : " + t + " Destination : " + td);
-
-
-        System.out.println("APRES JOUER -------------------");
-        this.printPlateau();
-
-        System.out.println("FinPlay2");
 
         return res;
     }

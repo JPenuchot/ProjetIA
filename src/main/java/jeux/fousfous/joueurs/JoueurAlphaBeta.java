@@ -17,21 +17,11 @@ public class JoueurAlphaBeta implements IJoueur {
     Heuristique h;
     int profondeur;
 
-    public JoueurAlphaBeta() {
-        System.out.println("ATTENTION constructeur par defaut JAB");
-    }
-
-
-    // TODO
-    public JoueurAlphaBeta(State joueur, PlateauFouFou p, Heuristique h) {
-        this.player = joueur;
-
-    }
-
     @Override
     public void initJoueur(int mycolour){
     	this.player = mycolour == 1 ? State.black : State.white;
         this.playerInt = mycolour;
+        this.profondeur = 4;
 
         plateau = new PlateauFouFou();
     }
@@ -43,7 +33,7 @@ public class JoueurAlphaBeta implements IJoueur {
 
     @Override
     public String choixMouvement(){
-        String[] coupPossibles = this.plateau.mouvementsPossibles(StateUtils.stateToString(this.player));
+        String[] coupPossibles = this.plateau.mouvementsPossibles(this.player);
         String meilleurCoup = "";
         float max = Float.MIN_VALUE;
         float alphaBeta = 0;
@@ -72,7 +62,7 @@ public class JoueurAlphaBeta implements IJoueur {
             alpha = h.estimate(this.plateau, this.player);
         } else {
 
-            String[] coupPossibles = this.plateau.mouvementsPossibles(StateUtils.stateToString(this.player));
+            String[] coupPossibles = this.plateau.mouvementsPossibles(this.player);
 
             for(String c : coupPossibles) {
                 Action[] ac = this.plateau.play(c, this.player);
