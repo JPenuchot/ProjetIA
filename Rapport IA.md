@@ -166,6 +166,7 @@ Lors des dernières implémentations des algorithme de recherche, nous etions em
 
 ##Heuristiques :
 
+###Heuristique DiffPions
 Pour le choix des heuristiques, nous avons avant tout de suite penser à faire quelque chose de simple à calculer au vu du nombre de fois ou celle-ci sera calculée. Nous avons donc choisir de calculer la différence entre les pièces noires et les pièces blanches : 
 
 ```java
@@ -188,6 +189,20 @@ res += plateau.getStateArray()[i] == joueur ? 1.f : -1.f;
 
 Ajoute +1 a res si la case qu’on explore contient un pion du Joueur et retire 1 sinon. Ce qui nous permet donc d’avoir la différence entre le nombre de pion noir et blanc sur le plateau.
 
+###Heuristique Minimiser
+
+Une autre heuristique assez simple à calculer est celle qui permet de minimiser les pions adverses.
+
+```java
+public float estimate(PlateauFouFou plateau, State joueur) {
+        return -plateau.getNumberCaseState(StateUtils.getInverseState(joueur));
+}
+```
+La méthode `getNumberCaseState` nous renvoie le nombre de pions d'un State passé en paramètre. Ici on retourne donc l'inverse pour rendre le nombre le plus possibles. Plus le resultat est grand, plus l'inverse est petit et donc on évite d'être dans ce cas.
+
+##GitHub : 
+
+Pour l'organisation du projet, nous avons décidé de mettre en place un GitHub. Grâce à celui-ci, nous avons pu mettre notre projet en commum et pouvoir donc travailler en même temps sans avoir à recopier apres tout ce qui avait été fait par le binome.
 
 ##Difficultés rencontrées :
 
@@ -198,5 +213,10 @@ Durant ce projet, nous avons rencontré plusieurs difficultées. Tout d'abord co
 
 1. L'intelligence artificielle et le machine learning étant étroitement liée, nous voulions essayer de coder un systeme de machine learning afin d'avoir une intélligence artificielle presque imbattable. Or nous n'avons pas eu le temps de le faire. Nous allons donc essayé d'apporter cette amélioration majeur dans les mois qui suivent.
 2. Lors de l'exploration des arbres de jeu (avec alpha Beta par exemple), de nombre parcourt se ressemblent. Il faudrait donc sauvegarder l'etat de l'arbre ainsi que la valeurs des heuristiques sur les noeuds afin de gagner un temps precieux.
+
+
+##Conclusion : 
+
+Ce projet nous a appris beaucoup. En effet, nous avons du nous organiser dans un projet à plusieurs. Nous avons du être rigoureux dans l'organisation du github, savoir comment découper le travail etc. Nous avons aussi beaucoup appris sur l'intelligence artificielle car nous devions tout coder et donc nous avons choisis une statégie (qui on l'espère sera payante) pour résoudre le problème posé.
 
 
