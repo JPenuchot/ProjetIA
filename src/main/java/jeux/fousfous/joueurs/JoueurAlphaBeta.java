@@ -21,7 +21,7 @@ public class JoueurAlphaBeta implements IJoueur {
     public void initJoueur(int mycolour){
     	this.player = mycolour == 1 ? State.black : State.white;
         this.playerInt = mycolour;
-        this.profondeur = 4;
+        this.profondeur = 6;
         this.h = new DiffPions();
 
         plateau = new PlateauFouFou();
@@ -35,7 +35,7 @@ public class JoueurAlphaBeta implements IJoueur {
     @Override
     public String choixMouvement(){
         String[] coupPossibles = this.plateau.mouvementsPossibles(this.player);
-        String meilleurCoup = "";
+        String meilleurCoup = coupPossibles[0];
         float max = Float.MIN_VALUE;
         float alphaBeta = Float.MIN_VALUE;
 
@@ -59,7 +59,7 @@ public class JoueurAlphaBeta implements IJoueur {
                 }
 
                 if(max < alphaBeta) {
-                    //System.out.println("Meilleur Coup Selectionné :" + c);
+                    System.out.println("Meilleur Coup Selectionné :" + c);
                     max = alphaBeta;
                     meilleurCoup = c;
                 }
@@ -68,7 +68,7 @@ public class JoueurAlphaBeta implements IJoueur {
             meilleurCoup = coupPossibles[0];
         }
 
-        System.out.println("Meilleur Coup : " + meilleurCoup);
+        System.out.println("Meilleur Coup parmi les " + coupPossibles.length + " : " + meilleurCoup);
         plateau.play(meilleurCoup, this.player);
 
         return meilleurCoup;
@@ -76,10 +76,10 @@ public class JoueurAlphaBeta implements IJoueur {
 
     public float negAlphaBeta(int p, float alpha, float beta, float parite) {
 
-        // System.out.println("AlphaBeta, p : " + p + "\nalpha :" + alpha + "\nbeta : " + beta + "\npartite : " + parite);
+        //System.out.println("AlphaBeta, p : " + p + "\nalpha :" + alpha + "\nbeta : " + beta + "\npartite : " + parite);
 
 
-        if (p == 0 || this.plateau.isOver()) {
+        if (p <= 0 || this.plateau.isOver()) {
             if(parite == 1)
                 alpha = this.h.estimate(this.plateau, this.player);
             else
