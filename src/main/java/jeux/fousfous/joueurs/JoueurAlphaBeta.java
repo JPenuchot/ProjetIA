@@ -21,7 +21,7 @@ public class JoueurAlphaBeta implements IJoueur {
     public void initJoueur(int mycolour){
     	this.player = mycolour == 1 ? State.black : State.white;
         this.playerInt = mycolour;
-        this.profondeur = 6;
+        this.profondeur = 4;
         this.h = new DiffPions();
 
         plateau = new PlateauFouFou();

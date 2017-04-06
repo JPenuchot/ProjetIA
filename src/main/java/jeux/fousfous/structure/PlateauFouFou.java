@@ -397,10 +397,12 @@ public class PlateauFouFou implements Partie1 {
      *
      * @return     True if over, False otherwise.
      */
-    public boolean isOver(){
-        for(int i = 0; i < pSize * pSize; i++)
-            if(this.plateau[i] != State.empty)
-                return false;
-        return true;
+    public boolean isOver() {
+        if (this.getNumberCaseState(State.black) == 0 || this.getNumberCaseState(State.white) == 0) {
+            System.out.println("Is Over");
+            return true;
+        }
+
+        return false;
     }
 }
