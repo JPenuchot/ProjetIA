@@ -137,10 +137,6 @@ public class PlateauFouFou implements Partie1 {
 
                     cpUnique = this.searchMouvement(i, j);
 
-                    // for(String k : cpUnique){
-                    //     coupPossible.add(k);
-                    // }
-
                     coupPossible.addAll(cpUnique);
 
                 }
@@ -371,7 +367,6 @@ public class PlateauFouFou implements Partie1 {
     }
 
 
-    // ERREUR AJOUR DU (+1)
     public static String convertCoordToString(int i, int j){
         return letters[j] + (i+1);
     }
