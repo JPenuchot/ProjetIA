@@ -189,11 +189,8 @@ public class PlateauFouFou implements Partie1 {
         }
 
         //  On retourne le tableau dans le cas d'une menace
-        if(!res.isEmpty()){
-            //String[] arrRes = new String[res.size()];
-            //res.toArray(arrRes);
+        if(!res.isEmpty())
             return res;
-        }
 
         //  Deuxième passe : double exploration (héhé)
 
@@ -212,9 +209,9 @@ public class PlateauFouFou implements Partie1 {
                 found = false;
 
                 if(!dirTab[dir] && ni < pSize && nj < pSize && ni >= 0 && nj >= 0){
-                    if(this.plateau[ni * pSize + nj] == ami){    //  On inverse si on tombe sur un ami
+                    if(this.plateau[ni * pSize + nj] == ami){
                         dirTab[dir] = true;
-                        continue;
+                        continue;   //  On n'explore pas depuis cette case si elle contient un ami
                     }
 
                     //  Deuxième imbrication (parcours des diagonales depuis la position (ni; nj))
@@ -222,15 +219,18 @@ public class PlateauFouFou implements Partie1 {
                     for(int rad_ = 1; rad_ < pSize; rad_++){
                         for(int dir_ = 0; dir_ < 4; dir_++){    //  On n'explore pas la direction de la première imbrication.
                             if(dir_ == dir || (dir_ ^ dir) == 3)
-                                continue;
+                                continue;   //  On n'explore pas une direction colinéaire
+                                            //  (Si la même ou l'opposée, d'où le dir_ ^ dir
+                                            //  qui est égal à 0b11 si les directions verticale et
+                                            //  horizontale sont toutes deux opposées CàD égal à 3.
 
-                            ni_ = ni + ((((dir_ >> 1) % 2) * 2) - 1) * rad_;
+                            ni_ = ni + ((((dir_ >> 1) % 2) * 2) - 1) * rad_;    //  Faites-moi confiance ça marche
                             nj_ = nj + (((dir_ % 2)        * 2) - 1) * rad_;
                             if(!dirTab_[dir_] && ni_ < pSize && nj_ < pSize && ni_ >= 0 && nj_ >= 0){
                                 if(this.plateau[ni_ * pSize + nj_] == ennemi){
                                     res.add(sOrigin + "-" + convertCoordToString(ni, nj));
-                                    //System.out.println("Ajout de " + sOrigin + "-" + convertCoordToString(ni, nj) " (deuxieme phase)");
-                                    found = true;   //  On casse les deux boucles si on trouve un ennemi lors de la 2ème exploration.
+                                    found = true;   //  On casse les deux boucles si on trouve un ennemi lors de la 2ème exploration
+                                                    //  pour éviter les doublons
                                     break;
                                 }
                                 else if(this.plateau[ni_ * pSize + nj_] == ami){
@@ -238,7 +238,8 @@ public class PlateauFouFou implements Partie1 {
                                 }
                             }
                         }
-                        if(found)   //  Plus besoin de continuer l'exploration si on a trouvé un ennemi.
+                        if(found)   //  Plus besoin de continuer l'exploration si on a trouvé un ennemi
+                                    //  pour éviter les doublons comme mentionné plus haut
                             break;
                     }
                     //  Fin deuxième imbrication
@@ -246,8 +247,6 @@ public class PlateauFouFou implements Partie1 {
             }
         }
 
-        // String[] arrRes = new String[res.size()];
-        // res.toArray(arrRes);
         return res;
     }
 
