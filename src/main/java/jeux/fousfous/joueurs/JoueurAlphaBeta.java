@@ -79,6 +79,8 @@ public class JoueurAlphaBeta implements IJoueur {
                 
                 float negAB = negAlphaBeta(this.getProf() - 1, -beta, -alpha, -1);
 
+                System.out.println(c + " - NegAlphaBeta = " + negAB);
+
                 if(- negAB > alpha){
                     System.out.println("Nouveau meilleur coup : " + c);
                     alpha = - negAB;
@@ -111,53 +113,26 @@ public class JoueurAlphaBeta implements IJoueur {
      * @return     Retourne une estimation de la qualité du noeud
      */
     public float negAlphaBeta(int p, float alpha, float beta, int parite) {
-        
-        MemoAlphaBeta mem = BaseAlphaBeta.find(this.plateau);
-
         if (p <= 0 || this.plateau.isOver()) {
             alpha = parite * this.h.estimate(this.plateau, this.player);
+            System.out.println("Je remonte " + alpha);
         } else {
-            mem = BaseAlphaBeta.find(this.plateau); //  Accès à la base de données
+            
+            String[] coupPossibles = this.plateau.mouvementsPossibles(this.player);
 
-            if(mem == null || mem.prof < p) {
-                String[] coupPossibles = this.plateau.mouvementsPossibles(this.player);
+            for(String c : coupPossibles) {
+                Action[] ac;
+                ac = this.plateau.play(c, this.player);
+                alpha = Math.max(alpha, - negAlphaBeta(p-1, - beta, - alpha, - parite));
 
-                if(mem == null)
-                        mem = BaseAlphaBeta.add(this.plateau);
-                    else
-                        mem = BaseAlphaBeta.find(this.plateau);
-
-                mem.prof = p;
-
-                for(String c : coupPossibles) {
-                    Action[] ac;
-                    ac = this.plateau.play(c, this.player);
-
-                    alpha = Math.max(alpha, - negAlphaBeta(p-1, - beta, - alpha, - parite));
-                    
-                    try {
-                        mem = BaseAlphaBeta.add(this.plateau);
-                    } catch(Exception e) {
-                        System.out.println("Erreur mem : " + e);
-                    }
-
-                    mem.alpha = alpha;
-                    mem.beta = beta;
-
-                    for(Action a : ac) {
-                        a.reverse();
-                        this.plateau.play(a);
-                    }
-
-                    if(alpha >= beta) {
-                        mem.alpha = beta;
-                        return beta;
-                    }
+                for(Action a : ac) {
+                    a.reverse();
+                    this.plateau.play(a);
                 }
-            }
-            else {
-                System.out.println("Mem deja trouvé : " + mem.alpha);
-                alpha = mem.alpha;
+
+                if(alpha >= beta) {
+                    return beta;
+                }
             }
         }
 
