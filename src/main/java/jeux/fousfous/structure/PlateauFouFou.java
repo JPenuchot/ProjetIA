@@ -6,7 +6,7 @@ import java.util.Arrays;
 
 import jeux.Partie1;
 
-public class PlateauFouFou implements Partie1 {
+public class PlateauFouFou {
     public State[] plateau;
     public final static int pSize = 8;
 
@@ -49,7 +49,6 @@ public class PlateauFouFou implements Partie1 {
         this.plateau = plateau;
     }
 
-    @Override
     public void setFromFile(String fileName) {
         try {
             BufferedReader reader = new BufferedReader(new FileReader(fileName));
@@ -79,7 +78,6 @@ public class PlateauFouFou implements Partie1 {
         }
     }
 
-    @Override
     public void saveToFile(String fileName) {
         try {
             PrintWriter file = new PrintWriter(fileName);
@@ -107,13 +105,11 @@ public class PlateauFouFou implements Partie1 {
     }
 
 
-    @Override
     public boolean estValide(String move, String player) {
 
         return true;
     }
 
-    @Override
     public String[] mouvementsPossibles(String sPlayer) {
         State player = State.empty;
 
@@ -250,7 +246,7 @@ public class PlateauFouFou implements Partie1 {
         return res;
     }
 
-    @Override
+    /*
     public void play(String move, String sPlayer) {
         // Formattage du Player
         State player;
@@ -270,7 +266,7 @@ public class PlateauFouFou implements Partie1 {
         this.plateau[iSource * pSize + jSource] = State.empty;
         this.plateau[iDest * pSize + jDest] = player;
     }
-
+    */
     /**
      * Joue un mouvement donné et retourne les actions faites avec les états précédents
      * pour faire du backtracking.
@@ -330,7 +326,6 @@ public class PlateauFouFou implements Partie1 {
         plateau[act.i * pSize + act.j] = act.after;
     }
 
-    @Override
     public boolean finDePartie() {
         return (getNumberCaseState(State.black) == 0 || getNumberCaseState(State.white) == 0);
     }
