@@ -30,7 +30,7 @@ public class BaseAlphaBeta{
 	 *
 	 * @param      plat  Le plateau en question.
 	 */
-	public static void add(PlateauFouFou plat){
-		base.put(plat.getStateArray(), new MemoAlphaBeta(plat));
+	public static MemoAlphaBeta add(PlateauFouFou plat){
+		return base.put(plat.getStateArray(), new MemoAlphaBeta(plat));
 	}
 }

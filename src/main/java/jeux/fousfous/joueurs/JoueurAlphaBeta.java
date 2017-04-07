@@ -19,6 +19,21 @@ public class JoueurAlphaBeta implements IJoueur {
     int profondeur;
 
     /**
+     * Détermine la profondeur de recherche pour le plateau actuel.
+     *
+     * @return     Profondeur de recherche
+     */
+    int getProf(){
+        int plyAmt =   plateau.getNumberCaseState(player)
+                        + plateau.getNumberCaseState(StateUtils.getInverseState(player));
+        if(plyAmt <= 10)
+            return 14;
+        else if (plyAmt <= 16)
+            return 8;
+        return 4;
+    }
+
+    /**
      * Initialise le joueur (profondeur initiale etc)
      *
      * @param      mycolour  Couleur du joueur en int (passée par l'arbitre)
@@ -28,7 +43,7 @@ public class JoueurAlphaBeta implements IJoueur {
     	this.player = mycolour == 1 ? State.black : State.white;
         this.playerInt = mycolour;
         this.profondeur = 6;
-        this.h = new DiffPions();
+        this.h = new Minimiser();
 
         plateau = new PlateauFouFou();
     }
@@ -49,8 +64,8 @@ public class JoueurAlphaBeta implements IJoueur {
 
         String[] coupPossibles = this.plateau.mouvementsPossibles(this.player);
         String meilleurCoup = coupPossibles[0];
-        float max = Float.MIN_VALUE;
-        float alphaBeta = Float.MIN_VALUE;
+        float beta = Float.MAX_VALUE;
+        float alpha = Float.MIN_VALUE;
 
         System.out.println("Coups Possible : ");
 
@@ -63,17 +78,17 @@ public class JoueurAlphaBeta implements IJoueur {
                 Action[] ac = this.plateau.play(c, this.player);
 
                 //System.out.println("DebutAlpha");
-                alphaBeta = negAlphaBeta(this.profondeur - 1, Float.MIN_VALUE, Float.MAX_VALUE, 1);
-                //System.out.println("finAlpha : " + alphaBeta);
+                alpha = negAlphaBeta(this.getProf() - 1, -beta, -alpha, -1);
+                //System.out.println("finAlpha : " + alpha);
 
                 for(Action a : ac) {
                         a.reverse();
                         this.plateau.play(a);
                 }
 
-                if(max < alphaBeta) {
+                if(beta < alpha) {
                     System.out.println("Meilleur Coup Selectionné :" + c);
-                    max = alphaBeta;
+                    beta = alpha;
                     meilleurCoup = c;
                 }
             }
@@ -92,7 +107,7 @@ public class JoueurAlphaBeta implements IJoueur {
      *
      * @param      p       Profondeur d'exploration
      * @param      alpha   Valeur alpha
-     * @param      beta    Valeur bet
+     * @param      beta    Valeur beta
      * @param      parite  Parité
      *
      * @return     Retourne une estimation de la qualité du noeud
@@ -116,6 +131,7 @@ public class JoueurAlphaBeta implements IJoueur {
 
             mem = BaseAlphaBeta.find(this.plateau);
 
+
             if(mem == null || mem.prof < p) {
                 String[] coupPossibles = this.plateau.mouvementsPossibles(this.player);
 
@@ -130,6 +146,13 @@ public class JoueurAlphaBeta implements IJoueur {
                     mem.alpha = alpha;
                     mem.beta = beta;
                     mem.prof = p;
+
+
+            for(String c : coupPossibles) {
+                Action[] ac = new Action[2];
+                ac = this.plateau.play(c, this.player);
+
+                alpha = Math.max(alpha, - negAlphaBeta(p-1, - beta, - alpha, - parite));
 
 
                     for(Action a : ac) {
