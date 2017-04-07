@@ -78,18 +78,19 @@ public class JoueurAlphaBeta implements IJoueur {
                 Action[] ac = this.plateau.play(c, this.player);
 
                 //System.out.println("DebutAlpha");
-                alpha = negAlphaBeta(this.getProf() - 1, -beta, -alpha, -1);
+                
+                float negAB = negAlphaBeta(this.getProf() - 1, -beta, -alpha, -1);
+
+                if(- negAB > alpha){
+                    System.out.println("Meilleur Coup Selectionné :" + c);
+                    alpha = -negAB;
+                    meilleurCoup = c;
+                }
                 //System.out.println("finAlpha : " + alpha);
 
                 for(Action a : ac) {
                         a.reverse();
                         this.plateau.play(a);
-                }
-
-                if(beta < alpha) {
-                    System.out.println("Meilleur Coup Selectionné :" + c);
-                    beta = alpha;
-                    meilleurCoup = c;
                 }
             }
         } else {
@@ -138,10 +139,12 @@ public class JoueurAlphaBeta implements IJoueur {
             if(mem == null) {
                 String[] coupPossibles = this.plateau.mouvementsPossibles(this.player);
 
-                // for(String c : coupPossibles) {
-                //     Action[] ac = new Action[2];
-                // }
+                if(mem == null)
+                        mem = BaseAlphaBeta.add(this.plateau);
+                    else
+                        mem = BaseAlphaBeta.find(this.plateau);
 
+                mem.prof = p;
 
                 for(String c : coupPossibles) {
                     Action[] ac;
@@ -189,13 +192,13 @@ public class JoueurAlphaBeta implements IJoueur {
                     mem.beta = beta;
                     mem.prof = p;
 
-
                     for(Action a : ac) {
                         a.reverse();
                         this.plateau.play(a);
                     }
 
                     if(alpha >= beta) {
+                        mem.alpha = alpha;
                         return beta;
                     }
                 }
