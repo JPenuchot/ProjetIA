@@ -27,10 +27,10 @@ public class JoueurAlphaBeta implements IJoueur {
         int plyAmt =   plateau.getNumberCaseState(player)
                         + plateau.getNumberCaseState(StateUtils.getInverseState(player));
         if(plyAmt <= 10)
-            return 16;
+            return 22;
         else if (plyAmt <= 16)
-            return 10;
-        return 4;
+            return 16;
+        return 10;
     }
 
     /**
