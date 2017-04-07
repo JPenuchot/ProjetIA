@@ -10,7 +10,7 @@ import java.util.HashMap;
  * Base de connaissances sur les états rencontrés lors de l'exploration de l'IA.
  */
 public class BaseAlphaBeta{
-	static HashMap<State[], MemoAlphaBeta> base = new HashMap<State[], MemoAlphaBeta>();
+	static HashMap<State[], MemoAlphaBeta> base = new HashMap<State[], MemoAlphaBeta>(100000);
 
 	/**
 	 * Permet d'accéder à la mémoire liée à un plateau donné.
@@ -31,6 +31,8 @@ public class BaseAlphaBeta{
 	 * @param      plat  Le plateau en question.
 	 */
 	public static MemoAlphaBeta add(PlateauFouFou plat){
-		return base.put(plat.getStateArray(), new MemoAlphaBeta(plat));
+		MemoAlphaBeta newVal = new MemoAlphaBeta(plat);
+		base.put(plat.getStateArray(), newVal);
+		return newVal;
 	}
 }

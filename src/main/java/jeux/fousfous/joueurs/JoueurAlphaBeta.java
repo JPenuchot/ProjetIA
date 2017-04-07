@@ -78,18 +78,19 @@ public class JoueurAlphaBeta implements IJoueur {
                 Action[] ac = this.plateau.play(c, this.player);
 
                 //System.out.println("DebutAlpha");
-                alpha = negAlphaBeta(this.getProf() - 1, -beta, -alpha, -1);
+                
+                float negAB = negAlphaBeta(this.getProf() - 1, -beta, -alpha, -1);
+
+                if(- negAB > alpha){
+                    System.out.println("Meilleur Coup Selectionné :" + c);
+                    alpha = -negAB;
+                    meilleurCoup = c;
+                }
                 //System.out.println("finAlpha : " + alpha);
 
                 for(Action a : ac) {
                         a.reverse();
                         this.plateau.play(a);
-                }
-
-                if(beta < alpha) {
-                    System.out.println("Meilleur Coup Selectionné :" + c);
-                    beta = alpha;
-                    meilleurCoup = c;
                 }
             }
         } else {
@@ -134,25 +135,21 @@ public class JoueurAlphaBeta implements IJoueur {
             if(mem == null || mem.prof < p) {
                 String[] coupPossibles = this.plateau.mouvementsPossibles(this.player);
 
-                // for(String c : coupPossibles) {
-                //     Action[] ac = new Action[2];
-                // }
+                if(mem == null)
+                        mem = BaseAlphaBeta.add(this.plateau);
+                    else
+                        mem = BaseAlphaBeta.find(this.plateau);
 
+                mem.prof = p;
 
                 for(String c : coupPossibles) {
 
                     System.out.println("c: " + c);
 
-                    Action[] ac = new Action[2];
+                    Action[] ac;
                     ac = this.plateau.play(c, this.player);
 
-                    alpha = Math.max(alpha, - negAlphaBeta(p-1, - beta, - alpha, - parite));
-
-                    mem = BaseAlphaBeta.add(this.plateau);
-                    mem.alpha = alpha;
-                    mem.beta = beta;
-                    mem.prof = p;
-
+                    alpha = Math.max(alpha, - negAlphaBeta(p-1, - beta, - alpha, - parite));                                        
 
                     for(Action a : ac) {
                         a.reverse();
@@ -160,10 +157,11 @@ public class JoueurAlphaBeta implements IJoueur {
                     }
 
                     if(alpha >= beta) {
+                        mem.alpha = alpha;
                         return beta;
                     }
                 }
-            } else {
+            }else {
                 System.out.println("Mem deja trouvé : " + mem.alpha);
                 alpha = mem.alpha;
             }
