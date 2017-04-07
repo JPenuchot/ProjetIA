@@ -1,12 +1,12 @@
-#Rapport Foufou
+# Rapport Foufou
 
-##Introduction : 
+## Introduction
 
 Notre système s’organise autour de l’utilisation d’un tableau à une dimension ainsi que l’utilisation d’énumération comme State qui permet de connaitre le type d’une case. C’est-à-dire si elle contient une pièce de couleur Noir, Blanche ou vide. La partie suivant décrit l'architecture du programme ainsi qu'une breve description des classes.
 
 Les interfaces vues en TP n'ont pas été gardées car notre code n'est en aucun cas une implémentation généralisée de l'algorithme AlphaBeta sur lequel notre IA est basée, nous n'avons gardé que l'interface IJoueur par souci de simplicité et d'efficacité afin d'utiliser des structures plus adaptées à la résolution de notre problème.
 
-##Architecture du programme :
+## Architecture du programme
 
 ```
 src                                                             - Dossier source
@@ -77,7 +77,7 @@ MemoAlphaBeta est un élément de mémoire associé à un état. On l'utilise po
 
 BaseAlphaBeta assure la correspondance entre un état du jeu et le MemoAlphaBeta. La classe repose sur un HashMap ayant pour clé un array de State pour être sûrs que la correspondance est faite sur un état du plateau sans prendre en compte les éventuels effets de bord de la classe PlateauFouFou.
 
-##Fonction MouvementsPossibles
+## Fonction MouvementsPossibles
 
 Nous avons remplacé la fonction mouvementsPossibles par la nôtre utilisant un enum State au lieu d'un String, toujours pour simplifier le code.
 
@@ -189,9 +189,9 @@ if(dir_ == dir || (dir_ ^ dir) == 3)
 
 Lors de la deuxième boucle d'exploration, si on rencontre un ennemi, on rajoute donc la case de départ de cette deuxième imbrication comme point d'arrivée pour notre coup qui sera ajouté à la liste des coups possibles.
 
-## Fonction Play : 
+## Fonction PlateauFouFou.play
 
-De même que pour la fonction mouvementPossibles, nous avons surchager la fonction play pour qu’elle puisse correspondre à notre choix statégique (State, Action).
+La fonction play a été surchargée de manière à pouvir jouer un mouvement décrit par un String ou un mouvement décrit par des objets Action. Un mouvement effectué avec un String renvoie les actions effectuées pour le backtracking dans l'exploration de negAlphaBeta.
 
 Je vais ici détailler la conversion des mouvements en coordonnées. Je prendrais comme exemple, le mouvement : **A2 – D5**
 
@@ -204,39 +204,56 @@ Je vais ici détailler la conversion des mouvements en coordonnées. Je prendrai
         int iDest = Integer.parseInt((moveTab[1].split(""))[1]) - 1;
 ```
 
-D’abord, nous découpons les deux parties du mouvement : ["A2", "D5"]. Ensuite, nous nous occupons de la première partie qui corresponds aux coordonnées de la case source (iSource, jSource). iSource est calculé grâce à une fonction qui convertis les lettres (A, B, C …) en entier (1, 2, 3 …). Pour obtenir jSource, nous avons d’abord découper notre mouvement source en deux : ["A","2"], puis convertis l’entier 2 en integer pour ensuite lui soustraire 1. Cette soustraction vient du fait que nos coordonnées vont de 0 à 7 alors que les mouvements vont de 1 à 8. Voila comment nous transformons un mouvement en coordonnées.
+D’abord, nous découpons les deux parties du mouvement : ["A2", "D5"]. Ensuite, nous nous occupons de la première partie qui corresponds aux coordonnées de la case source (iSource, jSource). iSource est calculé grâce à une fonction qui convertis les lettres (A, B, C …) en entier (1, 2, 3 …). Pour obtenir jSource, nous avons d’abord découper notre mouvement source en deux : ["A","2"], puis convertis l’entier 2 en integer pour ensuite lui soustraire 1. Cette soustraction vient du fait que nos coordonnées vont de 0 à 7 alors que les mouvements vont de 1 à 8. Voilà comment nous transformons un mouvement en coordonnées.
 
-Nous avons trois autres implémentations de la méthode play, voici leurs prototypes :
+## JoueurAlphaBeta.negAlphaBeta
 
-```java
-public Action[] play(String move, State sPlayer)
-public void play(Action[] actions)
-public void play(Action act)
+```Java
+public int negAlphaBeta(int p, int alpha, int beta, int parite) {
+    if (p <= 0 || this.plateau.isOver()) {
+        alpha = parite * this.h.estimate(this.plateau, this.player);
+    } else {
+        
+        String[] coupPossibles = this.plateau.mouvementsPossibles(this.player);
+
+        for(String c : coupPossibles) {
+            Action[] ac;
+            ac = this.plateau.play(c, this.player);
+            
+            alpha = Math.max(alpha, - negAlphaBeta(p-1, - beta, - alpha, - parite));
+            for(Action a : ac) {
+                a.reverse();
+                this.plateau.play(a);
+            }
+            if(alpha >= beta) {
+                return beta;
+            }
+        }
+    }
+    return alpha;
+}
 ```
 
-1.	Permet de retourner les mouvements sous forme d'Action apres les avoir joués
-2.	Permet de jouer une Action
-3.	Permet de jouer un tableau d’Actions
+Cette méthode n'est que l'implémentation de l'algo negAlphaBeta dans le cadre du jeu. On utilise le système de backtrack proposé par notre classe PlateauFouFou pour éviter les copies à chaque noeud ce qui nous fait gagner un temps considérable dû à l'absence de copies de tableaux. Notre implémentation de base de cette fonction utilisait les structures en place pour mémoriser le meilleur alpha mais nous avons retiré la mémorisation pour débugger cette fonction plus efficacement afin de nous assurer que l'IA marche bel et bien. Nous n'avons pas réimplémenté la mémorisation par manque de temps.
 
+## JoueurAlphaBeta.choixMouvement
 
-##Fonction isOver :
+Cette fonction est une variante de negAlphaBeta qui retient le meilleur coup possible pour le rendre. Cette fonction amorce l'exploration et permet d'implémenter l'interface IJoueur pour intégrer notre IA à la structure en place pour l'affrontement des programmes.
 
-La méthode isOver est notre fonction d’arrêt. Elle permet donc de savoir quand arreter le jeu. Elle renvoie juste vrai lorsqu’on nous n’avons plus qu’une unique couleur de piece sur le plateau.
+## Optimisation
 
-##Optimisation:
+### Mémorisation
 
-###Mémorisation :
+On sait que les algorithmes de recherche tels que AlphaBeta ou MinMax parcourt le plateau de jeu en jouant des coups et en calculant les heuristiques des feuilles. Or dans plusieurs cas, la configuration du plateau est la même que lors d'une exploration précédante. Nous avons donc voulu mettre en place un système de mémorisation. Les bases de ce système sont présentes mais il a été retiré de l'exploration pour des raisons de debug, et aussi parce-que l'algorithme negAlphaBeta permet à lui seul d'explorer assez loin pour gagner facilement.
 
-On sait que les algorithmes de recherche tels que AlphaBeta ou MinMax parcourt le plateau de jeu en jouant des coups et en calculant les heuristiques des feuilles. Or dans plusieurs cas, la configuration du plateau est la même que lors d'une exploration précédante. Nous avons donc voulu mettre en place un système de mémorisation. Ce systeme va stocker en mémoire les états du tableau ainsi que quelques paramètre associés (Valeurs d'alpha et beta, profondeur d'exploration...). Le but est donc de "checker" à chaque itération d'alphaBeta si on ne s'est pas deja retrouvé dans ce cas pour éviter de refaire un passage de l'algorithme et donc gagner un temps précieux. 
+### Profondeur incrémentale
 
-##Profondeur incrémentale :
+Nous avons choisi de mettre en place un système de profondeur incrémentale en fonction du nombre de pièce restant sur le plateau. Ce qui nous permettra de faire une recherche approfondis vers la fin du jeu et donc d'obtenir de meilleurs résultat dans un temps raisonnable.
 
-Nous avons choisis de mettre en place un système de profondeur incrémentale en fonction du nombre de pièce restant sur le plateau. Ce qui nous permettra de faire une recherche approfondis vers la fin du jeu et donc d'obtenir de meilleurs résultat dans un temps raisonnable.
+## Heuristiques
 
+### Heuristique DiffPions
 
-##Heuristiques :
-
-###Heuristique DiffPions
 Pour le choix des heuristiques, nous avons avant tout de suite penser à faire quelque chose de simple à calculer au vu du nombre de fois ou celle-ci sera calculée. Nous avons donc choisir de calculer la différence entre les pièces noires et les pièces blanches : 
 
 ```java
@@ -259,7 +276,7 @@ res += plateau.getStateArray()[i] == joueur ? 1.f : -1.f;
 
 Ajoute +1 a res si la case qu’on explore contient un pion du Joueur et retire 1 sinon. Ce qui nous permet donc d’avoir la différence entre le nombre de pion noir et blanc sur le plateau.
 
-###Heuristique Minimiser
+### Heuristique Minimiser
 
 Une autre heuristique assez simple à calculer est celle qui permet de minimiser les pions adverses.
 
@@ -270,23 +287,21 @@ public float estimate(PlateauFouFou plateau, State joueur) {
 ```
 La méthode `getNumberCaseState` nous renvoie le nombre de pions d'un State passé en paramètre. Ici on retourne donc l'inverse pour rendre le nombre le plus possibles. Plus le resultat est grand, plus l'inverse est petit et donc on évite d'être dans ce cas.
 
-##GitHub : 
+## GitHub
 
 Pour l'organisation du projet, nous avons décidé de mettre en place un GitHub. Grâce à celui-ci, nous avons pu mettre notre projet en commum et pouvoir donc travailler en même temps sans avoir à recopier apres tout ce qui avait été fait par le binome. Cela nous a donc appris à s'orgiser avec cette outils très utilisé et très répandu dans le monde du travail.
 
-##Difficultés rencontrées :
+## Difficultés rencontrées
 
 Durant ce projet, nous avons rencontré plusieurs difficultées. Tout d'abord comment rechercher les mouvements possibles en temps optimal. C'est-à-dire ne pas faire quatre (dans chaque direction) explorations du plateau. Le but de ce projet, en plus de coder une intélligence artificielle, était d'avoir le code le plus optimal possible.
 
 
-##Amélioration envisagées : 
+## Amélioration envisagées
 
 1. L'intelligence artificielle et le machine learning étant étroitement liée, nous voulions essayer de coder un systeme de machine learning afin d'avoir une intélligence artificielle presque imbattable. Or nous n'avons pas eu le temps de le faire. Nous allons donc essayé d'apporter cette amélioration majeur dans les mois qui suivent.
 2. Lors de l'exploration des arbres de jeu (avec alpha Beta par exemple), de nombre parcourt se ressemblent. Il faudrait donc sauvegarder l'etat de l'arbre ainsi que la valeurs des heuristiques sur les noeuds afin de gagner un temps precieux.
 
 
-##Conclusion : 
+## Conclusion : 
 
 Ce projet nous a appris beaucoup. En effet, nous avons du nous organiser dans un projet à plusieurs. Nous avons du être rigoureux dans l'organisation du github, savoir comment découper le travail etc. Nous avons aussi beaucoup appris sur l'intelligence artificielle car nous devions tout coder et donc nous avons choisis une statégie (qui on l'espère sera payante) pour résoudre le problème posé.
-
-
