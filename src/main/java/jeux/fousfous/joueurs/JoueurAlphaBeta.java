@@ -114,7 +114,7 @@ public class JoueurAlphaBeta implements IJoueur {
         
         MemoAlphaBeta mem = BaseAlphaBeta.find(this.plateau);
 
-        if (p >= 0 || this.plateau.isOver()) {
+        if (p <= 0 || this.plateau.isOver()) {
             alpha = parite * this.h.estimate(this.plateau, this.player);
         } else {
             mem = BaseAlphaBeta.find(this.plateau); //  Accès à la base de données
