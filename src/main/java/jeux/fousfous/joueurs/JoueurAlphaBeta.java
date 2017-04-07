@@ -114,38 +114,36 @@ public class JoueurAlphaBeta implements IJoueur {
                     //  Trier les coups en fonction de leurs valeurs retournées
                     //  Mais on n'aura pas le temps donc bon... Tant pis I guess
 
-            String[] coupPossibles = this.plateau.mouvementsPossibles(this.player);
+            mem = BaseAlphaBeta.find(this.plateau);
 
-            for(String c : coupPossibles) {
-                Action[] ac = new Action[2];
+            if(mem == null || mem.prof < p) {
+                String[] coupPossibles = this.plateau.mouvementsPossibles(this.player);
 
-                ac = this.plateau.play(c, this.player);
+                for(String c : coupPossibles) {
+                    Action[] ac = new Action[2];
 
+                    ac = this.plateau.play(c, this.player);
 
-                if(!(mem != null && mem.prof > p)) {
+                    alpha = Math.max(alpha, -1 * negAlphaBeta(p-1, -1 * beta, -1 * alpha, - parite));
 
+                    mem = BaseAlphaBeta.add(this.plateau);
                     mem.alpha = alpha;
                     mem.beta = beta;
                     mem.prof = p;
 
-                    BaseAlphaBeta.add(mem);
-                    alpha = Math.max(alpha, -1 * negAlphaBeta(p-1, -1 * beta, -1 * alpha, -1 * parite));
-                } else {
-                    alpha = mem.alpha;
-                    beta = mem.beta;
+
+                    for(Action a : ac) {
+                        a.reverse();
+                        this.plateau.play(a);
+                    }
+
+                    if(alpha >= beta) {
+                        return beta;
+                    }
                 }
-
-                alpha = Math.max(alpha, -1 * negAlphaBeta(p-1, -1 * beta, -1 * alpha, - parite));
-
-
-                for(Action a : ac) {
-                    a.reverse();
-                    this.plateau.play(a);
-                }
-
-                if(alpha >= beta) {
-                    return beta;
-                }
+            } else {
+                System.out.println("Mem deja trouvé : " + mem.alpha);
+                alpha = mem.alpha;
             }
         }
 
