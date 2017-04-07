@@ -11,9 +11,6 @@ src                                                             - Dossier source
 |    |    |    |    |    ├── JoueurAleatoire.java               - Joueur jouant aléatoirement
 |    |    |    |    |    ├── JoueurAlphaBeta.java               - Joueur jouant AlphaBeta
 |    |    |    |    ├── structure                               - Dossier contenant la structure du Jeu
-|	 |	  |	   |	|	 ├ Memo 								- Dossier contenant la structure de mémorisation
-|	 |	  |	   |z	|	 |	├ BaseAlphaBeta					-
-|	 |	  |	   |	|	 |	├ MemoAlphaBeta					-
 |    |    |    |    |    ├── Action.java                        - Action decrivant un mouvement
 |    |    |    |    |    ├── PlateauFouFou.java                 - Implémentation principale du Jeu
 |    |    |    |    |    ├── PlateauUtils.java                  -

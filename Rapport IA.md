@@ -24,9 +24,6 @@ src                                                             - Dossier source
 |    |    |    |    |    ├── JoueurAleatoire.java               - Joueur jouant aléatoirement
 |    |    |    |    |    ├── JoueurAlphaBeta.java               - Joueur jouant AlphaBeta
 |    |    |    |    ├── structure                               - Dossier contenant la structure du Jeu
-|    |    |    |    |    ├ Memo                                 - Dossier contenant la structure de mémorisation
-|    |    |    |    |    |  ├ BaseAlphaBeta                     -
-|    |    |    |    |    |  ├ MemoAlphaBeta                     -
 |    |    |    |    |    ├── Action.java                        - Action decrivant un mouvement
 |    |    |    |    |    ├── PlateauFouFou.java                 - Implémentation principale du Jeu
 |    |    |    |    |    ├── PlateauUtils.java                  -
@@ -37,7 +34,6 @@ src                                                             - Dossier source
 |    |    |    |    ├── PartieFoufou.java                       -
 |    |    |    |    ├── Solo.java                               -
 |    |    |    ├── Partie1.java                                 - Interface pour PlateauFoufou
-
 ```
 
 ##Énumération State : 
@@ -170,15 +166,6 @@ Lors des dernières implémentations des algorithme de recherche, nous etions em
 // TODO
 
 
-##Optimisation:
-###Mémorisation :
-
-On sait que les algorithmes de recherche tels que AlphaBeta ou MinMax parcourt le plateau de jeu en jouant des coups et en calculant les heuristiques des feuilles. Or dans plusieurs cas, la configuration du plateau est la même que lors d'une exploration précédante. Nous avons donc voulu mettre en place un système de mémorisation. Ce systeme va stocker en mémoire les états du tableau ainsi que quelques paramètre associés (Valeurs d'alpha et beta, profondeur d'exploration...). Le but est donc de "checker" à chaque itération d'alphaBeta si on ne s'est pas deja retrouvé dans ce cas pour éviter de refaire un passage de l'algorithme et donc gagner un temps précieux. 
-
-##Profondeur incrémentale :
-
-Nous avons choisis de mettre en place un système de profondeur incrémentale en fonction du nombre de pièce restant sur le plateau. Ce qui nous permettra de faire une recherche approfondis vers la fin du jeu et donc d'obtenir de meilleurs résultat dans un temps raisonnable.
-
 
 ##Heuristiques :
 
@@ -218,7 +205,7 @@ La méthode `getNumberCaseState` nous renvoie le nombre de pions d'un State pass
 
 ##GitHub : 
 
-Pour l'organisation du projet, nous avons décidé de mettre en place un GitHub. Grâce à celui-ci, nous avons pu mettre notre projet en commum et pouvoir donc travailler en même temps sans avoir à recopier apres tout ce qui avait été fait par le binome. Cela nous a donc appris à s'orgiser avec cette outils très utilisé et très répandu dans le monde du travail.
+Pour l'organisation du projet, nous avons décidé de mettre en place un GitHub. Grâce à celui-ci, nous avons pu mettre notre projet en commum et pouvoir donc travailler en même temps sans avoir à recopier apres tout ce qui avait été fait par le binome.
 
 ##Difficultés rencontrées :
 
