@@ -4,9 +4,7 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import jeux.Partie1;
-
-public class PlateauFouFou implements Partie1 {
+public class PlateauFouFou {
     public State[] plateau;
     public final static int pSize = 8;
 
@@ -49,71 +47,6 @@ public class PlateauFouFou implements Partie1 {
         this.plateau = plateau;
     }
 
-    @Override
-    public void setFromFile(String fileName) {
-        try {
-            BufferedReader reader = new BufferedReader(new FileReader(fileName));
-            String line = reader.readLine();
-            int i = 0; // permet de parcourir les lignes
-
-            while(line != null) {
-                line = reader.readLine();
-                if(line == null) // permet de ne pas afficher la derniere ligne
-                    continue;
-                if(!line.startsWith("%")) { // n'affiche pas les lignes "commentaire"
-                    String[] formatLine = line.split(" ")[1].split(""); // Barbu Line ! ^^ permet de retirer les chiffre des lignes puis de decouper chaque case
-
-                    for(int j = 0; j < pSize; j++)
-                        this.plateau[i * pSize + j] = StateUtils.stringToState(formatLine[j]);
-
-                    i++;
-                }
-            }
-
-
-        } catch (FileNotFoundException e) {
-            System.out.println("File not Found ");
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    public void saveToFile(String fileName) {
-        try {
-            PrintWriter file = new PrintWriter(fileName);
-
-            file.write("% ABCDEFGH\n");
-
-            for(int i = 0; i < pSize; i++) {
-                file.write((i + 1) + " ");
-                for(int j = 0; j < pSize; j++)
-                    file.write(StateUtils.stateToString(this.plateau[i * pSize + j])); // A changer quand le tableau sera un objet de Cellul
-                file.write(" " + (i + 1) + "\n");
-            }
-
-            file.write("% ABCDEFGH\n");
-
-            file.flush();
-            file.close();
-
-        } catch (FileNotFoundException e) {
-            System.out.println("File not Found ");
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-
-    @Override
-    public boolean estValide(String move, String player) {
-
-        return true;
-    }
-
-    @Override
     public String[] mouvementsPossibles(String sPlayer) {
         State player = State.empty;
 
@@ -250,27 +183,6 @@ public class PlateauFouFou implements Partie1 {
         return res;
     }
 
-    @Override
-    public void play(String move, String sPlayer) {
-        // Formattage du Player
-        State player;
-        if(sPlayer.equals("noir")) player = State.black;
-        else if(sPlayer.equals("blanc")) player = State.white;
-        else {
-            return;
-        }
-
-        // Formattage du Move en Integer
-        String[] moveTab = move.split("-");
-        int iSource = this.convertStringToCoord(moveTab[0]);
-        int jSource = Integer.parseInt((moveTab[0].split(""))[1]) - 1;
-        int iDest = this.convertStringToCoord(moveTab[1]);
-        int jDest = Integer.parseInt((moveTab[1].split(""))[1]) - 1;
-
-        this.plateau[iSource * pSize + jSource] = State.empty;
-        this.plateau[iDest * pSize + jDest] = player;
-    }
-
     /**
      * Joue un mouvement donné et retourne les actions faites avec les états précédents
      * pour faire du backtracking.
@@ -330,13 +242,11 @@ public class PlateauFouFou implements Partie1 {
         plateau[act.i * pSize + act.j] = act.after;
     }
 
-    @Override
     public boolean finDePartie() {
         return (getNumberCaseState(State.black) == 0 || getNumberCaseState(State.white) == 0);
     }
 
     public int getNumberCaseState(State state) {
-
         int compt = 0;
 
         for(int i = 0; i < pSize; i++)
