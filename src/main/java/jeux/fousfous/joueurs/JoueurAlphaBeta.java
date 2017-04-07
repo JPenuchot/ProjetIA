@@ -92,9 +92,21 @@ public class JoueurAlphaBeta implements IJoueur {
 
             for(String c : coupPossibles) {
                 Action[] ac = new Action[2];
+
                 ac = this.plateau.play(c, this.player);
 
-                alpha = Math.max(alpha, -1 * negAlphaBeta(p-1, -1 * beta, -1 * alpha, -1 * parite));
+                if(!(mem != null && mem.prof > p)) {
+
+                    mem.alpha = alpha;
+                    mem.beta = beta;
+                    mem.prof = p;
+
+                    BaseAlphaBeta.add(mem);
+                    alpha = Math.max(alpha, -1 * negAlphaBeta(p-1, -1 * beta, -1 * alpha, -1 * parite));
+                } else {
+                    alpha = mem.alpha;
+                    beta = mem.beta;
+                }
 
                 for(Action a : ac) {
                     a.reverse();
