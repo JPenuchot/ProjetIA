@@ -34,7 +34,7 @@ src                                                             - Dossier source
 |    |    |    |    ├── PartieFoufou.java                       -
 |    |    |    |    ├── Solo.java                               -
 |    |    |    ├── Partie1.java                                 - Interface pour PlateauFoufou
-``
+```
 
 ##Énumération State : 
 
@@ -61,6 +61,7 @@ Je ne détaillerais pas toutes les fonctions car nous avons tenu à commenter au
 
 Comme nous l’avons expliqué au-dessus, notre programme utilise en majorité l’Enumération State. Or nous devions utiliser les fonctions implémenter par l’interface qui nous était donné. C’est pourquoi nous avons **surchargé** la fonction mouvementsPossibles. Ici on peut voir la fonction de base qui prends en paramètre un string.
 
+
 ```java
 @Override
     public String[] mouvementsPossibles(String sPlayer) {
@@ -76,7 +77,9 @@ Comme nous l’avons expliqué au-dessus, notre programme utilise en majorité l
     }
 ```
 
+
 Nous récupérons donc ce string pour ensuite le convertir en State et pouvoir utiliser notre fonction surcharger.
+
 
 ```java
 public String[] mouvementsPossibles(State player) {
