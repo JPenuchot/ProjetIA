@@ -23,7 +23,7 @@ public class JoueurAlphaBeta implements IJoueur {
      *
      * @return     Profondeur de recherche
      */
-    int getProf(){
+    public int getProf(){
         int plyAmt =   plateau.getNumberCaseState(player)
                         + plateau.getNumberCaseState(StateUtils.getInverseState(player));
         if(plyAmt <= 10)
