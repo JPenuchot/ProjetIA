@@ -7,6 +7,7 @@
 
 Notre système s’organise autour de l’utilisation d’un tableau à une dimension ainsi que l’utilisation d’énumération comme State qui permet de connaitre le type d’une case. C’est-à-dire si elle contient une pièce de couleur Noir, Blanche ou vide. La partie suivant décrit l'architecture du programme ainsi qu'une breve description des classes.
 
+Les interfaces vues en TP n'ont pas été gardées car notre code n'est en aucun cas une implémentation généralisée de l'algorithme AlphaBeta sur lequel notre IA est basée, nous n'avons gardé que l'interface IJoueur par souci de simplicité et d'efficacité afin d'utiliser des structures plus adaptées à la résolution de notre problème.
 
 ##Architecture du programme :
 
@@ -36,7 +37,6 @@ src                                                             - Dossier source
 |    |    |    |    ├── ClientJeu.java                          - Connection Serveur
 |    |    |    |    ├── PartieFoufou.java                       -
 |    |    |    |    ├── Solo.java                               -
-|    |    |    ├── Partie1.java                                 - Interface pour PlateauFoufou
 
 ```
 
@@ -50,39 +50,17 @@ public enum State {
 }
 ```
 
-Notre plateau de jeu est un tableau de State. On peut ici voir que State peut avoir trois « état » différents. Toutes nos algorithmes, fonctions utilise cette énumération. Au début, nous avions utilisé une classe nommé Case, qui nous permettait de stocker les informations sur chaque case, mais nous nous sommes vite rendu compte que ceci n’était pas indispensable et que donc nous utilisions de la mémoire inutilement. 
+Notre plateau de jeu est un tableau de State. On peut ici voir que State peut avoir trois « états » différents. Tous nos algorithmes, fonctions utilisent cette énumération. Au début, nous avions utilisé une classe nommé Case, qui nous permettait de stocker des informations supplémentaires pour chaque case comme leur position, mais nous avons décidé de la retirer afin de simplifier le code et de tourner vers un type enum, ce qui de plus nous permet d'utiliser les opérateurs =, !=, etc. pour les comparaisons et affectations (pas besoin de passer par des fonctions auxiliaires lourdes en coût et rendant le code illisible).
 
-Pour manipuler les States, nous avons 4 méthodes implémenté dans une classe StateUtils.
-stringToState : permet de convertir un string en state grâce à une hashMap 
-stateToString : permet de convertir un state en string
-getInverseState : permet de données l’inverse d’une state ( Blanc -> Noir, Noir -> Blanc, Empty -> Empty)
-getStringCoord : permet de convertir une chaine « A2-B4 » en coordonnée i, j
+Pour manipuler les States, nous avons 4 méthodes implémenté dans une classe StateUtils :
 
-Je ne détaillerais pas toutes les fonctions car nous avons tenu à commenter au mieux notre code pour que celui-ci soit lisible et pourquoi pas réutilisé par la suite.
-
+-   stringToState : permet de convertir un string en state grâce à une hashMap 
+-   stateToString : permet de convertir un state en string
+-   getInverseState : permet de données l’inverse d’une state ( Blanc -> Noir, Noir -> Blanc, Empty -> Empty)
 
 ##Fonction MouvementsPossibles : 
 
-Comme nous l’avons expliqué au-dessus, notre programme utilise en majorité l’Enumération State. Or nous devions utiliser les fonctions implémenter par l’interface qui nous était donné. C’est pourquoi nous avons **surchargé** la fonction mouvementsPossibles. Ici on peut voir la fonction de base qui prends en paramètre un string.
-
-
-```java
-@Override
-    public String[] mouvementsPossibles(String sPlayer) {
-        State player = State.empty;
-
-        if(sPlayer.equals("noir"))  return mouvementsPossibles(State.black);
-        if(sPlayer.equals("blanc")) return mouvementsPossibles(State.white);
-
-        System.out.println("Erreur Paramètre (PlateauFouFou.mouvementPossibles)");
-        System.out.println(Thread.currentThread().getStackTrace());
-
-        return null;
-    }
-```
-
-
-Nous récupérons donc ce string pour ensuite le convertir en State et pouvoir utiliser notre fonction surcharger.
+Nous avons remplacé la fonction mouvementsPossibles par la nôtre utilisant un enum State au lieu d'un String, toujours pour simplifier le code.
 
 
 ```java
@@ -107,10 +85,7 @@ public String[] mouvementsPossibles(State player) {
     }
 ```
 
-
-
-Voici notre fonction surchargé mouvementsPossibles qui nous permet d’utiliser les States. Nous avons fait le choix d’utiliser une ArrayList<String> pour stocker nos coups plutôt qu’un tableau non dynamique. En effet, une ArrayList nous permet donc de ne pas alloué un tableau trop grand dès le début ou de ne pas faire une réallocation d’un tableau a la main. 
-Notre variable coupPossibles sera donc une ArrayList de String contenant tous les coups possibles des pièces. La variable cpUnique contiendra tout les coups possibles pour une pièce données. Notre boucle nous permet de parcourir tous le tableau et d’ensuite chercher les cases contenant le State passer précédemment en paramètre. 
+La fonction mouvementsPossibles s'appuie donc sur searchMouvement qui vérifie les mouvements possibles depuis une case donnée et les retourne dans un ArrayList<String>.
 
 Les lignes : 
 
@@ -126,7 +101,75 @@ Comme la fonction de retour est un tableau non dynamique de String, nous devons 
 
 ##Fonction searchMouvement :
 
-// TODO
+La fonction searchMouvement nous a donné beaucoup de mal. Nous avons pris le soin de faire une fonction presque optimale car le traitement est relativement lourd et la fonction est appelée à chaque noeud.
+
+Elle se décline en deux parties (détaillées en commentaires)
+
+##### La première exploration
+
+```Java
+int ni, nj;
+State ami = this.plateau[i * pSize + j];
+State ennemi = StateUtils.getInverseState(ami);
+
+String sOrigin = convertCoordToString(i, j);
+
+ArrayList<String> res = new ArrayList<String>();
+
+//  Première étape : Recherche d'adversaires aux diagonales et activation des cases
+//  ----
+//  La progression se fait avec rad qui représente le rayon
+//  et dir qui itère parmi les quatre directions.
+//  dirTab permet d'indiquer quelles sont les directions à explorer
+//  (on s'arrête dans une direction donnée lorsqu'on a rencontré un ennemi)
+boolean dirTab[] = new boolean[4];
+
+for(int rad = 1; rad < pSize; rad++){
+    for(int dir = 0; dir < 4; dir++){
+        //  ni et nj : Case explorée
+        ni = i + ((((dir >> 1) % 2) * 2) - 1) * rad;    //  Permet d'alterner entre x + i et x - i deux fois sur quatre en fonction de dir
+        nj = j + (((dir % 2)        * 2) - 1) * rad;    //  Permet d'alterner entre y + j et y - j une fois sur deux en fonction de dir
+        if(!dirTab[dir] && ni < pSize && nj < pSize && ni >= 0 && nj >= 0){
+            //  Si on trouve un ennemi, inverser dirTab[dir] et ajouter la position (ni; nj) à la liste des coups possibles
+            if(this.plateau[ni * pSize + nj] == ennemi){
+                //  Ajout de la position dans le tableau de résultats
+                res.add(sOrigin + "-" + convertCoordToString(ni, nj));
+                dirTab[dir] = true;
+            }
+            else if(this.plateau[ni * pSize + nj] == ami){
+                //  Un ami bloque l'exploration
+                dirTab[dir] = true;
+            }
+        }
+    }
+}
+```
+
+Bien que le code soit assez dur à comprendre le principe est assez simple. La première boucle ```for(int rad = 1; rad < pSize; rad++)``` itère de 0 à la taille du tableau pour faire augmenter le rayon d'exploration, quant à ```for(int dir = 0; dir < 4; dir++)```, elle permet d'itérer parmi les 4 directions possibles. Ainsi cette partie du code permet d'explorer les 4 directions avec un rayon incrémental.
+
+```
+ni = i + ((((dir >> 1) % 2) * 2) - 1) * rad;
+nj = j + (((dir % 2)        * 2) - 1) * rad;
+```
+
+En itérant rad de 0 à 3 on passe par les valeurs binaires suivantes : 0b00, 0b01, 0b10, 0b11
+
+On multiplie le premier bit par 2 puis on lui soustrait 1 afin qu'il alterne entre -1 et 1, de même pour le deuxième bit, et on les multiplie par le rayon d'exploration pour itérer parmi les 4 cases pour un rayon. La condition ```if(!dirTab[dir] && ni < pSize && nj < pSize && ni >= 0 && nj >= 0)``` nous permet de nous assurer que l'on reste bien dans les dimensions.
+
+```dirTab[]``` quant à lui sert à stocker les directions qu'il faut ou non continuer à explorer. Les valeurs sont à 0 par défaut, on arrête d'explorer une direction si sa valeur passe à true (facile).
+
+Enfin si on tombe sur un ami, on arrête d'explorer la direction en question et si on tombe sur un ennemi, on rajoute le coup menant à lui depuis les coordonnées i j dans le tableau résultant.
+
+##### La deuxième exploration (Si la première n'a pas trouvé de coup possible)
+
+La deuxième exploration est identique à ceci près qu'elle est double : on utilise le même algo pour explorer les diagonales du joueur, puis pour chaque case explorée les directions perpendiculaires pour trouver un ennemi. On prend soin de ne pas explorer une direction perpendiculaire grâce à ces lignes :
+
+```
+if(dir_ == dir || (dir_ ^ dir) == 3)
+    continue;
+```
+
+Lors de la deuxième boucle d'exploration, si on rencontre un ennemi, on rajoute donc la case de départ de cette deuxième imbrication comme point d'arrivée pour notre coup qui sera ajouté à la liste des coups possibles.
 
 ##Fonction Play : 
 
@@ -165,12 +208,12 @@ La méthode isOver est notre fonction d’arrêt. Elle permet donc de savoir qua
 
 ##Classe Action :
 
-Lors des dernières implémentations des algorithme de recherche, nous etions embetés par le fait de devoir à chaque fois copier le plateau de jeu pour pouvoir ensuite faire des recheches dessus sans pour autant « modifier » le plateau (celui avant la recherche). Nous avons donc d’utiliser une classe Action qui va nous permettre de sauvegarder les mouvements effectués lors de la recherche et donc de pouvoir les inverser par la suite pour revenir à l’état initiale.
+Lors des dernières implémentations des algorithme de recherche, nous etions embetés par le fait de devoir à chaque fois copier le plateau de jeu pour pouvoir ensuite faire des recheches dessus sans pour autant « modifier » le plateau (celui avant la recherche). Nous avons donc d’utiliser une classe Action qui va nous permettre de sauvegarder les mouvements effectués lors de la recherche et donc de pouvoir les inverser par la suite pour revenir à l’état initial.
 
 // TODO
 
-
 ##Optimisation:
+
 ###Mémorisation :
 
 On sait que les algorithmes de recherche tels que AlphaBeta ou MinMax parcourt le plateau de jeu en jouant des coups et en calculant les heuristiques des feuilles. Or dans plusieurs cas, la configuration du plateau est la même que lors d'une exploration précédante. Nous avons donc voulu mettre en place un système de mémorisation. Ce systeme va stocker en mémoire les états du tableau ainsi que quelques paramètre associés (Valeurs d'alpha et beta, profondeur d'exploration...). Le but est donc de "checker" à chaque itération d'alphaBeta si on ne s'est pas deja retrouvé dans ce cas pour éviter de refaire un passage de l'algorithme et donc gagner un temps précieux. 
