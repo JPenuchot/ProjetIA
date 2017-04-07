@@ -131,28 +131,27 @@ public class JoueurAlphaBeta implements IJoueur {
 
             mem = BaseAlphaBeta.find(this.plateau);
 
-
             if(mem == null || mem.prof < p) {
                 String[] coupPossibles = this.plateau.mouvementsPossibles(this.player);
 
-                for(String c : coupPossibles) {
-                    Action[] ac = new Action[2];
+                // for(String c : coupPossibles) {
+                //     Action[] ac = new Action[2];
+                // }
 
+
+                for(String c : coupPossibles) {
+
+                    System.out.println("c: " + c);
+
+                    Action[] ac = new Action[2];
                     ac = this.plateau.play(c, this.player);
 
-                    alpha = Math.max(alpha, -1 * negAlphaBeta(p-1, -1 * beta, -1 * alpha, - parite));
+                    alpha = Math.max(alpha, - negAlphaBeta(p-1, - beta, - alpha, - parite));
 
                     mem = BaseAlphaBeta.add(this.plateau);
                     mem.alpha = alpha;
                     mem.beta = beta;
                     mem.prof = p;
-
-
-            for(String c : coupPossibles) {
-                Action[] ac = new Action[2];
-                ac = this.plateau.play(c, this.player);
-
-                alpha = Math.max(alpha, - negAlphaBeta(p-1, - beta, - alpha, - parite));
 
 
                     for(Action a : ac) {
