@@ -130,9 +130,13 @@ public class JoueurAlphaBeta implements IJoueur {
                     //  Trier les coups en fonction de leurs valeurs retournées
                     //  Mais on n'aura pas le temps donc bon... Tant pis I guess
 
-            mem = BaseAlphaBeta.find(this.plateau);
+            try {
+                mem = BaseAlphaBeta.find(this.plateau);
+            } catch (Exception e) {
+                System.out.println("Erruer find : " + e);
+            }
 
-            if(mem == null || mem.prof < p) {
+            if(mem == null) {
                 String[] coupPossibles = this.plateau.mouvementsPossibles(this.player);
 
                 if(mem == null)
@@ -143,13 +147,50 @@ public class JoueurAlphaBeta implements IJoueur {
                 mem.prof = p;
 
                 for(String c : coupPossibles) {
-
-                    System.out.println("c: " + c);
-
                     Action[] ac;
                     ac = this.plateau.play(c, this.player);
 
-                    alpha = Math.max(alpha, - negAlphaBeta(p-1, - beta, - alpha, - parite));                                        
+                    alpha = Math.max(alpha, - negAlphaBeta(p-1, - beta, - alpha, - parite));
+
+                    
+                    try {
+                        mem = BaseAlphaBeta.add(this.plateau);
+                    } catch(Exception e) {
+                        System.out.println("Erreur mem : " + e);
+                    }
+
+                    mem.alpha = alpha;
+                    mem.beta = beta;
+                    mem.prof = p;
+
+
+                    for(Action a : ac) {
+                        a.reverse();
+                        this.plateau.play(a);
+                    }
+
+                    if(alpha >= beta) {
+                        return beta;
+                    }
+                }
+            } else if (mem.prof < p) {
+                String[] coupPossibles = this.plateau.mouvementsPossibles(this.player);
+
+                // for(String c : coupPossibles) {
+                //     Action[] ac = new Action[2];
+                // }
+
+
+                for(String c : coupPossibles) {
+                    Action[] ac;
+                    ac = this.plateau.play(c, this.player);
+
+                    alpha = Math.max(alpha, - negAlphaBeta(p-1, - beta, - alpha, - parite));
+
+
+                    mem.alpha = alpha;
+                    mem.beta = beta;
+                    mem.prof = p;
 
                     for(Action a : ac) {
                         a.reverse();
@@ -161,7 +202,8 @@ public class JoueurAlphaBeta implements IJoueur {
                         return beta;
                     }
                 }
-            }else {
+            }
+            else {
                 System.out.println("Mem deja trouvé : " + mem.alpha);
                 alpha = mem.alpha;
             }
