@@ -30,7 +30,7 @@ public class JoueurAlphaBeta implements IJoueur {
             return 22;
         else if (plyAmt <= 16)
             return 16;
-        return 10;
+        return 8;
     }
 
     /**
@@ -60,29 +60,18 @@ public class JoueurAlphaBeta implements IJoueur {
      */
     @Override
     public String choixMouvement(){
-        //  TODO : Profondeur variable (en fonction du nombre de pions ou de choix)
-
         String[] coupPossibles = this.plateau.mouvementsPossibles(this.player);
         String meilleurCoup = coupPossibles[0];
         int alpha = Integer.MIN_VALUE;
         int beta = Integer.MAX_VALUE;
 
-        System.out.println("Coups possibles : ");
-
-        for (String s : coupPossibles) {
-            System.out.println(s);
-        }
-
         if(coupPossibles.length != 1) {
             for(String c : coupPossibles) {
                 Action[] ac = this.plateau.play(c, this.player);
                 
-                int negAB = negAlphaBeta(this.profondeur - 1, -beta, -alpha, -1);
-
-                System.out.println(c + " - NegAlphaBeta = " + negAB);
+                int negAB = negAlphaBeta(this.getProf() - 1, -beta, -alpha, -1);
 
                 if(- negAB > alpha){
-                    System.out.println("Nouveau meilleur coup : " + c);
                     alpha = - negAB;
                     meilleurCoup = c;
                 }
@@ -96,7 +85,6 @@ public class JoueurAlphaBeta implements IJoueur {
             meilleurCoup = coupPossibles[0];
         }
 
-        System.out.println("Meilleur Coup parmi les " + coupPossibles.length + " : " + meilleurCoup);
         plateau.play(meilleurCoup, this.player);
 
         return meilleurCoup;
@@ -114,22 +102,16 @@ public class JoueurAlphaBeta implements IJoueur {
      */
     public int negAlphaBeta(int p, int alpha, int beta, int parite) {
         if (p <= 0 || this.plateau.isOver()) {
-            // System.out.println("HEURISTIQUE --------------------------------");
-            // this.plateau.printPlateau();
-            alpha = Math.round(parite * this.h.estimate(this.plateau, this.player));
-            return alpha;
-            //System.out.println("Je remonte " + alpha);
+            alpha = parite * this.h.estimate(this.plateau, this.player);
         } else {
             
             String[] coupPossibles = this.plateau.mouvementsPossibles(this.player);
 
             for(String c : coupPossibles) {
                 Action[] ac;
-                // System.out.println("AVANT JOUER ------------------");
-                // this.plateau.printPlateau();
+
                 ac = this.plateau.play(c, this.player);
-                // System.out.println("APRES JOUER ------------------");
-                // printPlateau();
+                
                 alpha = Math.max(alpha, - negAlphaBeta(p-1, - beta, - alpha, - parite));
 
                 for(Action a : ac) {

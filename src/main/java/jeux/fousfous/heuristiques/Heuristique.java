@@ -11,5 +11,5 @@ public interface Heuristique{
 	 *
 	 * @return     Estimation de la situation du joueur
 	 */
-	public float estimate(PlateauFouFou plateau, State joueur);
+	public int estimate(PlateauFouFou plateau, State joueur);
 }
