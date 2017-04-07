@@ -1,8 +1,5 @@
 #Rapport Foufou
 
-
-
-
 ##Introduction : 
 
 Notre système s’organise autour de l’utilisation d’un tableau à une dimension ainsi que l’utilisation d’énumération comme State qui permet de connaitre le type d’une case. C’est-à-dire si elle contient une pièce de couleur Noir, Blanche ou vide. La partie suivant décrit l'architecture du programme ainsi qu'une breve description des classes.
@@ -40,7 +37,17 @@ src                                                             - Dossier source
 
 ```
 
-##Énumération State : 
+Le package structure contient la structure même du jeu tandis que le package joueurs ne contient que les implémentations des différents joueurs et heuristiques contient les heuristiques. Nous allons détailler les classes principales du programme avant de nous pencher sur les fonctions sur lesquelles elles s'appuient.
+
+### PlateauFouFou
+
+PlateauFouFou est la colonne vertébrale de notre code. On y stocke les états des cases dans un tableau de **State**. C'est cette classe même qui implémente la mécanique du jeu et surtout la recherche de coups possibles. Elle a été coçue de manière à ne reposer que sur le tableau de **State** de manière à éviter les effets de bord et simplifier l'exploration dans JoueurAlphaBeta pour faciliter au maximum l'implémentation de l'algorithme negAlphaBeta.
+
+### JoueurAlphaBeta
+
+Il s'agit de la classe qui implémente l'exploration de l'arbre de jeu, c'est donc l'IA à proprement parler. Nous avions une implémentation de cet algorithme avec un système de mémorisation contenu dans BaseAlphaBeta et MemoAlphaBeta qui toutefois n'a pas été gardé car nous avons eu des problèmes avec l'implémentation de negAlphaBeta, nous avons donc supprimé la couche de mémorisation pour faciliter son debug.
+
+### State : 
 
 ```java
 public enum State {
@@ -58,10 +65,21 @@ Pour manipuler les States, nous avons 4 méthodes implémenté dans une classe S
 -   stateToString : permet de convertir un state en string
 -   getInverseState : permet de données l’inverse d’une state ( Blanc -> Noir, Noir -> Blanc, Empty -> Empty)
 
-##Fonction MouvementsPossibles : 
+### Action
+
+Action est une classe très simple permettant de décrire une action. Nous définissons une action par le changement d'état d'une case à un autre. Une action stocke donc l'état précédent de la case et son état courant. Elle dispose d'une fonction simple permettant d'intervertir les deux états pour faire un backtrack des actions lors de l'exploration. Ainsi seul un tableau est nécessaire pour toute l'exploration et on économise un nombre précieux de copies mémoires puisqu'elles se limitent à deux fois une paire d'entiers et une paire d'états. Les actions sont renvoyées à chaque appel de play() dans la structure PlateauFouFou.
+
+### MemoAlphaBeta
+
+MemoAlphaBeta est un élément de mémoire associé à un état. On l'utilise pour stocker les valeurs alpha/beta d'un noeud lors de l'exploration ainsi que la profondeur à laquelle cet état a été exploré.
+
+### BaseAlphaBeta
+
+BaseAlphaBeta assure la correspondance entre un état du jeu et le MemoAlphaBeta. La classe repose sur un HashMap ayant pour clé un array de State pour être sûrs que la correspondance est faite sur un état du plateau sans prendre en compte les éventuels effets de bord de la classe PlateauFouFou.
+
+##Fonction MouvementsPossibles
 
 Nous avons remplacé la fonction mouvementsPossibles par la nôtre utilisant un enum State au lieu d'un String, toujours pour simplifier le code.
-
 
 ```java
 public String[] mouvementsPossibles(State player) {
@@ -99,7 +117,7 @@ permettent de stocker tous les mouvements possibles pour une pièce de coordonn�
 
 Comme la fonction de retour est un tableau non dynamique de String, nous devons ensuite convertir notre ArrayList<String> grâce à la dernière ligne.
 
-##Fonction searchMouvement :
+## Fonction searchMouvement
 
 La fonction searchMouvement nous a donné beaucoup de mal. Nous avons pris le soin de faire une fonction presque optimale car le traitement est relativement lourd et la fonction est appelée à chaque noeud.
 
@@ -171,7 +189,7 @@ if(dir_ == dir || (dir_ ^ dir) == 3)
 
 Lors de la deuxième boucle d'exploration, si on rencontre un ennemi, on rajoute donc la case de départ de cette deuxième imbrication comme point d'arrivée pour notre coup qui sera ajouté à la liste des coups possibles.
 
-##Fonction Play : 
+## Fonction Play : 
 
 De même que pour la fonction mouvementPossibles, nous avons surchager la fonction play pour qu’elle puisse correspondre à notre choix statégique (State, Action).
 
@@ -204,13 +222,6 @@ public void play(Action act)
 ##Fonction isOver :
 
 La méthode isOver est notre fonction d’arrêt. Elle permet donc de savoir quand arreter le jeu. Elle renvoie juste vrai lorsqu’on nous n’avons plus qu’une unique couleur de piece sur le plateau.
-
-
-##Classe Action :
-
-Lors des dernières implémentations des algorithme de recherche, nous etions embetés par le fait de devoir à chaque fois copier le plateau de jeu pour pouvoir ensuite faire des recheches dessus sans pour autant « modifier » le plateau (celui avant la recherche). Nous avons donc d’utiliser une classe Action qui va nous permettre de sauvegarder les mouvements effectués lors de la recherche et donc de pouvoir les inverser par la suite pour revenir à l’état initial.
-
-// TODO
 
 ##Optimisation:
 
