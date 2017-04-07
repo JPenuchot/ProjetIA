@@ -18,6 +18,11 @@ public class JoueurAlphaBeta implements IJoueur {
     Heuristique h;
     int profondeur;
 
+    /**
+     * Initialise le joueur (profondeur initiale etc)
+     *
+     * @param      mycolour  Couleur du joueur en int (passée par l'arbitre)
+     */
     @Override
     public void initJoueur(int mycolour){
     	this.player = mycolour == 1 ? State.black : State.white;
@@ -33,8 +38,15 @@ public class JoueurAlphaBeta implements IJoueur {
     	return this.playerInt;
     }
 
+    /**
+     * Choisit un mouvement en se basant sur les résultats d'un negAlphaBeta
+     *
+     * @return     Mouvement choisi
+     */
     @Override
     public String choixMouvement(){
+        //  TODO : Profondeur variable (en fonction du nombre de pions ou de choix)
+
         String[] coupPossibles = this.plateau.mouvementsPossibles(this.player);
         String meilleurCoup = coupPossibles[0];
         float max = Float.MIN_VALUE;
@@ -75,18 +87,32 @@ public class JoueurAlphaBeta implements IJoueur {
         return meilleurCoup;
     }
 
-    public float negAlphaBeta(int p, float alpha, float beta, float parite) {
+    /**
+     * Implémentation de l'algorithme negAlphaBeta
+     *
+     * @param      p       Profondeur d'exploration
+     * @param      alpha   Valeur alpha
+     * @param      beta    Valeur bet
+     * @param      parite  Parité
+     *
+     * @return     Retourne une estimation de la qualité du noeud
+     */
+    public float negAlphaBeta(int p, float alpha, float beta, int parite) {
 
         //System.out.println("AlphaBeta, p : " + p + "\nalpha :" + alpha + "\nbeta : " + beta + "\npartite : " + parite);
         
         MemoAlphaBeta mem = BaseAlphaBeta.find(this.plateau);
 
-        if (p <= 0 || this.plateau.isOver()) {
-            if(parite == 1)
-                alpha = this.h.estimate(this.plateau, this.player);
-            else
-                alpha = this.h.estimate(this.plateau, StateUtils.getInverseState(this.player));
-        } else {
+        if (p <= 0 || this.plateau.isOver()) {  //  TODO : Mémorisation de la valeur heuristique
+            alpha = parite * this.h.estimate(this.plateau, this.player);
+        } else {    //  TODO : Mémorisation de l'alpha
+                    //  /!\ EN FONCTION DE LA PROFONDEUR DEJA EXPLOREE
+                    //  Si on explore plus profond que la valeur déjà explorée
+                    //  alors on s'en branle et on recalcule
+                    //  
+                    //  Deuxième phase d'opti :
+                    //  Trier les coups en fonction de leurs valeurs retournées
+                    //  Mais on n'aura pas le temps donc bon... Tant pis I guess
 
             String[] coupPossibles = this.plateau.mouvementsPossibles(this.player);
 
@@ -94,6 +120,7 @@ public class JoueurAlphaBeta implements IJoueur {
                 Action[] ac = new Action[2];
 
                 ac = this.plateau.play(c, this.player);
+
 
                 if(!(mem != null && mem.prof > p)) {
 
@@ -107,6 +134,9 @@ public class JoueurAlphaBeta implements IJoueur {
                     alpha = mem.alpha;
                     beta = mem.beta;
                 }
+
+                alpha = Math.max(alpha, -1 * negAlphaBeta(p-1, -1 * beta, -1 * alpha, - parite));
+
 
                 for(Action a : ac) {
                     a.reverse();
@@ -122,6 +152,11 @@ public class JoueurAlphaBeta implements IJoueur {
         return alpha;
     }
 
+    /**
+     * Déclare le vainqueur (paramètre colour passé par l'arbitre)
+     *
+     * @param      colour  Couleur du vainqueur
+     */
     @Override
     public void declareLeVainqueur(int colour){
     	if (colour == this.playerInt) {
@@ -129,6 +164,11 @@ public class JoueurAlphaBeta implements IJoueur {
         }
     }
 
+    /**
+     * Procédure appelée par l'arbitre pour transmettre le coup de l'adversaire.
+     *
+     * @param      coup  Le coup de l'adversaire
+     */
     @Override
     public void mouvementEnnemi(String coup){
     	this.plateau.play(coup, StateUtils.getInverseState(this.player));
