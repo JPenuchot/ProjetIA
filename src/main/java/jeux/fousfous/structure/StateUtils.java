@@ -29,10 +29,4 @@ public class StateUtils {
     public static State getInverseState(State st){
         return (st == State.empty) ? (State.empty) : (st == State.black ? State.white : State.black);
     }
-
-    /**
-     * Permet de transformer les coordoonées en String
-     * @return
-     */
-    public static String getStringCoord(int i, int j) {    return Character.toString((char)(i + 'A')) + Integer.toString(j + 1);   }
 }
