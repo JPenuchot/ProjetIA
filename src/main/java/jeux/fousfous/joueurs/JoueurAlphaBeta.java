@@ -2,6 +2,7 @@ package joueurs;
 
 import structure.*;
 import heuristiques.*;
+import memo.*;
 
 public class JoueurAlphaBeta implements IJoueur {
 
@@ -77,7 +78,8 @@ public class JoueurAlphaBeta implements IJoueur {
     public float negAlphaBeta(int p, float alpha, float beta, float parite) {
 
         //System.out.println("AlphaBeta, p : " + p + "\nalpha :" + alpha + "\nbeta : " + beta + "\npartite : " + parite);
-
+        
+        MamoAlphaBeta mem = BaseAlphaBeta.find()
 
         if (p <= 0 || this.plateau.isOver()) {
             if(parite == 1)
@@ -108,9 +110,6 @@ public class JoueurAlphaBeta implements IJoueur {
         return alpha;
     }
 
-
-
-
     @Override
     public void declareLeVainqueur(int colour){
     	if (colour == this.playerInt) {
@@ -125,21 +124,4 @@ public class JoueurAlphaBeta implements IJoueur {
 
     @Override
     public String binoName(){ return "Quentin Barroche et Jules Penuchot"; }
-
-    /**
-     * Implémentation de l'algorithme AlphaBeta.
-     *
-     * @param      plateau  Plateau en cours
-     * @param      h        Heuristique
-     * @param      prof     Profondeur max
-     *
-     * @return     Coup à jouer
-     */
-    private String alphaBeta(PlateauFouFou plateau, Heuristique h, int prof){
-        /*  TODO :
-         *      -   Mémorisation des chemins explorés
-         */
-        return null;
-    }
-
 }
