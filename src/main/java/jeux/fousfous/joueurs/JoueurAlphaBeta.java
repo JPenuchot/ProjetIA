@@ -79,7 +79,7 @@ public class JoueurAlphaBeta implements IJoueur {
 
         //System.out.println("AlphaBeta, p : " + p + "\nalpha :" + alpha + "\nbeta : " + beta + "\npartite : " + parite);
         
-        MamoAlphaBeta mem = BaseAlphaBeta.find()
+        MemoAlphaBeta mem = BaseAlphaBeta.find(this.plateau);
 
         if (p <= 0 || this.plateau.isOver()) {
             if(parite == 1)
