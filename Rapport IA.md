@@ -237,7 +237,7 @@ Nous avons choisis de mettre en place un système de profondeur incrémentale en
 ##Heuristiques :
 
 ###Heuristique DiffPions
-Pour le choix des heuristiques, nous avons avant tout de suite penser à faire quelque chose de simple à calculer au vu du nombre de fois ou celle-ci sera calculée. Nous avons donc choisir de calculer la différence entre les pièces noires et les pièces blanches : 
+Pour le choix des heuristiques, nous avons avant tout de suite penser à faire quelque chose de simple à calculer au vu du nombre de fois ou celle-ci sera calculée. Nous avons donc choisi de calculer la différence entre les pièces noires et les pièces blanches : 
 
 ```java
 public float estimate(PlateauFouFou plateau, State joueur){
@@ -249,7 +249,7 @@ public float estimate(PlateauFouFou plateau, State joueur){
 	}
 ```
 
-Notre fonction estimate de l’Heuristique prends deux paramètres, le plateau actuelle ainsi que le joueurs qui appel celle-ci. On peut ici voir que la boucle parcourt tout notre plateau de jeux (pSize était notre largeur et hauteur). 
+Notre fonction estimate de l’Heuristique prend deux paramètres, le plateau actuel ainsi que le joueur qui appel celle-ci. On peut ici voir que la boucle parcourt tout notre plateau de jeux (pSize était notre largeur et hauteur). 
 
 La ligne : 
 
@@ -276,17 +276,18 @@ Pour l'organisation du projet, nous avons décidé de mettre en place un GitHub.
 
 ##Difficultés rencontrées :
 
-Durant ce projet, nous avons rencontré plusieurs difficultées. Tout d'abord comment rechercher les mouvements possibles en temps optimal. C'est-à-dire ne pas faire quatre (dans chaque direction) explorations du plateau. Le but de ce projet, en plus de coder une intélligence artificielle, était d'avoir le code le plus optimal possible.
+1. Durant ce projet, nous avons rencontré plusieurs difficultés. Tout d'abord comment rechercher les mouvements possibles en temps optimal. C'est-à-dire ne pas faire quatre (dans chaque direction) explorations du plateau. Le but de ce projet, en plus de coder une intelligence artificielle, était d'avoir le code le plus optimal possible. 
+2. Nous avons eu beaucoup de mal à implementer l'algorithme NegAlphaBeta. En effet, dans la première version de cette algorithme, nous utilisions des variables de type floattant pour alpha, beta et les valeurs de retour de nos heuristiques. Or pour des raisons que nous ignorons, le fait d'utiliser les floattant faisait bugger tout notre code. Nous avons donc décidé de remplacer ces floattants par des integers ainsi le problème s'est resolu.
 
 
 ##Amélioration envisagées : 
 
-1. L'intelligence artificielle et le machine learning étant étroitement liée, nous voulions essayer de coder un systeme de machine learning afin d'avoir une intélligence artificielle presque imbattable. Or nous n'avons pas eu le temps de le faire. Nous allons donc essayé d'apporter cette amélioration majeur dans les mois qui suivent.
-2. Lors de l'exploration des arbres de jeu (avec alpha Beta par exemple), de nombre parcourt se ressemblent. Il faudrait donc sauvegarder l'etat de l'arbre ainsi que la valeurs des heuristiques sur les noeuds afin de gagner un temps precieux.
+1. L'intelligence artificielle et le machine learning étant étroitement liée, nous voulions essayer de coder un systeme de machine learning afin d'avoir une intélligence artificielle presque imbattable. Or nous n'avons pas eu le temps de le faire. Nous allons donc essayé d'apporter cette amélioration majeure dans les mois qui suivent.
+2. Lors de l'exploration des arbres de jeu (avec alpha Beta par exemple), de nombre parcourt se ressemblent. Il faudrait donc sauvegarder l'êtat de l'arbre ainsi que la valeur des heuristiques sur les noeuds afin de gagner un temps précieux.
 
 
 ##Conclusion : 
 
-Ce projet nous a appris beaucoup. En effet, nous avons du nous organiser dans un projet à plusieurs. Nous avons du être rigoureux dans l'organisation du github, savoir comment découper le travail etc. Nous avons aussi beaucoup appris sur l'intelligence artificielle car nous devions tout coder et donc nous avons choisis une statégie (qui on l'espère sera payante) pour résoudre le problème posé.
+Ce projet nous a appris beaucoup. En effet, nous avons dû nous organiser dans un projet à plusieurs. Nous avons dû être rigoureux dans l'organisation du github, savoir comment découper le travail etc. Nous avons aussi beaucoup appris sur l'intelligence artificielle car nous devions tout coder et donc nous avons choisi une statégie (qui on l'espère sera payante) pour résoudre le problème posé.
 
 
