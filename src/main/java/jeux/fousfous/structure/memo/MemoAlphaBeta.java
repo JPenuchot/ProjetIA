@@ -45,4 +45,8 @@ public class MemoAlphaBeta{
     public int prof = 0;    //  Profondeur max explorée après le noeud
 
     //  TODO : Rajouter des valeurs (alpha/beta, max, meilleur coup etc.)
+
+    public float alpha = 0;
+    public float beta = 0;
+
 }
