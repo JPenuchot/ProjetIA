@@ -254,8 +254,6 @@ Nous avons choisi de mettre en place un système de profondeur incrémentale en 
 
 ### Heuristique DiffPions
 
-
-###Heuristique DiffPions
 Pour le choix des heuristiques, nous avons avant tout de suite penser à faire quelque chose de simple à calculer au vu du nombre de fois ou celle-ci sera calculée. Nous avons donc choisi de calculer la différence entre les pièces noires et les pièces blanches : 
 
 
